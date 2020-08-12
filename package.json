@@ -1,0 +1,24 @@
+{
+  "name": "treemate",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/07akioni/treemate.git"
+  },
+  "author": "07akioni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/07akioni/treemate/issues"
+  },
+  "homepage": "https://github.com/07akioni/treemate#readme"
+}
