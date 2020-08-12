@@ -6,7 +6,7 @@ import {
 
 function createTreeNodes (
   rawNodes: RawNode[] | null | undefined,
-  TreeNodeMap: TreeNodeMap,
+  treeNodeMap: TreeNodeMap,
   parent: TreeNode | null = null,
   level: number = 0,
 ): TreeNode[] | undefined | null {
@@ -17,7 +17,7 @@ function createTreeNodes (
   rawNodes.forEach((rawNode, index) => {
     const treeNode: TreeNode = {
       key: rawNode.key,
-      children: createTreeNodes(rawNode.children, TreeNodeMap),
+      children: createTreeNodes(rawNode.children, treeNodeMap),
       rawNode,
       level,
       index,
@@ -26,7 +26,7 @@ function createTreeNodes (
       parent: parent
     }
     treeNodes.push(treeNode)
-    TreeNodeMap.set(treeNode.key, treeNode)
+    treeNodeMap.set(treeNode.key, treeNode)
   })
   return treeNodes
 }
