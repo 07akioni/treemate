@@ -3,6 +3,7 @@
     "module": "ES2015",
     "outDir": "dist",
     "strict": true,
+    "strictNullChecks": true,
     "declaration": true,
     "lib": [
       "ESNext"

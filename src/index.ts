@@ -1,38 +1,59 @@
 import {
   RawNode,
   TreeNode,
-  TreeNodeMap
+  TreeNodeMap,
+  LevelTreeNodeMap
 } from './interface'
 
+export function isLeaf (rawNode: RawNode): boolean {
+  if (rawNode.isLeaf === true) return true
+  else if (rawNode.children === undefined) return true
+  return false
+}
+
 function createTreeNodes (
-  rawNodes: RawNode[] | null | undefined,
+  rawNodes: RawNode[] | undefined,
   treeNodeMap: TreeNodeMap,
+  levelTreeNodeMap: LevelTreeNodeMap,
   parent: TreeNode | null = null,
   level: number = 0,
-): TreeNode[] | undefined | null {
-  if (rawNodes === undefined || rawNodes === null) {
+): TreeNode[] | undefined {
+  if (rawNodes === undefined) {
     return rawNodes
   }
   const treeNodes: TreeNode[] = []
   rawNodes.forEach((rawNode, index) => {
     const treeNode: TreeNode = {
       key: rawNode.key,
-      children: createTreeNodes(rawNode.children, treeNodeMap),
+      children: createTreeNodes(
+        rawNode.children,
+        treeNodeMap,
+        levelTreeNodeMap
+      ),
       rawNode,
       level,
       index,
       isFirstChild: index === 0,
       isLastChild: index + 1 === rawNodes.length,
+      disabled: rawNode.disabled === true,
+      isLeaf: isLeaf(rawNode),
       parent: parent
     }
     treeNodes.push(treeNode)
     treeNodeMap.set(treeNode.key, treeNode)
+    if (!levelTreeNodeMap.has(level)) levelTreeNodeMap.set(level, [])
+    levelTreeNodeMap.get(level)!.push(treeNode)
   })
   return treeNodes
 }
 
 function createTreeAndMap (rawNodes: RawNode[]) {
-  const TreeNodeMap: TreeNodeMap = new Map()
-  const treeNodes = createTreeNodes(rawNodes, TreeNodeMap)
-  return [treeNodes, TreeNodeMap]
+  const treeNodeMap: TreeNodeMap = new Map()
+  const levelTreeNodeMap: LevelTreeNodeMap = new Map()
+  const treeNodes = createTreeNodes(
+    rawNodes,
+    treeNodeMap,
+    levelTreeNodeMap,
+  )
+  return [treeNodes, treeNodeMap, levelTreeNodeMap]
 }
