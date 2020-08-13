@@ -1,4 +1,20 @@
-import { TreeNode } from '../../interface'
+import { TreeNode, Key } from '../../interface'
+
+export function expectCheckedStatusSame (
+  status1: {
+    checkedKeys: Key[],
+    indeterminateKeys: Key[]
+  },
+  status2: {
+    checkedKeys: Key[],
+    indeterminateKeys: Key[]
+  }
+) {
+  expect(Array.from(status1.checkedKeys).sort())
+    .toEqual(Array.from(status2.checkedKeys).sort())
+  expect(Array.from(status1.indeterminateKeys).sort())
+    .toEqual(Array.from(status2.indeterminateKeys).sort())
+}
 
 export function expectTreeNodesEqual (
   nodes1: TreeNode[] | undefined,

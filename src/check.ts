@@ -44,12 +44,15 @@ function getExtendedCheckedKeysAfterUncheck (
   )
 }
 
-function getCheckedKeys (
+export function getCheckedKeys (
   checkedKeys: Key[],
   levelTreeNodeMap: LevelTreeNodeMap
-) {
-  const syntheticCheckedKeySet = new Set()
-  const syntheticIndeterminateKeySet = new Set()
+): {
+  checkedKeys: Key[],
+  indeterminateKeys: Key[]
+} {
+  const syntheticCheckedKeySet: Set<Key> = new Set()
+  const syntheticIndeterminateKeySet: Set<Key> = new Set()
   const checkedKeySet = new Set(checkedKeys)
   const maxLevel = Math.max.apply(
     null,
@@ -91,7 +94,7 @@ function getCheckedKeys (
   }
 }
 
-function getExtendedCheckedKeys (
+export function getExtendedCheckedKeys (
   checkedKeys: Key[],
   TreeNodeMap: TreeNodeMap
 ): Key[] {
