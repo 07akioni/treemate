@@ -74,7 +74,7 @@ const data : Array<{ createData: CreateData, description: string }> = [
             index: 0,
             isFirstChild: true,
             isLastChild: false,
-            parent: null, // to be set
+            parent: null, // will be set later
             isLeaf: true,
             disabled: false,
           },
@@ -85,7 +85,7 @@ const data : Array<{ createData: CreateData, description: string }> = [
             index: 1,
             isFirstChild: false,
             isLastChild: true,
-            parent: null, // to be set
+            parent: null, // will be set later
             isLeaf: true,
             disabled: false,
           }
@@ -102,7 +102,7 @@ const data : Array<{ createData: CreateData, description: string }> = [
         ]
       }
     }
-  },
+  }
 ]
 
 export default data

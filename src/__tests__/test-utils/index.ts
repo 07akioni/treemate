@@ -1,6 +1,9 @@
 import { TreeNode } from '../../interface'
 
-export function expectTreeNodesEqual (nodes1: TreeNode[] | undefined, nodes2: TreeNode[] | undefined) {
+export function expectTreeNodesEqual (
+  nodes1: TreeNode[] | undefined,
+  nodes2: TreeNode[] | undefined
+) {
   if (nodes1 === undefined || nodes2 === undefined) {
     expect(nodes1).toEqual(nodes2)
     return
