@@ -46,10 +46,10 @@ function getExtendedCheckedKeysAfterUncheck (
 
 function getCheckedKeys (
   checkedKeys: Key[],
-  treeNodes: TreeNode[],
   levelTreeNodeMap: LevelTreeNodeMap
 ) {
-  const syntheticCheckedKeys = []
+  const syntheticCheckedKeySet = new Set()
+  const syntheticIndeterminateKeySet = new Set()
   const checkedKeySet = new Set(checkedKeys)
   const maxLevel = Math.max.apply(
     null,
@@ -58,14 +58,36 @@ function getCheckedKeys (
   for (let level = maxLevel; level >= 0; level -= 1) {
     const levelTreeNodes = levelTreeNodeMap.get(level)!
     for (const levelTreeNode of levelTreeNodes) {
+      const levelTreeNodeKey = levelTreeNode.key
       if (levelTreeNode.isLeaf) {
-        if (checkedKeySet.has(levelTreeNode.key)) {
-          syntheticCheckedKeys.push(levelTreeNode.key)
+        if (checkedKeySet.has(levelTreeNodeKey)) {
+          syntheticCheckedKeySet.add(levelTreeNodeKey)
         }
       } else {
-
+        let fullyChecked = true
+        let partialChecked = false
+        for (const childNode of levelTreeNode.children!) {
+          const childKey = childNode.key
+          if (syntheticCheckedKeySet.has(childKey)) {
+            partialChecked = true
+          } else {
+            fullyChecked = false
+            if (partialChecked) {
+              break
+            }
+          }
+        }
+        if (fullyChecked) {
+          syntheticCheckedKeySet.add(levelTreeNodeKey)
+        } else if (partialChecked) {
+          syntheticIndeterminateKeySet.add(levelTreeNodeKey)
+        }
       }
     }
+  }
+  return {
+    checkedKeys: Array.from(syntheticCheckedKeySet),
+    indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
   }
 }
 

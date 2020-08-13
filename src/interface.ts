@@ -4,7 +4,8 @@ export interface RawNode {
   key: Key
   children?: RawNode[]
   isLeaf?: boolean
-  disabled?: boolean
+  disabled?: boolean,
+  [key: string]: any
 }
 
 export interface TreeNode {

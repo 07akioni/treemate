@@ -25,11 +25,6 @@ function createTreeNodes (
   rawNodes.forEach((rawNode, index) => {
     const treeNode: TreeNode = {
       key: rawNode.key,
-      children: createTreeNodes(
-        rawNode.children,
-        treeNodeMap,
-        levelTreeNodeMap
-      ),
       rawNode,
       level,
       index,
@@ -39,6 +34,13 @@ function createTreeNodes (
       isLeaf: isLeaf(rawNode),
       parent: parent
     }
+    treeNode.children = createTreeNodes(
+      rawNode.children,
+      treeNodeMap,
+      levelTreeNodeMap,
+      treeNode,
+      level + 1
+    ),
     treeNodes.push(treeNode)
     treeNodeMap.set(treeNode.key, treeNode)
     if (!levelTreeNodeMap.has(level)) levelTreeNodeMap.set(level, [])
@@ -47,13 +49,17 @@ function createTreeNodes (
   return treeNodes
 }
 
-function createTreeAndMap (rawNodes: RawNode[]) {
+export function createTreeAndMap (rawNodes: RawNode[]): [
+  TreeNode[],
+  TreeNodeMap,
+  LevelTreeNodeMap,
+] {
   const treeNodeMap: TreeNodeMap = new Map()
   const levelTreeNodeMap: LevelTreeNodeMap = new Map()
-  const treeNodes = createTreeNodes(
+  const treeNodes: TreeNode[] = createTreeNodes(
     rawNodes,
     treeNodeMap,
     levelTreeNodeMap,
-  )
+  )!
   return [treeNodes, treeNodeMap, levelTreeNodeMap]
 }
