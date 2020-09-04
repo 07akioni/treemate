@@ -4,6 +4,10 @@ Help people who want to write a tree component.
 
 ## TODO
 - [x] checked keys & indeterminate keys
-- [ ] check action & uncheck action
+- [x] check action & uncheck action
+  - [ ] full test
 - [ ] <del>async patches</del> support non-complete-data
-- [x] test
+  - [ ] support check & uncheck action on partial complete tree
+  - [ ] throw error on non-complete tree
+- [x] basic test
+- [ ] lint
