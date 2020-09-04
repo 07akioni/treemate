@@ -1,4 +1,4 @@
-export const tree1 = [
+export const basicTree = [
   {
     key: 0,
     children: [
@@ -36,7 +36,7 @@ export const tree1 = [
   }
 ]
 
-export const disabledTree1 = [
+export const disabledNodeTestTree = [
   {
     key: 0,
     children: [
@@ -75,7 +75,7 @@ export const disabledTree1 = [
   }
 ]
 
-export const testExtendedCheckedKeysTree = [
+export const extendedCheckedKeysTestTree = [
   {
     key: '0',
     children: [

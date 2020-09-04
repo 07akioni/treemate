@@ -93,8 +93,42 @@ export function TreeMate (
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
-    getCheckedKeys (checkedKeys: Key[]) {
-      return getCheckedKeys(checkedKeys, this)
+    getCheckedKeys (
+      checkedKeys: Key[],
+    ) {
+      return getCheckedKeys(
+        checkedKeys,
+        {
+          type: 'none'
+        },
+        this
+      )
+    },
+    check (
+      checkedKey: Key,
+      checkedKeys: Key[],
+    ) {
+      return getCheckedKeys(
+        checkedKeys,
+        {
+          type: 'check',
+          key: checkedKey
+        },
+        this
+      )
+    },
+    uncheck (
+      uncheckedKey: Key,
+      checkedKeys: Key[],
+    ) {
+      return getCheckedKeys(
+        checkedKeys,
+        {
+          type: 'uncheck',
+          key: uncheckedKey
+        },
+        this
+      )
     }
   }
 }

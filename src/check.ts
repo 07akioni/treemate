@@ -1,9 +1,8 @@
 import { 
   Key,
   TreeNode,
-  TreeNodeMap,
-  LevelTreeNodeMap,
-  TreeMateInstance
+  TreeMateInstance,
+  CheckAction
 } from './interface'
 
 enum TraverseCommand {
@@ -51,13 +50,38 @@ function getExtendedCheckedKeysAfterUncheck (
 
 export function getCheckedKeys (
   checkedKeys: Key[],
+  action: CheckAction,
   treeMate: TreeMateInstance
 ): {
   checkedKeys: Key[],
   indeterminateKeys: Key[]
 } {
   const { levelTreeNodeMap } = treeMate
-  const extendedCheckedKeys = getExtendedCheckedKeys(checkedKeys, treeMate)
+  let extendedCheckedKeys: Key[]
+
+  switch (action.type) {
+    case 'check':
+      extendedCheckedKeys = getExtendedCheckedKeysAfterCheck(
+        action.key,
+        checkedKeys,
+        treeMate
+      )
+      break
+    case 'uncheck':
+      extendedCheckedKeys = getExtendedCheckedKeysAfterUncheck(
+        action.key,
+        checkedKeys,
+        treeMate
+      )
+      break
+    case 'none':
+      extendedCheckedKeys = getExtendedCheckedKeys(
+        checkedKeys,
+        treeMate
+      )
+      break
+  }
+
   const syntheticCheckedKeySet: Set<Key> = new Set(extendedCheckedKeys)
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
   const maxLevel = Math.max.apply(

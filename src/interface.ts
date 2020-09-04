@@ -1,7 +1,3 @@
-import {
-  getCheckedKeys
-} from './check'
-
 export type Key = string | number
 
 export interface RawNode {
@@ -38,9 +34,21 @@ export type TreeMateOptions = {
   async?: boolean
 }
 
+type CheckActionTypeWithKey = 'check' | 'uncheck'
+type CheckActionTypeNone = 'none'
+export type CheckActionType = CheckActionTypeWithKey | CheckActionTypeNone
+export type CheckAction = {
+  type: CheckActionTypeWithKey,
+  key: Key
+} | {
+  type: CheckActionTypeNone
+}
+
 export interface TreeMateInstance {
   treeNodes: TreeNode[],
   treeNodeMap: TreeNodeMap,
   levelTreeNodeMap: LevelTreeNodeMap,
   getCheckedKeys: (checkedKeys: Key[]) => MergedKeys
+  check: (checkedKey: Key, checkedKeys: Key[]) => MergedKeys
+  uncheck: (uncheckedKey: Key, checkedKeys: Key[]) => MergedKeys
 }
