@@ -11,6 +11,10 @@ export function isLeaf (rawNode: RawNode): boolean {
   return false
 }
 
+export function isDisabled (rawNode: RawNode): boolean {
+  return rawNode.disabled === true
+}
+
 function createTreeNodes (
   rawNodes: RawNode[] | undefined,
   treeNodeMap: TreeNodeMap,
@@ -30,8 +34,12 @@ function createTreeNodes (
       index,
       isFirstChild: index === 0,
       isLastChild: index + 1 === rawNodes.length,
-      disabled: rawNode.disabled === true,
-      isLeaf: isLeaf(rawNode),
+      get disabled () {
+        return isDisabled(rawNode)
+      },
+      get isLeaf () {
+        return isLeaf(rawNode)
+      },
       parent: parent
     }
     treeNode.children = createTreeNodes(

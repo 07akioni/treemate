@@ -61,6 +61,9 @@ export function getCheckedKeys (
   for (let level = maxLevel; level >= 0; level -= 1) {
     const levelTreeNodes = levelTreeNodeMap.get(level)!
     for (const levelTreeNode of levelTreeNodes) {
+      if (levelTreeNode.disabled) {
+        continue
+      }
       const levelTreeNodeKey = levelTreeNode.key
       if (levelTreeNode.isLeaf) {
         if (checkedKeySet.has(levelTreeNodeKey)) {
@@ -71,6 +74,7 @@ export function getCheckedKeys (
         let partialChecked = false
         for (const childNode of levelTreeNode.children!) {
           const childKey = childNode.key
+          if (childNode.disabled) continue
           if (syntheticCheckedKeySet.has(childKey)) {
             partialChecked = true
           } else {
@@ -105,6 +109,7 @@ export function getExtendedCheckedKeys (
     if (checkedTreeNode !== undefined) {
       traverse(checkedTreeNode, treeNode => {
         if (visitedKeySet.has(treeNode.key)) return
+        if (treeNode.disabled) return
         visitedKeySet.add(treeNode.key)
         extendedCheckedKey.push(treeNode.key)
       })

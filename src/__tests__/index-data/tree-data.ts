@@ -1,5 +1,4 @@
 import { TreeNode, RawNode } from '../../interface'
-import { Tree } from '../../../node_modules/_@types_istanbul-lib-report@3.0.0@@types/istanbul-lib-report/index'
 
 type CreateData = () => { input: RawNode[], output: TreeNode[] }
 
