@@ -105,27 +105,27 @@ export function TreeMate (
       )
     },
     check (
-      checkedKey: Key,
+      checkedKey: Key | Key[],
       checkedKeys: Key[]
     ) {
       return getCheckedKeys(
         checkedKeys,
         {
           type: 'check',
-          key: checkedKey
+          data: checkedKey
         },
         this
       )
     },
     uncheck (
-      uncheckedKey: Key,
+      uncheckedKey: Key | Key[],
       checkedKeys: Key[]
     ) {
       return getCheckedKeys(
         checkedKeys,
         {
           type: 'uncheck',
-          key: uncheckedKey
+          data: uncheckedKey
         },
         this
       )

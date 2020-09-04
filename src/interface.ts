@@ -39,7 +39,7 @@ type CheckActionTypeNone = 'none'
 export type CheckActionType = CheckActionTypeWithKey | CheckActionTypeNone
 export type CheckAction = {
   type: CheckActionTypeWithKey
-  key: Key
+  data: Key | Key[]
 } | {
   type: CheckActionTypeNone
 }

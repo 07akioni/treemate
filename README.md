@@ -9,6 +9,9 @@ Help people who want to write a tree component.
 - [ ] check action & uncheck action
   - [ ] full test
   - [ ] batch check & batch uncheck
+    - [x] feature
+    - [ ] API cleaning
+    - [ ] test
   - [ ] functional disabled prop
 - [ ] <del>async patches</del> support non-complete-data
   - [ ] support check & uncheck action on partial complete tree

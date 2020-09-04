@@ -10,6 +10,11 @@ const TraverseCommand = {
   STOP: 'STOP'
 }
 
+function toArray<T> (arg: T): T extends any[] ? T : T[] {
+  if (Array.isArray(arg)) return arg as any
+  return [arg] as any
+}
+
 function traverse (
   treeNode: TreeNode,
   callback: (treeNode: TreeNode) => any
@@ -21,18 +26,42 @@ function traverse (
 }
 
 function getExtendedCheckedKeysAfterCheck (
-  checkKey: Key,
+  checkKeys: Key[],
   currentCheckedKeys: Key[],
   treeMate: TreeMateInstance
 ): Key[] {
   return getExtendedCheckedKeys(
-    currentCheckedKeys.concat([checkKey]),
+    currentCheckedKeys.concat(
+      checkKeys
+    ),
     treeMate
   )
 }
 
+function getAvailableAscendantNodeSet (
+  uncheckedKeys: Key[],
+  treeMate: TreeMateInstance
+): Set<Key> {
+  const visitedKeys: Set<Key> = new Set()
+  uncheckedKeys.forEach(uncheckedKey => {
+    const uncheckedTreeNode = treeMate.treeNodeMap.get(uncheckedKey)
+    if (uncheckedTreeNode !== undefined) {
+      let nodeCursor = uncheckedTreeNode.parent
+      while (nodeCursor !== null) {
+        if (nodeCursor.disabled) break
+        if (visitedKeys.has(nodeCursor.key)) break
+        else {
+          visitedKeys.add(nodeCursor.key)
+        }
+        nodeCursor = nodeCursor.parent
+      }
+    }
+  })
+  return visitedKeys
+}
+
 function getExtendedCheckedKeysAfterUncheck (
-  uncheckKey: Key,
+  uncheckedKeys: Key[],
   currentCheckedKeys: Key[],
   treeMate: TreeMateInstance
 ): Key[] {
@@ -41,27 +70,19 @@ function getExtendedCheckedKeysAfterUncheck (
     treeMate
   )
   const extendedKeySetToUncheck = new Set(getExtendedCheckedKeys(
-    [uncheckKey],
+    uncheckedKeys,
     treeMate
   ))
-  const ascendantKeySet: Set<Key> = new Set()
-  const uncheckedTreeNode = treeMate.treeNodeMap.get(uncheckKey)
-  if (uncheckedTreeNode !== undefined) {
-    let nodeCursor = uncheckedTreeNode.parent
-    while (nodeCursor !== null) {
-      if (nodeCursor.disabled) break
-      ascendantKeySet.add(nodeCursor.key)
-      nodeCursor = nodeCursor.parent
-    }
-    return extendedCheckedKeys.filter(
-      checkedKey => (
-        !extendedKeySetToUncheck.has(checkedKey) &&
-        !ascendantKeySet.has(checkedKey)
-      )
+  const ascendantKeySet: Set<Key> = getAvailableAscendantNodeSet(
+    uncheckedKeys,
+    treeMate
+  )
+  return extendedCheckedKeys.filter(
+    checkedKey => (
+      !extendedKeySetToUncheck.has(checkedKey) &&
+      !ascendantKeySet.has(checkedKey)
     )
-  } else {
-    return extendedCheckedKeys
-  }
+  )
 }
 
 export function getCheckedKeys (
@@ -78,14 +99,14 @@ export function getCheckedKeys (
   switch (action.type) {
     case 'check':
       extendedCheckedKeys = getExtendedCheckedKeysAfterCheck(
-        action.key,
+        toArray(action.data),
         checkedKeys,
         treeMate
       )
       break
     case 'uncheck':
       extendedCheckedKeys = getExtendedCheckedKeysAfterUncheck(
-        action.key,
+        toArray(action.data),
         checkedKeys,
         treeMate
       )
