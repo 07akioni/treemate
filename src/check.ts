@@ -101,8 +101,14 @@ export function getCheckedKeys (
         for (const childNode of levelTreeNode.children!) {
           const childKey = childNode.key
           if (childNode.disabled) continue
-          if (syntheticCheckedKeySet.has(childKey)) {
+          if (
+            syntheticCheckedKeySet.has(childKey)
+          ) {
             partialChecked = true
+          } else if (syntheticIndeterminateKeySet.has(childKey)) {
+            partialChecked = true
+            fullyChecked = false
+            break
           } else {
             fullyChecked = false
             if (partialChecked) {
