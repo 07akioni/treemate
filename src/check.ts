@@ -5,12 +5,16 @@ import {
   LevelTreeNodeMap
 } from './interface'
 
+enum TraverseCommand {
+  STOP
+}
+
 function traverse (
   treeNode: TreeNode,
   callback: (treeNode: TreeNode) => any,
 ) {
-  callback(treeNode)
-  if (treeNode.children !== undefined && !treeNode.disabled) {
+  const command = callback(treeNode)
+  if (treeNode.children !== undefined && command !== TraverseCommand.STOP) {
     treeNode.children.forEach(childNode => traverse(childNode, callback))
   }
 }
@@ -51,9 +55,8 @@ export function getCheckedKeys (
   checkedKeys: Key[],
   indeterminateKeys: Key[]
 } {
-  const syntheticCheckedKeySet: Set<Key> = new Set()
+  const syntheticCheckedKeySet: Set<Key> = new Set(checkedKeys)
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
-  const checkedKeySet = new Set(checkedKeys)
   const maxLevel = Math.max.apply(
     null,
     Array.from(levelTreeNodeMap.keys())
@@ -65,11 +68,7 @@ export function getCheckedKeys (
         continue
       }
       const levelTreeNodeKey = levelTreeNode.key
-      if (levelTreeNode.isLeaf) {
-        if (checkedKeySet.has(levelTreeNodeKey)) {
-          syntheticCheckedKeySet.add(levelTreeNodeKey)
-        }
-      } else {
+      if (!levelTreeNode.isLeaf) {
         let fullyChecked = true
         let partialChecked = false
         for (const childNode of levelTreeNode.children!) {
@@ -102,16 +101,24 @@ export function getExtendedCheckedKeys (
   checkedKeys: Key[],
   TreeNodeMap: TreeNodeMap
 ): Key[] {
+  const checkedKeySet: Set<Key> = new Set(checkedKeys)
   const visitedKeySet: Set<Key> = new Set()
   const extendedCheckedKey: Key[] = []
   checkedKeys.forEach(checkedKey => {
     const checkedTreeNode = TreeNodeMap.get(checkedKey)
     if (checkedTreeNode !== undefined) {
       traverse(checkedTreeNode, treeNode => {
-        if (visitedKeySet.has(treeNode.key)) return
-        if (treeNode.disabled) return
-        visitedKeySet.add(treeNode.key)
-        extendedCheckedKey.push(treeNode.key)
+        const { key } = treeNode
+        if (visitedKeySet.has(key)) return
+        visitedKeySet.add(key)
+        if (treeNode.disabled) {
+          if (checkedKeySet.has(key)) {
+            extendedCheckedKey.push(key)
+          }
+          return TraverseCommand.STOP
+        } else {
+          extendedCheckedKey.push(key)
+        }
       })
     }
   })

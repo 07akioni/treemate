@@ -1,5 +1,10 @@
 import { TreeNode, Key } from '../../interface'
 
+export function expectArrayEqual (array1: Array<Key>, array2: Array<Key>) {
+  expect(Array.from(array1).sort())
+    .toEqual(Array.from(array2).sort())
+}
+
 export function expectCheckedStatusSame (
   status1: {
     checkedKeys: Key[],

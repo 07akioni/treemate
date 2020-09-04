@@ -6,7 +6,15 @@ export const tree1 = [
         key: 1,
         children: [
           {
-            key: 3
+            key: 3,
+            children: [
+              {
+                key: 9,
+              },
+              {
+                key: 10
+              }
+            ]
           },
           {
             key: 4
@@ -37,7 +45,15 @@ export const disabledTree1 = [
         disabled: true,
         children: [
           {
-            key: 3
+            key: 3,
+            children: [
+              {
+                key: 9,
+              },
+              {
+                key: 10
+              }
+            ]
           },
           {
             key: 4
@@ -57,4 +73,49 @@ export const disabledTree1 = [
       }
     ]
   }
+]
+
+export const testExtendedCheckedKeysTree = [
+  {
+    key: '0',
+    children: [
+      {
+        key: '0-0'
+      },
+      {
+        key: '0-1',
+        disabled: true,
+        children: [
+          {
+            key: '0-1-0'
+          },
+          {
+            key: '0-1-1',
+            disabled: true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    key: '1',
+    disabled: true,
+    children: [
+      {
+        key: '1-0'
+      },
+      {
+        key: '1-1',
+        children: [
+          {
+            key: '1-1-0'
+          },
+          {
+            key: '1-1-1',
+            disabled: true
+          }
+        ]
+      }
+    ]
+  },
 ]
