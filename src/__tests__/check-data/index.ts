@@ -1,34 +1,34 @@
 export const basicTree = [
   {
-    key: 0,
+    key: '0',
     children: [
       {
-        key: 1,
+        key: '0-0',
         children: [
           {
-            key: 3,
+            key: '0-0-0',
             children: [
               {
-                key: 9,
+                key: '0-0-0-0',
               },
               {
-                key: 10
+                key: '0-0-0-1'
               }
             ]
           },
           {
-            key: 4
+            key: '0-0-1'
           }
         ]
       },
       {
-        key: 2,
+        key: '0-1',
         children: [
           {
-            key: 5
+            key: '0-1-0'
           },
           {
-            key: 6
+            key: '0-1-1'
           }
         ]
       }
@@ -38,36 +38,36 @@ export const basicTree = [
 
 export const disabledNodeTestTree = [
   {
-    key: 0,
+    key: '0',
     children: [
       {
-        key: 1,
+        key: '0-0',
         disabled: true,
         children: [
           {
-            key: 3,
+            key: '0-0-0',
             children: [
               {
-                key: 9,
+                key: '0-0-0-0',
               },
               {
-                key: 10
+                key: '0-0-0-1'
               }
             ]
           },
           {
-            key: 4
+            key: '0-0-1'
           }
         ]
       },
       {
-        key: 2,
+        key: '0-1',
         children: [
           {
-            key: 5
+            key: '0-1-0'
           },
           {
-            key: 6
+            key: '0-1-1'
           }
         ]
       }

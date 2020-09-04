@@ -88,7 +88,6 @@ export function getCheckedKeys (
         checkedKeys,
         treeMate
       )
-      console.log({ extendedCheckedKeys })
       break
     case 'none':
       extendedCheckedKeys = getExtendedCheckedKeys(

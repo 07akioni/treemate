@@ -38,54 +38,74 @@ describe('check', () => {
     [
       {
         explain: 'check all available children',
-        input: [1],
+        input: ['0-0'],
         output: {
-          checkedKeys: [1, 3, 4, 9, 10],
-          indeterminateKeys: [0]
+          checkedKeys: [
+            '0-0',
+            '0-0-0',
+            '0-0-0-0', 
+            '0-0-0-1',
+            '0-0-1'
+          ],
+          indeterminateKeys: ['0']
         },
         tree: basicTree
       },
       {
         explain: 'stop bubble on disabled parent',
-        input: [3],
+        input: ['0-0-0'],
         output: {
-          checkedKeys: [3, 9, 10],
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
           indeterminateKeys: []
         },
         tree: disabledNodeTestTree
       },
       {
         explain: 'stop sink to disabled children',
-        input: [0],
+        input: ['0'],
         output: {
-          checkedKeys: [0, 2, 5, 6],
+          checkedKeys: [
+            '0',
+            '0-1',
+            '0-1-0',
+            '0-1-1',
+          ],
           indeterminateKeys: []
         },
         tree: disabledNodeTestTree
       },
       {
         explain: 'bubble on ascendant #1',
-        input: [2],
+        input: ['0-1'],
         output: {
-          checkedKeys: [0, 2, 5, 6],
+          checkedKeys: [
+            '0',
+            '0-1',
+            '0-1-0',
+            '0-1-1'
+          ],
           indeterminateKeys: []
         },
         tree: disabledNodeTestTree
       },
       {
         explain: 'bubble on ascendant #2',
-        input: [5],
+        input: ['0-1-0'],
         output: {
-          checkedKeys: [5],
-          indeterminateKeys: [0, 2]
+          checkedKeys: ['0-1-0'],
+          indeterminateKeys: ['0', '0-1']
         },
         tree: disabledNodeTestTree
       },
       {
         explain: 'doesn\'t affect other nodes if it\'s disabled',
-        input: [1],
+        input: ['0-0'],
         output: {
-          checkedKeys: [1],
+          checkedKeys: ['0-0'],
           indeterminateKeys: []
         },
         tree: disabledNodeTestTree
@@ -105,45 +125,66 @@ describe('check', () => {
       {
         explain: 'case1',
         checkedKeys: [],
-        checkedKey: 3,
+        checkedKey: '0-0-0',
         output: {
-          checkedKeys: [3, 9, 10],
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
           indeterminateKeys: []
         }
       },
       {
         explain: 'case2',
         checkedKeys: [],
-        checkedKey: 2,
+        checkedKey: '0-1',
         output: {
-          checkedKeys: [0, 2, 5, 6],
+          checkedKeys: [
+            '0',
+            '0-1',
+            '0-1-0',
+            '0-1-1'
+          ],
           indeterminateKeys: []
         }
       },
       {
         explain: 'case3',
         checkedKeys: [],
-        checkedKey: 5,
+        checkedKey: '0-1-0',
         output: {
-          checkedKeys: [5],
-          indeterminateKeys: [0, 2]
+          checkedKeys: ['0-1-0'],
+          indeterminateKeys: ['0', '0-1']
         }
       },
       {
         explain: 'case4',
-        checkedKeys: [9],
-        checkedKey: 10,
+        checkedKeys: ['0-0-0-0'],
+        checkedKey: '0-0-0-1',
         output: {
-          checkedKeys: [3, 9, 10],
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1',
+          ],
           indeterminateKeys: []
         }
       },
       {
         explain: 'case5',
-        checkedKeys: [1, 9],
-        checkedKey: 10,
+        checkedKeys: [
+          '0-0',
+          '0-0-0-0',
+        ],
+        checkedKey: '0-0-0-1',
         output: {
-          checkedKeys: [1, 3, 9, 10],
+          checkedKeys: [
+            '0-0',
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1',
+          ],
           indeterminateKeys: []
         }
       },
@@ -161,8 +202,12 @@ describe('check', () => {
     [
       {
         explain: 'case1',
-        checkedKeys: [3, 9, 10],
-        uncheckedKey: 3,
+        checkedKeys: [
+          '0-0-0',
+          '0-0-0-0', 
+          '0-0-0-1'
+        ],
+        uncheckedKey: '0-0-0',
         output: {
           checkedKeys: [],
           indeterminateKeys: []
@@ -170,11 +215,15 @@ describe('check', () => {
       },
       {
         explain: 'case2',
-        checkedKeys: [3, 9, 10],
-        uncheckedKey: 9,
+        checkedKeys: [
+          '0-0-0',
+          '0-0-0-0', 
+          '0-0-0-1'
+        ],
+        uncheckedKey: '0-0-0-0',
         output: {
-          checkedKeys: [10],
-          indeterminateKeys: [3]
+          checkedKeys: ['0-0-0-1'],
+          indeterminateKeys: ['0-0-0']
         }
       },
     ].forEach(testCase => {
