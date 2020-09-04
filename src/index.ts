@@ -2,7 +2,8 @@ import {
   RawNode,
   TreeNode,
   TreeNodeMap,
-  LevelTreeNodeMap
+  LevelTreeNodeMap,
+  TreeMateInstance
 } from './interface'
 
 export function isLeaf (rawNode: RawNode): boolean {
@@ -57,11 +58,7 @@ function createTreeNodes (
   return treeNodes
 }
 
-export function createTreeAndMap (rawNodes: RawNode[]): [
-  TreeNode[],
-  TreeNodeMap,
-  LevelTreeNodeMap,
-] {
+export function TreeMate (rawNodes: RawNode[]): TreeMateInstance {
   const treeNodeMap: TreeNodeMap = new Map()
   const levelTreeNodeMap: LevelTreeNodeMap = new Map()
   const treeNodes: TreeNode[] = createTreeNodes(
@@ -69,5 +66,9 @@ export function createTreeAndMap (rawNodes: RawNode[]): [
     treeNodeMap,
     levelTreeNodeMap,
   )!
-  return [treeNodes, treeNodeMap, levelTreeNodeMap]
+  return {
+    treeNodes,
+    treeNodeMap,
+    levelTreeNodeMap
+  }
 }

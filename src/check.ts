@@ -2,7 +2,8 @@ import {
   Key,
   TreeNode,
   TreeNodeMap,
-  LevelTreeNodeMap
+  LevelTreeNodeMap,
+  TreeMateInstance
 } from './interface'
 
 enum TraverseCommand {
@@ -22,26 +23,26 @@ function traverse (
 function getExtendedCheckedKeysAfterCheck (
   checkKey: Key,
   currentCheckedKeys: Key[],
-  TreeNodeMap: TreeNodeMap
+  treeMate: TreeMateInstance
 ): Key[] {
   return getExtendedCheckedKeys(
     currentCheckedKeys.concat([checkKey]),
-    TreeNodeMap
+    treeMate
   )
 }
 
 function getExtendedCheckedKeysAfterUncheck (
   uncheckKey: Key,
   currentCheckedKeys: Key[],
-  TreeNodeMap: TreeNodeMap
+  treeMate: TreeMateInstance
 ): Key[] {
   const extendedCheckedKeys = getExtendedCheckedKeys(
     currentCheckedKeys,
-    TreeNodeMap
+    treeMate
   )
   const extendedKeySetToUncheck = new Set(getExtendedCheckedKeys(
     [ uncheckKey ],
-    TreeNodeMap
+    treeMate
   ))
   return extendedCheckedKeys.filter(
     checkedKey => !extendedKeySetToUncheck.has(checkedKey)
@@ -50,12 +51,14 @@ function getExtendedCheckedKeysAfterUncheck (
 
 export function getCheckedKeys (
   checkedKeys: Key[],
-  levelTreeNodeMap: LevelTreeNodeMap
+  treeMate: TreeMateInstance
 ): {
   checkedKeys: Key[],
   indeterminateKeys: Key[]
 } {
-  const syntheticCheckedKeySet: Set<Key> = new Set(checkedKeys)
+  const { levelTreeNodeMap } = treeMate
+  const extendedCheckedKeys = getExtendedCheckedKeys(checkedKeys, treeMate)
+  const syntheticCheckedKeySet: Set<Key> = new Set(extendedCheckedKeys)
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
   const maxLevel = Math.max.apply(
     null,
@@ -99,13 +102,14 @@ export function getCheckedKeys (
 
 export function getExtendedCheckedKeys (
   checkedKeys: Key[],
-  TreeNodeMap: TreeNodeMap
+  treeMate: TreeMateInstance
 ): Key[] {
+  const { treeNodeMap } = treeMate
   const checkedKeySet: Set<Key> = new Set(checkedKeys)
   const visitedKeySet: Set<Key> = new Set()
   const extendedCheckedKey: Key[] = []
   checkedKeys.forEach(checkedKey => {
-    const checkedTreeNode = TreeNodeMap.get(checkedKey)
+    const checkedTreeNode = treeNodeMap.get(checkedKey)
     if (checkedTreeNode !== undefined) {
       traverse(checkedTreeNode, treeNode => {
         const { key } = treeNode

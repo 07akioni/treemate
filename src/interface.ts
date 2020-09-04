@@ -24,3 +24,9 @@ export interface TreeNode {
 export type TreeNodeMap = Map<Key, TreeNode>
 
 export type LevelTreeNodeMap = Map<number, TreeNode[]>
+
+export interface TreeMateInstance {
+  treeNodes: TreeNode[],
+  treeNodeMap: TreeNodeMap,
+  levelTreeNodeMap: LevelTreeNodeMap,
+}
