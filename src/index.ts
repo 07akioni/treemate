@@ -54,10 +54,10 @@ function createTreeNodes<T extends RawNode[] | undefined> (
       isFirstChild: index === 0,
       isLastChild: index + 1 === rawNodes.length,
       get disabled () {
-        return isDisabled(rawNode)
+        return isDisabled(this.rawNode)
       },
       get isLeaf () {
-        return isLeaf(rawNode)
+        return isLeaf(this.rawNode)
       },
       parent: parent
     }
