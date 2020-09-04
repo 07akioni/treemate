@@ -1,3 +1,7 @@
+import {
+  getCheckedKeys
+} from './check'
+
 export type Key = string | number
 
 export interface RawNode {
@@ -25,8 +29,18 @@ export type TreeNodeMap = Map<Key, TreeNode>
 
 export type LevelTreeNodeMap = Map<number, TreeNode[]>
 
+export type MergedKeys = {
+  checkedKeys: Key[],
+  indeterminateKeys: Key[]
+}
+
+export type TreeMateOptions = {
+  async?: boolean
+}
+
 export interface TreeMateInstance {
   treeNodes: TreeNode[],
   treeNodeMap: TreeNodeMap,
   levelTreeNodeMap: LevelTreeNodeMap,
+  getCheckedKeys: (checkedKeys: Key[]) => MergedKeys
 }

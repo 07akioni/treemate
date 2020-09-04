@@ -3,11 +3,18 @@ import {
   TreeNode,
   TreeNodeMap,
   LevelTreeNodeMap,
-  TreeMateInstance
+  TreeMateInstance,
+  TreeMateOptions,
+  Key
 } from './interface'
 
+import {
+  getCheckedKeys
+} from './check'
+
 export function isLeaf (rawNode: RawNode): boolean {
-  if (rawNode.isLeaf === true) return true
+  const { isLeaf } = rawNode
+  if (isLeaf !== undefined) return isLeaf
   else if (rawNode.children === undefined) return true
   return false
 }
@@ -20,6 +27,7 @@ function createTreeNodes (
   rawNodes: RawNode[] | undefined,
   treeNodeMap: TreeNodeMap,
   levelTreeNodeMap: LevelTreeNodeMap,
+  options: TreeMateOptions,
   parent: TreeNode | null = null,
   level: number = 0,
 ): TreeNode[] | undefined {
@@ -28,6 +36,16 @@ function createTreeNodes (
   }
   const treeNodes: TreeNode[] = []
   rawNodes.forEach((rawNode, index) => {
+    if (
+      options.async &&
+      rawNode.isLeaf === undefined
+    ) {
+      console.error(
+        '[treemate]: node has no `isLeaf` property',
+        rawNode,
+        'all nodes in async mode should have `isLeaf` property'
+      )
+    }
     const treeNode: TreeNode = {
       key: rawNode.key,
       rawNode,
@@ -47,6 +65,7 @@ function createTreeNodes (
       rawNode.children,
       treeNodeMap,
       levelTreeNodeMap,
+      options,
       treeNode,
       level + 1
     ),
@@ -58,17 +77,24 @@ function createTreeNodes (
   return treeNodes
 }
 
-export function TreeMate (rawNodes: RawNode[]): TreeMateInstance {
+export function TreeMate (
+  rawNodes: RawNode[],
+  options: TreeMateOptions = {}
+): TreeMateInstance {
   const treeNodeMap: TreeNodeMap = new Map()
   const levelTreeNodeMap: LevelTreeNodeMap = new Map()
   const treeNodes: TreeNode[] = createTreeNodes(
     rawNodes,
     treeNodeMap,
     levelTreeNodeMap,
+    options
   )!
   return {
     treeNodes,
     treeNodeMap,
-    levelTreeNodeMap
+    levelTreeNodeMap,
+    getCheckedKeys (checkedKeys: Key[]) {
+      return getCheckedKeys(checkedKeys, this)
+    }
   }
 }

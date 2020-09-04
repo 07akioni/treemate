@@ -37,7 +37,7 @@ describe('check', () => {
     it('check all available children', () => {
       const checkedKeys = [1]
       const treeMate = TreeMate(tree1)
-      expectCheckedStatusSame(getCheckedKeys(checkedKeys, treeMate), {
+      expectCheckedStatusSame(treeMate.getCheckedKeys(checkedKeys), {
         checkedKeys: [1, 3, 4, 9, 10],
         indeterminateKeys: [0]
       })
@@ -45,7 +45,7 @@ describe('check', () => {
     it('stop bubble on disabled parent', () => {
       const checkedKeys = [3]
       const treeMate = TreeMate(disabledTree1)
-      expectCheckedStatusSame(getCheckedKeys(checkedKeys, treeMate), {
+      expectCheckedStatusSame(treeMate.getCheckedKeys(checkedKeys), {
         checkedKeys: [3, 9, 10],
         indeterminateKeys: []
       })
@@ -53,7 +53,7 @@ describe('check', () => {
     it('stop sink to disabled children', () => {
       const checkedKeys = [0]
       const treeMate = TreeMate(disabledTree1)
-      expectCheckedStatusSame(getCheckedKeys(checkedKeys, treeMate), {
+      expectCheckedStatusSame(treeMate.getCheckedKeys(checkedKeys), {
         checkedKeys: [0, 2, 5, 6],
         indeterminateKeys: []
       })
@@ -61,7 +61,7 @@ describe('check', () => {
     it('bubble on ascendant', () => {
       const checkedKeys = [2]
       const treeMate = TreeMate(disabledTree1)
-      expectCheckedStatusSame(getCheckedKeys(checkedKeys, treeMate), {
+      expectCheckedStatusSame(treeMate.getCheckedKeys(checkedKeys), {
         checkedKeys: [0, 2, 5, 6],
         indeterminateKeys: []
       })
@@ -69,7 +69,7 @@ describe('check', () => {
     it('doesn\'t affect other nodes if it\'s disabled', () => {
       const checkedKeys = [1]
       const treeMate = TreeMate(disabledTree1)
-      expectCheckedStatusSame(getCheckedKeys(checkedKeys, treeMate), {
+      expectCheckedStatusSame(treeMate.getCheckedKeys(checkedKeys), {
         checkedKeys: [1],
         indeterminateKeys: []
       })
