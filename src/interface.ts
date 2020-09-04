@@ -4,13 +4,13 @@ export interface RawNode {
   key: Key
   children?: RawNode[]
   isLeaf?: boolean
-  disabled?: boolean,
+  disabled?: boolean
   [key: string]: any
 }
 
 export interface TreeNode {
-  key: Key,
-  rawNode: RawNode,
+  key: Key
+  rawNode: RawNode
   level: number
   index: number
   isFirstChild: boolean
@@ -25,12 +25,12 @@ export type TreeNodeMap = Map<Key, TreeNode>
 
 export type LevelTreeNodeMap = Map<number, TreeNode[]>
 
-export type MergedKeys = {
-  checkedKeys: Key[],
+export interface MergedKeys {
+  checkedKeys: Key[]
   indeterminateKeys: Key[]
 }
 
-export type TreeMateOptions = {
+export interface TreeMateOptions {
   async?: boolean
 }
 
@@ -38,16 +38,16 @@ type CheckActionTypeWithKey = 'check' | 'uncheck'
 type CheckActionTypeNone = 'none'
 export type CheckActionType = CheckActionTypeWithKey | CheckActionTypeNone
 export type CheckAction = {
-  type: CheckActionTypeWithKey,
+  type: CheckActionTypeWithKey
   key: Key
 } | {
   type: CheckActionTypeNone
 }
 
 export interface TreeMateInstance {
-  treeNodes: TreeNode[],
-  treeNodeMap: TreeNodeMap,
-  levelTreeNodeMap: LevelTreeNodeMap,
+  treeNodes: TreeNode[]
+  treeNodeMap: TreeNodeMap
+  levelTreeNodeMap: LevelTreeNodeMap
   getCheckedKeys: (checkedKeys: Key[]) => MergedKeys
   check: (checkedKey: Key, checkedKeys: Key[]) => MergedKeys
   uncheck: (uncheckedKey: Key, checkedKeys: Key[]) => MergedKeys

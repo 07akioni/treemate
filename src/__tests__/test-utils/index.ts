@@ -1,20 +1,21 @@
+/* eslint-disable @typescript-eslint/require-array-sort-compare */
 import { TreeNode, Key } from '../../interface'
 
-export function expectArrayEqual (array1: Array<Key>, array2: Array<Key>) {
+export function expectArrayEqual (array1: Key[], array2: Key[]): void {
   expect(Array.from(array1).sort())
     .toEqual(Array.from(array2).sort())
 }
 
 export function expectCheckedStatusSame (
   status1: {
-    checkedKeys: Key[],
+    checkedKeys: Key[]
     indeterminateKeys: Key[]
   },
   status2: {
-    checkedKeys: Key[],
+    checkedKeys: Key[]
     indeterminateKeys: Key[]
   }
-) {
+): void {
   expect(Array.from(status1.checkedKeys).sort())
     .toEqual(Array.from(status2.checkedKeys).sort())
   expect(Array.from(status1.indeterminateKeys).sort())
@@ -24,7 +25,7 @@ export function expectCheckedStatusSame (
 export function expectTreeNodesEqual (
   nodes1: TreeNode[] | undefined,
   nodes2: TreeNode[] | undefined
-) {
+): void {
   if (nodes1 === undefined || nodes2 === undefined) {
     expect(nodes1).toEqual(nodes2)
     return
@@ -34,7 +35,7 @@ export function expectTreeNodesEqual (
   })
 }
 
-export function expectTreeNodeEqual (node1: TreeNode, node2: TreeNode) {
+export function expectTreeNodeEqual (node1: TreeNode, node2: TreeNode): void {
   Object.keys(node1).forEach(key => {
     if (key === 'rawNode') {
       expect(node1.rawNode).toStrictEqual(node2.rawNode)

@@ -1,18 +1,19 @@
-import { 
+import {
   Key,
   TreeNode,
   TreeMateInstance,
   CheckAction
 } from './interface'
 
-enum TraverseCommand {
-  STOP
+// Do not use enum for lint plugin has error
+const TraverseCommand = {
+  STOP: 'STOP'
 }
 
 function traverse (
   treeNode: TreeNode,
-  callback: (treeNode: TreeNode) => any,
-) {
+  callback: (treeNode: TreeNode) => any
+): void {
   const command = callback(treeNode)
   if (treeNode.children !== undefined && command !== TraverseCommand.STOP) {
     treeNode.children.forEach(childNode => traverse(childNode, callback))
@@ -40,14 +41,14 @@ function getExtendedCheckedKeysAfterUncheck (
     treeMate
   )
   const extendedKeySetToUncheck = new Set(getExtendedCheckedKeys(
-    [ uncheckKey ],
+    [uncheckKey],
     treeMate
   ))
   const ascendantKeySet: Set<Key> = new Set()
   const uncheckedTreeNode = treeMate.treeNodeMap.get(uncheckKey)
-  if (uncheckedTreeNode) {
+  if (uncheckedTreeNode !== undefined) {
     let nodeCursor = uncheckedTreeNode.parent
-    while (nodeCursor) {
+    while (nodeCursor !== null) {
       if (nodeCursor.disabled) break
       ascendantKeySet.add(nodeCursor.key)
       nodeCursor = nodeCursor.parent
@@ -68,9 +69,9 @@ export function getCheckedKeys (
   action: CheckAction,
   treeMate: TreeMateInstance
 ): {
-  checkedKeys: Key[],
-  indeterminateKeys: Key[]
-} {
+    checkedKeys: Key[]
+    indeterminateKeys: Key[]
+  } {
   const { levelTreeNodeMap } = treeMate
   let extendedCheckedKeys: Key[]
 
@@ -104,7 +105,7 @@ export function getCheckedKeys (
     Array.from(levelTreeNodeMap.keys())
   )
   for (let level = maxLevel; level >= 0; level -= 1) {
-    const levelTreeNodes = levelTreeNodeMap.get(level)!
+    const levelTreeNodes = levelTreeNodeMap.get(level) ?? []
     for (const levelTreeNode of levelTreeNodes) {
       if (levelTreeNode.disabled) {
         continue
@@ -113,7 +114,7 @@ export function getCheckedKeys (
       if (!levelTreeNode.isLeaf) {
         let fullyChecked = true
         let partialChecked = false
-        for (const childNode of levelTreeNode.children!) {
+        for (const childNode of levelTreeNode.children ?? []) {
           const childKey = childNode.key
           if (childNode.disabled) continue
           if (

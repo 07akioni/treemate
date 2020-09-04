@@ -2,7 +2,6 @@ import testData from './index-data/tree-data'
 import { expectTreeNodesEqual } from './test-utils/index'
 import { TreeMate } from '../index'
 
-
 describe('index', () => {
   describe('#createTreeNodes', () => {
     testData.forEach(({ createData, description }, index) => {

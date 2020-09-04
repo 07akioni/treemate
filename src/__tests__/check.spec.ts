@@ -2,7 +2,6 @@ import { getExtendedCheckedKeys } from '../check'
 import { TreeMate } from '../index'
 import { basicTree, disabledNodeTestTree, extendedCheckedKeysTestTree } from './check-data/index'
 import { expectCheckedStatusSame, expectArrayEqual } from './test-utils/index'
-import { Key } from '../interface'
 
 describe('check', () => {
   describe('#getExtentedCheckedKeys', () => {
@@ -24,7 +23,7 @@ describe('check', () => {
         extendedCheckedKeys: ['1-1', '1-1-0']
       }
     ].forEach((data, index) => {
-      it('extended to all avaiabled children #' + (index + 1), () => {
+      it('extended to all avaiabled children #' + String(index + 1), () => {
         const treeMate = TreeMate(extendedCheckedKeysTestTree)
         const extendedCheckedKeys = getExtendedCheckedKeys(data.checkedKeys, treeMate)
         expectArrayEqual(
@@ -43,7 +42,7 @@ describe('check', () => {
           checkedKeys: [
             '0-0',
             '0-0-0',
-            '0-0-0-0', 
+            '0-0-0-0',
             '0-0-0-1',
             '0-0-1'
           ],
@@ -72,7 +71,7 @@ describe('check', () => {
             '0',
             '0-1',
             '0-1-0',
-            '0-1-1',
+            '0-1-1'
           ],
           indeterminateKeys: []
         },
@@ -166,7 +165,7 @@ describe('check', () => {
           checkedKeys: [
             '0-0-0',
             '0-0-0-0',
-            '0-0-0-1',
+            '0-0-0-1'
           ],
           indeterminateKeys: []
         }
@@ -175,7 +174,7 @@ describe('check', () => {
         explain: 'case5',
         checkedKeys: [
           '0-0',
-          '0-0-0-0',
+          '0-0-0-0'
         ],
         checkedKey: '0-0-0-1',
         output: {
@@ -183,11 +182,11 @@ describe('check', () => {
             '0-0',
             '0-0-0',
             '0-0-0-0',
-            '0-0-0-1',
+            '0-0-0-1'
           ],
           indeterminateKeys: []
         }
-      },
+      }
     ].forEach(testCase => {
       it(testCase.explain, () => {
         const treeMate = TreeMate(disabledNodeTestTree)
@@ -204,7 +203,7 @@ describe('check', () => {
         explain: 'case1',
         checkedKeys: [
           '0-0-0',
-          '0-0-0-0', 
+          '0-0-0-0',
           '0-0-0-1'
         ],
         uncheckedKey: '0-0-0',
@@ -217,7 +216,7 @@ describe('check', () => {
         explain: 'case2',
         checkedKeys: [
           '0-0-0',
-          '0-0-0-0', 
+          '0-0-0-0',
           '0-0-0-1'
         ],
         uncheckedKey: '0-0-0-0',
@@ -225,7 +224,7 @@ describe('check', () => {
           checkedKeys: ['0-0-0-1'],
           indeterminateKeys: ['0-0-0']
         }
-      },
+      }
     ].forEach(testCase => {
       it(testCase.explain, () => {
         const treeMate = TreeMate(disabledNodeTestTree)

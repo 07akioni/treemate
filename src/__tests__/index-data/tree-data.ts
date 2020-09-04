@@ -2,7 +2,7 @@ import { TreeNode, RawNode } from '../../interface'
 
 type CreateData = () => { input: RawNode[], output: TreeNode[] }
 
-const data : Array<{ createData: CreateData, description: string }> = [
+const data: Array<{ createData: CreateData, description: string }> = [
   {
     description: 'empty root []',
     createData () {
@@ -16,7 +16,7 @@ const data : Array<{ createData: CreateData, description: string }> = [
     description: '1 node',
     createData () {
       const raw0 = {
-        key: 0,
+        key: 0
       }
       const node0 = {
         key: 0,
@@ -75,7 +75,7 @@ const data : Array<{ createData: CreateData, description: string }> = [
             isLastChild: false,
             parent: null, // will be set later
             isLeaf: true,
-            disabled: false,
+            disabled: false
           },
           {
             key: 2,
@@ -86,7 +86,7 @@ const data : Array<{ createData: CreateData, description: string }> = [
             isLastChild: true,
             parent: null, // will be set later
             isLeaf: true,
-            disabled: false,
+            disabled: false
           }
         ]
       }

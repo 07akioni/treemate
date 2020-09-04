@@ -23,21 +23,21 @@ export function isDisabled (rawNode: RawNode): boolean {
   return rawNode.disabled === true
 }
 
-function createTreeNodes (
-  rawNodes: RawNode[] | undefined,
+function createTreeNodes<T extends RawNode[] | undefined> (
+  rawNodes: T,
   treeNodeMap: TreeNodeMap,
   levelTreeNodeMap: LevelTreeNodeMap,
   options: TreeMateOptions,
   parent: TreeNode | null = null,
-  level: number = 0,
-): TreeNode[] | undefined {
+  level: number = 0
+): T extends RawNode[] ? TreeNode[] : undefined {
   if (rawNodes === undefined) {
-    return rawNodes
+    return rawNodes as any
   }
   const treeNodes: TreeNode[] = []
   rawNodes.forEach((rawNode, index) => {
     if (
-      options.async &&
+      options.async === true &&
       rawNode.isLeaf === undefined
     ) {
       console.error(
@@ -68,13 +68,13 @@ function createTreeNodes (
       options,
       treeNode,
       level + 1
-    ),
+    )
     treeNodes.push(treeNode)
     treeNodeMap.set(treeNode.key, treeNode)
     if (!levelTreeNodeMap.has(level)) levelTreeNodeMap.set(level, [])
-    levelTreeNodeMap.get(level)!.push(treeNode)
+    levelTreeNodeMap.get(level)?.push(treeNode)
   })
-  return treeNodes
+  return treeNodes as any
 }
 
 export function TreeMate (
@@ -88,13 +88,13 @@ export function TreeMate (
     treeNodeMap,
     levelTreeNodeMap,
     options
-  )!
+  )
   return {
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
     getCheckedKeys (
-      checkedKeys: Key[],
+      checkedKeys: Key[]
     ) {
       return getCheckedKeys(
         checkedKeys,
@@ -106,7 +106,7 @@ export function TreeMate (
     },
     check (
       checkedKey: Key,
-      checkedKeys: Key[],
+      checkedKeys: Key[]
     ) {
       return getCheckedKeys(
         checkedKeys,
@@ -119,7 +119,7 @@ export function TreeMate (
     },
     uncheck (
       uncheckedKey: Key,
-      checkedKeys: Key[],
+      checkedKeys: Key[]
     ) {
       return getCheckedKeys(
         checkedKeys,

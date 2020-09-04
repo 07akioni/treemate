@@ -9,7 +9,7 @@ export const basicTree = [
             key: '0-0-0',
             children: [
               {
-                key: '0-0-0-0',
+                key: '0-0-0-0'
               },
               {
                 key: '0-0-0-1'
@@ -48,7 +48,7 @@ export const disabledNodeTestTree = [
             key: '0-0-0',
             children: [
               {
-                key: '0-0-0-0',
+                key: '0-0-0-0'
               },
               {
                 key: '0-0-0-1'
@@ -117,5 +117,5 @@ export const extendedCheckedKeysTestTree = [
         ]
       }
     ]
-  },
+  }
 ]
