@@ -43,9 +43,24 @@ function getExtendedCheckedKeysAfterUncheck (
     [ uncheckKey ],
     treeMate
   ))
-  return extendedCheckedKeys.filter(
-    checkedKey => !extendedKeySetToUncheck.has(checkedKey)
-  )
+  const ascendantKeySet: Set<Key> = new Set()
+  const uncheckedTreeNode = treeMate.treeNodeMap.get(uncheckKey)
+  if (uncheckedTreeNode) {
+    let nodeCursor = uncheckedTreeNode.parent
+    while (nodeCursor) {
+      if (nodeCursor.disabled) break
+      ascendantKeySet.add(nodeCursor.key)
+      nodeCursor = nodeCursor.parent
+    }
+    return extendedCheckedKeys.filter(
+      checkedKey => (
+        !extendedKeySetToUncheck.has(checkedKey) &&
+        !ascendantKeySet.has(checkedKey)
+      )
+    )
+  } else {
+    return extendedCheckedKeys
+  }
 }
 
 export function getCheckedKeys (
@@ -73,6 +88,7 @@ export function getCheckedKeys (
         checkedKeys,
         treeMate
       )
+      console.log({ extendedCheckedKeys })
       break
     case 'none':
       extendedCheckedKeys = getExtendedCheckedKeys(

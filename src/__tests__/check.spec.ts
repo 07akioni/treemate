@@ -121,14 +121,32 @@ describe('check', () => {
         }
       },
       {
-        explain: 'case2',
+        explain: 'case3',
         checkedKeys: [],
         checkedKey: 5,
         output: {
           checkedKeys: [5],
           indeterminateKeys: [0, 2]
         }
-      }
+      },
+      {
+        explain: 'case4',
+        checkedKeys: [9],
+        checkedKey: 10,
+        output: {
+          checkedKeys: [3, 9, 10],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case5',
+        checkedKeys: [1, 9],
+        checkedKey: 10,
+        output: {
+          checkedKeys: [1, 3, 9, 10],
+          indeterminateKeys: []
+        }
+      },
     ].forEach(testCase => {
       it(testCase.explain, () => {
         const treeMate = TreeMate(disabledNodeTestTree)
@@ -140,12 +158,32 @@ describe('check', () => {
     })
   })
   describe('#uncheck', () => {
-    it('works', () => {
-      const checkedKeys: Key[] = [3, 9, 10]
-      const treeMate = TreeMate(disabledNodeTestTree)
-      expectCheckedStatusSame(treeMate.uncheck(3, checkedKeys), {
-        checkedKeys: [],
-        indeterminateKeys: []
+    [
+      {
+        explain: 'case1',
+        checkedKeys: [3, 9, 10],
+        uncheckedKey: 3,
+        output: {
+          checkedKeys: [],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case2',
+        checkedKeys: [3, 9, 10],
+        uncheckedKey: 9,
+        output: {
+          checkedKeys: [10],
+          indeterminateKeys: [3]
+        }
+      },
+    ].forEach(testCase => {
+      it(testCase.explain, () => {
+        const treeMate = TreeMate(disabledNodeTestTree)
+        expectCheckedStatusSame(
+          treeMate.uncheck(testCase.uncheckedKey, testCase.checkedKeys),
+          testCase.output
+        )
       })
     })
   })
