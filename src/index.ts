@@ -83,9 +83,7 @@ export function TreeMate (
     levelTreeNodeMap,
     options
   )
-  const { async = false } = options
   return {
-    async,
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,

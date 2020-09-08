@@ -181,7 +181,7 @@ export function getExtendedCheckedKeys (
           }
           return TRAVERSE_COMMAND.STOP
         } else {
-          if (treeMate.async && isExpilicitlyNotLoaded(treeNode.rawNode)) {
+          if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
             throw new SubtreeUnloadedError()
           }
           extendedCheckedKey.push(key)

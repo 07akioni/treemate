@@ -30,12 +30,10 @@ export interface MergedKeys {
   indeterminateKeys: Key[]
 }
 
-export interface TreeMateOptions {
-  async?: boolean
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface TreeMateOptions {}
 
 export interface TreeMateInstance {
-  async: boolean
   treeNodes: TreeNode[]
   treeNodeMap: TreeNodeMap
   levelTreeNodeMap: LevelTreeNodeMap
