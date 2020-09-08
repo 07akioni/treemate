@@ -18,3 +18,40 @@ Help people who want to write a tree component.
     - [x] implemented
     - [ ] well tested
   - [x] throw error on non-complete tree
+
+## Usage
+```js
+const { TreeMate } = require('treemate')
+
+const tree = [
+  {
+    key: '0',
+    children: [
+      {
+        key: '0-0'
+      },
+      {
+        key: '0-1'
+      }
+    ]
+  }
+]
+
+const treemate = TreeMate(tree)
+
+let result = treemate.getCheckedKeys(['0'])
+// {
+//   checkedKeys: ['0', '0-0', '0-1'],
+//   indeterminateKeys: []
+// }
+checkedKeys = treemate.uncheck('0-1', result)
+// {
+//   checkedKeys: ['0-0'],
+//   indeterminateKeys: ['0']
+// }
+checkedKeys = treemate.check('0-1', result)
+// {
+//   checkedKeys: ['0', '0-0', '0-1'],
+//   indeterminateKeys: []
+// }
+```

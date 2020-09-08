@@ -1,6 +1,8 @@
 import {
   TreeNode,
-  RawNode
+  RawNode,
+  CheckResult,
+  Key
 } from '@/interface'
 
 export function toArray<T> (arg: T): T extends any[] ? T : T[] {
@@ -40,4 +42,9 @@ export function isExpilicitlyNotLoaded (rawNode: RawNode): boolean {
 
 export function isNodeInvalid (rawNode: RawNode): boolean {
   return rawNode.isLeaf === true && rawNode.children !== undefined
+}
+
+export function unwrapResult (result: CheckResult | Key[]): Key[] {
+  if (Array.isArray(result)) return result
+  return result.checkedKeys
 }

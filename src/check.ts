@@ -1,6 +1,7 @@
 import {
   Key,
-  TreeMateInstance
+  TreeMateInstance,
+  CheckResult
 } from '@/interface'
 import {
   isExpilicitlyNotLoaded,
@@ -82,10 +83,7 @@ export function getCheckedKeys (
     keysToUncheck?: Key[]
   },
   treeMate: TreeMateInstance
-): {
-    checkedKeys: Key[]
-    indeterminateKeys: Key[]
-  } {
+): CheckResult {
   const {
     checkedKeys,
     keysToCheck,

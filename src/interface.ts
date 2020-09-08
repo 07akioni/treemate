@@ -41,3 +41,8 @@ export interface TreeMateInstance {
   check: (checkedKey: Key, checkedKeys: Key[]) => MergedKeys
   uncheck: (uncheckedKey: Key, checkedKeys: Key[]) => MergedKeys
 }
+
+export interface CheckResult {
+  checkedKeys: Key[]
+  indeterminateKeys: Key[]
+}

@@ -5,7 +5,8 @@ import {
   LevelTreeNodeMap,
   TreeMateInstance,
   TreeMateOptions,
-  Key
+  Key,
+  CheckResult
 } from '@/interface'
 import {
   getCheckedKeys
@@ -14,7 +15,8 @@ import {
   toArray,
   isDisabled,
   isLeaf,
-  isNodeInvalid
+  isNodeInvalid,
+  unwrapResult
 } from '@/utils'
 
 function createTreeNodes<T extends RawNode[] | undefined> (
@@ -88,20 +90,22 @@ export function TreeMate (
     treeNodeMap,
     levelTreeNodeMap,
     getCheckedKeys (
-      checkedKeys: Key[]
+      checkedKeys: Key[] | CheckResult
     ) {
       return getCheckedKeys(
-        { checkedKeys },
+        {
+          checkedKeys: unwrapResult(checkedKeys)
+        },
         this
       )
     },
     check (
       keysToCheck: Key | Key[],
-      checkedKeys: Key[]
+      checkedKeys: Key[] | CheckResult
     ) {
       return getCheckedKeys(
         {
-          checkedKeys,
+          checkedKeys: unwrapResult(checkedKeys),
           keysToCheck: toArray(keysToCheck)
         },
         this
@@ -109,11 +113,11 @@ export function TreeMate (
     },
     uncheck (
       keysToUncheck: Key | Key[],
-      checkedKeys: Key[]
+      checkedKeys: Key[] | CheckResult
     ) {
       return getCheckedKeys(
         {
-          checkedKeys,
+          checkedKeys: unwrapResult(checkedKeys),
           keysToUncheck: toArray(keysToUncheck)
         },
         this
