@@ -17,7 +17,15 @@ module.exports = {
         project: './tsconfig.json'
       },
       rules: {
-        "@typescript-eslint/strict-boolean-expressions": 0
+        '@typescript-eslint/strict-boolean-expressions': 0
+      }
+    },
+    {
+      files: ['*.js'],
+      extends: 'standard',
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module'
       }
     }
   ]

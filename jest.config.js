@@ -1,6 +1,8 @@
+const path = require('path')
+
 module.exports = {
   testRegex: '(test|spec)\\.[jt]sx?$',
   moduleNameMapper: {
-    "@/(.*)": require('path').resolve(__dirname, 'src') + '/$1',
+    '@/(.*)': path.resolve(__dirname, 'src') + '/$1'
   }
 }
