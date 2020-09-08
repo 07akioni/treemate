@@ -15,6 +15,9 @@ module.exports = {
       ],
       parserOptions: {
         project: './tsconfig.json'
+      },
+      rules: {
+        "@typescript-eslint/strict-boolean-expressions": 0
       }
     }
   ]

@@ -6,22 +6,16 @@ import {
   TreeMateInstance,
   TreeMateOptions,
   Key
-} from './interface'
-
+} from '@/interface'
 import {
   getCheckedKeys
-} from './check'
-
-export function isLeaf (rawNode: RawNode): boolean {
-  const { isLeaf } = rawNode
-  if (isLeaf !== undefined) return isLeaf
-  else if (rawNode.children === undefined) return true
-  return false
-}
-
-export function isDisabled (rawNode: RawNode): boolean {
-  return rawNode.disabled === true
-}
+} from '@/check'
+import {
+  toArray,
+  isDisabled,
+  isLeaf,
+  isNodeInvalid
+} from '@/utils'
 
 function createTreeNodes<T extends RawNode[] | undefined> (
   rawNodes: T,
@@ -37,13 +31,13 @@ function createTreeNodes<T extends RawNode[] | undefined> (
   const treeNodes: TreeNode[] = []
   rawNodes.forEach((rawNode, index) => {
     if (
-      options.async === true &&
-      rawNode.isLeaf === undefined
+      process.env.NODE_ENV !== 'production' &&
+      isNodeInvalid(rawNode)
     ) {
       console.error(
-        '[treemate]: node has no `isLeaf` property',
+        '[treemate]: node',
         rawNode,
-        'all nodes in async mode should have `isLeaf` property'
+        'is invalid'
       )
     }
     const treeNode: TreeNode = {
@@ -89,7 +83,9 @@ export function TreeMate (
     levelTreeNodeMap,
     options
   )
+  const { async = false } = options
   return {
+    async,
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
@@ -97,35 +93,30 @@ export function TreeMate (
       checkedKeys: Key[]
     ) {
       return getCheckedKeys(
-        checkedKeys,
-        {
-          type: 'none'
-        },
+        { checkedKeys },
         this
       )
     },
     check (
-      checkedKey: Key | Key[],
+      keysToCheck: Key | Key[],
       checkedKeys: Key[]
     ) {
       return getCheckedKeys(
-        checkedKeys,
         {
-          type: 'check',
-          data: checkedKey
+          checkedKeys,
+          keysToCheck: toArray(keysToCheck)
         },
         this
       )
     },
     uncheck (
-      uncheckedKey: Key | Key[],
+      keysToUncheck: Key | Key[],
       checkedKeys: Key[]
     ) {
       return getCheckedKeys(
-        checkedKeys,
         {
-          type: 'uncheck',
-          data: uncheckedKey
+          checkedKeys,
+          keysToUncheck: toArray(keysToUncheck)
         },
         this
       )

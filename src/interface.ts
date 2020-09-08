@@ -34,17 +34,8 @@ export interface TreeMateOptions {
   async?: boolean
 }
 
-type CheckActionTypeWithKey = 'check' | 'uncheck'
-type CheckActionTypeNone = 'none'
-export type CheckActionType = CheckActionTypeWithKey | CheckActionTypeNone
-export type CheckAction = {
-  type: CheckActionTypeWithKey
-  data: Key | Key[]
-} | {
-  type: CheckActionTypeNone
-}
-
 export interface TreeMateInstance {
+  async: boolean
   treeNodes: TreeNode[]
   treeNodeMap: TreeNodeMap
   levelTreeNodeMap: LevelTreeNodeMap

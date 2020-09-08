@@ -1,27 +1,17 @@
 import {
   Key,
-  TreeNode,
-  TreeMateInstance,
-  CheckAction
-} from './interface'
+  TreeMateInstance
+} from '@/interface'
+import {
+  isExpilicitlyNotLoaded,
+  traverse,
+  TRAVERSE_COMMAND
+} from '@/utils'
 
-// Do not use enum for lint plugin has error
-const TraverseCommand = {
-  STOP: 'STOP'
-}
-
-function toArray<T> (arg: T): T extends any[] ? T : T[] {
-  if (Array.isArray(arg)) return arg as any
-  return [arg] as any
-}
-
-function traverse (
-  treeNode: TreeNode,
-  callback: (treeNode: TreeNode) => any
-): void {
-  const command = callback(treeNode)
-  if (treeNode.children !== undefined && command !== TraverseCommand.STOP) {
-    treeNode.children.forEach(childNode => traverse(childNode, callback))
+export class SubtreeUnloadedError extends Error {
+  constructor () {
+    super()
+    this.message = 'SubtreeUnloadedError: checking a subtree whose required nodes are not fully loaded.'
   }
 }
 
@@ -86,37 +76,40 @@ function getExtendedCheckedKeysAfterUncheck (
 }
 
 export function getCheckedKeys (
-  checkedKeys: Key[],
-  action: CheckAction,
+  options: {
+    checkedKeys: Key[]
+    keysToCheck?: Key[]
+    keysToUncheck?: Key[]
+  },
   treeMate: TreeMateInstance
 ): {
     checkedKeys: Key[]
     indeterminateKeys: Key[]
   } {
+  const {
+    checkedKeys,
+    keysToCheck,
+    keysToUncheck
+  } = options
   const { levelTreeNodeMap } = treeMate
   let extendedCheckedKeys: Key[]
-
-  switch (action.type) {
-    case 'check':
-      extendedCheckedKeys = getExtendedCheckedKeysAfterCheck(
-        toArray(action.data),
-        checkedKeys,
-        treeMate
-      )
-      break
-    case 'uncheck':
-      extendedCheckedKeys = getExtendedCheckedKeysAfterUncheck(
-        toArray(action.data),
-        checkedKeys,
-        treeMate
-      )
-      break
-    case 'none':
-      extendedCheckedKeys = getExtendedCheckedKeys(
-        checkedKeys,
-        treeMate
-      )
-      break
+  if (keysToUncheck !== undefined) {
+    extendedCheckedKeys = getExtendedCheckedKeysAfterUncheck(
+      keysToUncheck,
+      checkedKeys,
+      treeMate
+    )
+  } else if (keysToCheck !== undefined) {
+    extendedCheckedKeys = getExtendedCheckedKeysAfterCheck(
+      keysToCheck,
+      checkedKeys,
+      treeMate
+    )
+  } else {
+    extendedCheckedKeys = getExtendedCheckedKeys(
+      checkedKeys,
+      treeMate
+    )
   }
 
   const syntheticCheckedKeySet: Set<Key> = new Set(extendedCheckedKeys)
@@ -186,8 +179,11 @@ export function getExtendedCheckedKeys (
           if (checkedKeySet.has(key)) {
             extendedCheckedKey.push(key)
           }
-          return TraverseCommand.STOP
+          return TRAVERSE_COMMAND.STOP
         } else {
+          if (treeMate.async && isExpilicitlyNotLoaded(treeNode.rawNode)) {
+            throw new SubtreeUnloadedError()
+          }
           extendedCheckedKey.push(key)
         }
       })

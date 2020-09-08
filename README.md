@@ -7,12 +7,14 @@ Help people who want to write a tree component.
 - [x] basic test
 - [x] lint
 - [ ] check action & uncheck action
-  - [ ] full test
+  - [x] full test
   - [ ] batch check & batch uncheck
     - [x] feature
-    - [ ] API cleaning
+    - [x] API cleaning
     - [ ] test
   - [ ] functional disabled prop
-- [ ] <del>async patches</del> support non-complete-data
+- [x] <del>async patches</del> support non-complete-data
   - [ ] support check & uncheck action on partial complete tree
-  - [ ] throw error on non-complete tree
+    - [x] implemented
+    - [ ] well tested
+  - [x] throw error on non-complete tree

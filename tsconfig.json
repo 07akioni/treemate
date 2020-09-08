@@ -6,6 +6,10 @@
     "strict": true,
     "strictNullChecks": true,
     "declaration": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    },
     "lib": [
       "ESNext"
     ]

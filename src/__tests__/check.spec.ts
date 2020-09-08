@@ -1,5 +1,6 @@
-import { getExtendedCheckedKeys } from '../check'
-import { TreeMate } from '../index'
+import { getExtendedCheckedKeys } from '@/check'
+import { TreeMate } from '@/index'
+
 import { basicTree, disabledNodeTestTree, extendedCheckedKeysTestTree } from './check-data/index'
 import { expectCheckedStatusSame, expectArrayEqual } from './test-utils/index'
 
