@@ -1,6 +1,6 @@
 {
   "name": "treemate",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -26,6 +26,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.esm.json && tsc --project tsconfig.build.cjs.json ",
     "lint": "eslint \"./src/**/*.ts\"",
+    "release": "npm run build && npm publish",
     "test": "jest"
   },
   "repository": {
