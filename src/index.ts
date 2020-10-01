@@ -16,8 +16,11 @@ import {
   isDisabled,
   isLeaf,
   isNodeInvalid,
-  unwrapResult
+  unwrapResult, isShallowLoaded
 } from '@/utils'
+import {
+  getActivePath
+} from '@/active-path'
 
 function createTreeNodes<T extends RawNode[] | undefined> (
   rawNodes: T,
@@ -55,6 +58,9 @@ function createTreeNodes<T extends RawNode[] | undefined> (
       get isLeaf () {
         return isLeaf(this.rawNode)
       },
+      get isShallowLoaded () {
+        return isShallowLoaded(this.rawNode)
+      },
       parent: parent
     }
     treeNode.children = createTreeNodes(
@@ -89,6 +95,12 @@ export function TreeMate (
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
+    getActivePath (activeKey: Key) {
+      return getActivePath(
+        activeKey,
+        this
+      )
+    },
     getCheckedKeys (
       checkedKeys: Key[] | CheckResult
     ) {

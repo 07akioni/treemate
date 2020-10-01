@@ -32,6 +32,12 @@ export function isLeaf (rawNode: RawNode): boolean {
   return false
 }
 
+export function isShallowLoaded (rawNode: RawNode): boolean {
+  const { isLeaf, children } = rawNode
+  if (isLeaf === false && children === undefined) return false
+  return true
+}
+
 export function isDisabled (rawNode: RawNode): boolean {
   return rawNode.disabled === true
 }

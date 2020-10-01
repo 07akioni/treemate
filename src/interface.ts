@@ -17,6 +17,7 @@ export interface TreeNode {
   isLastChild: boolean
   parent: TreeNode | null
   isLeaf: boolean
+  isShallowLoaded: boolean
   disabled: boolean
   children?: TreeNode[]
 }
@@ -33,6 +34,12 @@ export interface MergedKeys {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TreeMateOptions {}
 
+export interface MergedActivePath {
+  keyPath: Key[]
+  treeNodePath: TreeNode[]
+  activeTreeNode: TreeNode | null
+}
+
 export interface TreeMateInstance {
   treeNodes: TreeNode[]
   treeNodeMap: TreeNodeMap
@@ -40,6 +47,7 @@ export interface TreeMateInstance {
   getCheckedKeys: (checkedKeys: Key[]) => MergedKeys
   check: (checkedKey: Key, checkedKeys: Key[]) => MergedKeys
   uncheck: (uncheckedKey: Key, checkedKeys: Key[]) => MergedKeys
+  getActivePath: (activeKey: Key) => MergedActivePath
 }
 
 export interface CheckResult {

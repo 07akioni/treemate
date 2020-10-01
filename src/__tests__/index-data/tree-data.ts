@@ -27,6 +27,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         isLastChild: true,
         parent: null,
         isLeaf: true,
+        isShallowLoaded: true,
         disabled: false
       }
       return {
@@ -65,6 +66,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         parent: null,
         isLeaf: false,
         disabled: false,
+        isShallowLoaded: true,
         children: [
           {
             key: 1,
@@ -75,7 +77,8 @@ const data: Array<{ createData: CreateData, description: string }> = [
             isLastChild: false,
             parent: null, // will be set later
             isLeaf: true,
-            disabled: false
+            disabled: false,
+            isShallowLoaded: true
           },
           {
             key: 2,
@@ -86,7 +89,8 @@ const data: Array<{ createData: CreateData, description: string }> = [
             isLastChild: true,
             parent: null, // will be set later
             isLeaf: true,
-            disabled: false
+            disabled: false,
+            isShallowLoaded: true
           }
         ]
       }
