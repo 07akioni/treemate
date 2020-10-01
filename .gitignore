@@ -3,4 +3,6 @@ package-lock.json
 .DS_Store
 dist
 coverage
+es
+lib
 ~
