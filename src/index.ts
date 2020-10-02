@@ -91,14 +91,14 @@ export function TreeMate (
     levelTreeNodeMap,
     options
   )
-  return {
+  const treemate: TreeMateInstance = {
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
     getActivePath (activeKey: Key) {
       return getActivePath(
         activeKey,
-        this
+        treemate
       )
     },
     getCheckedKeys (
@@ -108,7 +108,7 @@ export function TreeMate (
         {
           checkedKeys: unwrapResult(checkedKeys)
         },
-        this
+        treemate
       )
     },
     check (
@@ -120,7 +120,7 @@ export function TreeMate (
           checkedKeys: unwrapResult(checkedKeys),
           keysToCheck: toArray(keysToCheck)
         },
-        this
+        treemate
       )
     },
     uncheck (
@@ -132,8 +132,9 @@ export function TreeMate (
           checkedKeys: unwrapResult(checkedKeys),
           keysToUncheck: toArray(keysToUncheck)
         },
-        this
+        treemate
       )
     }
   }
+  return treemate
 }
