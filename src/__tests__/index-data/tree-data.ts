@@ -18,6 +18,9 @@ const data: Array<{ createData: CreateData, description: string }> = [
       const raw0 = {
         key: 0
       }
+      const input = [
+        raw0
+      ]
       const node0 = {
         key: 0,
         rawNode: raw0,
@@ -28,15 +31,19 @@ const data: Array<{ createData: CreateData, description: string }> = [
         parent: null,
         isLeaf: true,
         isShallowLoaded: true,
-        disabled: false
+        disabled: false,
+        getParent: () => null,
+        getChild: () => null,
+        getPrev: () => null,
+        getNext: () => null
       }
+      ;(node0 as TreeNode).siblings = [
+        node0 as TreeNode
+      ]
+      const output = (node0 as TreeNode).siblings
       return {
-        input: [
-          raw0
-        ],
-        output: [
-          node0
-        ]
+        input,
+        output
       }
     }
   },
@@ -56,6 +63,43 @@ const data: Array<{ createData: CreateData, description: string }> = [
       }
       const raw1 = raw0.children[0]
       const raw2 = raw0.children[1]
+      const input = [
+        raw0
+      ]
+      const node1 = {
+        key: 1,
+        rawNode: raw1,
+        level: 1,
+        index: 0,
+        isFirstChild: true,
+        isLastChild: false,
+        parent: null, // will be set later
+        isLeaf: true,
+        disabled: false,
+        isShallowLoaded: true,
+        getParent: () => null,
+        getChild: () => null,
+        getPrev: () => null,
+        getNext: () => null,
+        siblings: []
+      }
+      const node2 = {
+        key: 2,
+        rawNode: raw2,
+        level: 1,
+        index: 1,
+        isFirstChild: false,
+        isLastChild: true,
+        parent: null, // will be set later
+        isLeaf: true,
+        disabled: false,
+        isShallowLoaded: true,
+        getParent: () => null,
+        getChild: () => null,
+        getPrev: () => null,
+        getNext: () => null,
+        siblings: []
+      }
       const node0 = {
         key: 0,
         rawNode: raw0,
@@ -67,42 +111,26 @@ const data: Array<{ createData: CreateData, description: string }> = [
         isLeaf: false,
         disabled: false,
         isShallowLoaded: true,
+        getParent: () => null,
+        getChild: () => null,
+        getPrev: () => null,
+        getNext: () => null,
+        siblings: [],
         children: [
-          {
-            key: 1,
-            rawNode: raw1,
-            level: 1,
-            index: 0,
-            isFirstChild: true,
-            isLastChild: false,
-            parent: null, // will be set later
-            isLeaf: true,
-            disabled: false,
-            isShallowLoaded: true
-          },
-          {
-            key: 2,
-            rawNode: raw2,
-            level: 1,
-            index: 1,
-            isFirstChild: false,
-            isLastChild: true,
-            parent: null, // will be set later
-            isLeaf: true,
-            disabled: false,
-            isShallowLoaded: true
-          }
+          node1,
+          node2
         ]
       }
+      ;(node0 as TreeNode).siblings = [
+        node0 as TreeNode
+      ]
+      ;(node1 as TreeNode).siblings = node0.children
+      ;(node2 as TreeNode).siblings = node0.children
       ;(node0.children[0] as TreeNode).parent = node0
       ;(node0.children[1] as TreeNode).parent = node0
       return {
-        input: [
-          raw0
-        ],
-        output: [
-          node0
-        ]
+        input,
+        output: node0.siblings
       }
     }
   }

@@ -44,6 +44,12 @@ export function expectTreeNodeEqual (node1: TreeNode, node2: TreeNode): void {
       expect(node1.parent?.key).toEqual(node2.parent?.key)
     } else if (key === 'children') {
       expectTreeNodesEqual(node1.children, node2.children)
+    } else if (key === 'siblings') {
+      expect(node1.siblings.map(node => node.key)).toEqual(node2.siblings.map(node => node.key))
+    } else if (
+      ['getPrev', 'getNext', 'getParent', 'getChild'].includes(key)
+    ) {
+      return true
     } else {
       expect((node1 as any)[key]).toStrictEqual((node2 as any)[key])
     }

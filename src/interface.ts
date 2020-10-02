@@ -8,6 +8,10 @@ export interface RawNode {
   [key: string]: any
 }
 
+export interface GetPrevNextOptions {
+  loop?: boolean
+}
+
 export interface TreeNode {
   key: Key
   rawNode: RawNode
@@ -19,7 +23,12 @@ export interface TreeNode {
   isLeaf: boolean
   isShallowLoaded: boolean
   disabled: boolean
+  siblings: TreeNode[]
   children?: TreeNode[]
+  getPrev: (options?: GetPrevNextOptions) => TreeNode | null
+  getNext: (options?: GetPrevNextOptions) => TreeNode | null
+  getParent: () => TreeNode | null
+  getChild: () => TreeNode | null
 }
 
 export type TreeNodeMap = Map<Key, TreeNode>

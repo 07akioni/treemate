@@ -21,6 +21,9 @@ import {
 import {
   getActivePath
 } from './active-path'
+import {
+  moveMethods
+} from './move'
 
 function createTreeNodes<T extends RawNode[] | undefined> (
   rawNodes: T,
@@ -45,9 +48,10 @@ function createTreeNodes<T extends RawNode[] | undefined> (
         'is invalid'
       )
     }
-    const treeNode: TreeNode = {
+    const rawTreeNode = ({
       key: rawNode.key,
       rawNode,
+      siblings: treeNodes,
       level,
       index,
       isFirstChild: index === 0,
@@ -62,7 +66,8 @@ function createTreeNodes<T extends RawNode[] | undefined> (
         return isShallowLoaded(this.rawNode)
       },
       parent: parent
-    }
+    })
+    const treeNode: TreeNode = Object.setPrototypeOf(rawTreeNode, moveMethods)
     treeNode.children = createTreeNodes(
       rawNode.children,
       treeNodeMap,
