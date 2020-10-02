@@ -3,7 +3,7 @@ import {
   RawNode,
   CheckResult,
   Key
-} from '@/interface'
+} from './interface'
 
 export function toArray<T> (arg: T): T extends any[] ? T : T[] {
   if (Array.isArray(arg)) return arg as any

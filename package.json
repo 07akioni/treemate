@@ -1,10 +1,14 @@
 {
   "name": "treemate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
   "dependencies": {},
+  "files": [
+    "es",
+    "lib"
+  ],
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",

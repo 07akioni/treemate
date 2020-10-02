@@ -7,20 +7,20 @@ import {
   TreeMateOptions,
   Key,
   CheckResult
-} from '@/interface'
+} from './interface'
 import {
   getCheckedKeys
-} from '@/check'
+} from './check'
 import {
   toArray,
   isDisabled,
   isLeaf,
   isNodeInvalid,
   unwrapResult, isShallowLoaded
-} from '@/utils'
+} from './utils'
 import {
   getActivePath
-} from '@/active-path'
+} from './active-path'
 
 function createTreeNodes<T extends RawNode[] | undefined> (
   rawNodes: T,

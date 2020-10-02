@@ -2,12 +2,12 @@ import {
   Key,
   TreeMateInstance,
   CheckResult
-} from '@/interface'
+} from './interface'
 import {
   isExpilicitlyNotLoaded,
   traverse,
   TRAVERSE_COMMAND
-} from '@/utils'
+} from './utils'
 
 export class SubtreeUnloadedError extends Error {
   constructor () {
