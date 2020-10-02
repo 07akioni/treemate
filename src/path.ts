@@ -2,7 +2,7 @@
 /* eslint-disable no-labels */
 import { Key, MergedActivePath, TreeMateInstance } from './interface'
 
-export function getActivePath (activeKey: Key, treeMate: TreeMateInstance): MergedActivePath {
+export function getPath (activeKey: Key, treeMate: TreeMateInstance): MergedActivePath {
   const treeNodeMap = treeMate.treeNodeMap
   let activeTreeNode = treeNodeMap.get(activeKey) ?? null
   const mergedActivePath: MergedActivePath = {

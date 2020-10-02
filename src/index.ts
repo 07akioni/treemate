@@ -19,8 +19,8 @@ import {
   unwrapResult, isShallowLoaded
 } from './utils'
 import {
-  getActivePath
-} from './active-path'
+  getPath
+} from './path'
 import {
   moveMethods
 } from './move'
@@ -100,8 +100,18 @@ export function TreeMate (
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
-    getActivePath (activeKey: Key) {
-      return getActivePath(
+    getFirstAvailableNode () {
+      const { length } = treeNodes
+      for (let i = 0; i < length; ++i) {
+        const treeNode = treeNodes[i]
+        if (!treeNode.disabled) {
+          return treeNode
+        }
+      }
+      return null
+    },
+    getPath (activeKey: Key) {
+      return getPath(
         activeKey,
         treemate
       )

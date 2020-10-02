@@ -1,5 +1,9 @@
 export const basicMoveTree = [
   {
+    key: '-1',
+    disabled: true
+  },
+  {
     key: '0'
   },
   {

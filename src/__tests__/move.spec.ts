@@ -6,8 +6,11 @@ import { basicMoveTree } from './move-data/index'
 
 describe('move', () => {
   const treeMate = TreeMate(basicMoveTree)
-  let cursor = treeMate.treeNodeMap.get('0') as TreeNode
+  it('first node', () => {
+    expect(treeMate.getFirstAvailableNode()?.key).toEqual('0')
+  })
   it('moves', () => {
+    let cursor = treeMate.treeNodeMap.get('0') as TreeNode
     cursor = cursor.getNext()!
     expect(cursor.key).toEqual('2')
     expect(cursor.getChild()).toEqual(null)

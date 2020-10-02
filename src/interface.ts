@@ -56,7 +56,8 @@ export interface TreeMateInstance {
   getCheckedKeys: (checkedKeys: Key[]) => MergedKeys
   check: (checkedKey: Key, checkedKeys: Key[]) => MergedKeys
   uncheck: (uncheckedKey: Key, checkedKeys: Key[]) => MergedKeys
-  getActivePath: (activeKey: Key) => MergedActivePath
+  getPath: (activeKey: Key) => MergedActivePath
+  getFirstAvailableNode: () => TreeNode | null
 }
 
 export interface CheckResult {
