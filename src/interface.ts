@@ -1,7 +1,7 @@
 export type Key = string | number
 
 export interface RawNode {
-  key: Key
+  key?: Key
   children?: RawNode[]
   isLeaf?: boolean
   disabled?: boolean
@@ -40,8 +40,10 @@ export interface MergedKeys {
   indeterminateKeys: Key[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TreeMateOptions {}
+export interface TreeMateOptions {
+  getDisabled?: (data: { parentKey: Key | null, index: number, node: RawNode}) => boolean
+  getKey?: (data: { parentKey: Key | null, index: number, node: RawNode }) => Key
+}
 
 export interface MergedActivePath {
   keyPath: Key[]

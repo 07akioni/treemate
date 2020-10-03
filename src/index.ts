@@ -16,7 +16,8 @@ import {
   isDisabled,
   isLeaf,
   isNodeInvalid,
-  unwrapResult, isShallowLoaded
+  unwrapResult,
+  isShallowLoaded
 } from './utils'
 import {
   getPath
@@ -49,14 +50,37 @@ function createTreeNodes<T extends RawNode[] | undefined> (
       )
     }
     const rawTreeNode = ({
-      key: rawNode.key,
       rawNode,
       siblings: treeNodes,
       level,
       index,
       isFirstChild: index === 0,
       isLastChild: index + 1 === rawNodes.length,
+      get key () {
+        const {
+          getKey
+        } = options
+        if (getKey) {
+          return getKey({
+            parentKey: parent?.key ?? null,
+            index,
+            node: this.rawNode
+          })
+        } else {
+          return rawNode.key
+        }
+      },
       get disabled () {
+        const {
+          getDisabled
+        } = options
+        if (getDisabled) {
+          return getDisabled({
+            parentKey: parent?.key ?? null,
+            index,
+            node: this.rawNode
+          })
+        }
         return isDisabled(this.rawNode)
       },
       get isLeaf () {
