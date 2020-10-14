@@ -6,7 +6,7 @@ import {
   TreeMateInstance,
   TreeMateOptions,
   Key,
-  CheckResult,
+  CheckState,
   GetPathOptions
 } from './interface'
 import {
@@ -18,7 +18,8 @@ import {
   isLeaf,
   isNodeInvalid,
   unwrapResult,
-  isShallowLoaded
+  isShallowLoaded,
+  isNullish
 } from './utils'
 import {
   getPath
@@ -143,7 +144,7 @@ export function TreeMate (
       )
     },
     getCheckedKeys (
-      checkedKeys: Key[] | CheckResult
+      checkedKeys: Key[] | CheckState | null | undefined
     ) {
       return getCheckedKeys(
         {
@@ -153,25 +154,25 @@ export function TreeMate (
       )
     },
     check (
-      keysToCheck: Key | Key[],
-      checkedKeys: Key[] | CheckResult
+      keysToCheck: Key | Key[] | null | undefined,
+      checkedKeys: Key[] | CheckState
     ) {
       return getCheckedKeys(
         {
           checkedKeys: unwrapResult(checkedKeys),
-          keysToCheck: toArray(keysToCheck)
+          keysToCheck: isNullish(keysToCheck) ? [] : toArray(keysToCheck as string | number | Key[])
         },
         treemate
       )
     },
     uncheck (
-      keysToUncheck: Key | Key[],
-      checkedKeys: Key[] | CheckResult
+      keysToUncheck: Key | Key[] | null | undefined,
+      checkedKeys: Key[] | CheckState
     ) {
       return getCheckedKeys(
         {
           checkedKeys: unwrapResult(checkedKeys),
-          keysToUncheck: toArray(keysToUncheck)
+          keysToUncheck: isNullish(keysToUncheck) ? [] : toArray(keysToUncheck as string | number | Key[])
         },
         treemate
       )

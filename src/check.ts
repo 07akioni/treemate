@@ -1,7 +1,7 @@
 import {
   Key,
   TreeMateInstance,
-  CheckResult
+  CheckState
 } from './interface'
 import {
   isExpilicitlyNotLoaded,
@@ -78,17 +78,26 @@ function getExtendedCheckedKeysAfterUncheck (
 
 export function getCheckedKeys (
   options: {
-    checkedKeys: Key[]
+    checkedKeys?: Key[] | null
     keysToCheck?: Key[]
     keysToUncheck?: Key[]
   },
   treeMate: TreeMateInstance
-): CheckResult {
+): CheckState {
   const {
     checkedKeys,
     keysToCheck,
     keysToUncheck
   } = options
+  if (
+    checkedKeys === null ||
+    checkedKeys === undefined
+  ) {
+    return {
+      checkedKeys: [],
+      indeterminateKeys: []
+    }
+  }
   const { levelTreeNodeMap } = treeMate
   let extendedCheckedKeys: Key[]
   if (keysToUncheck !== undefined) {

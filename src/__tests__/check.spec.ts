@@ -109,6 +109,24 @@ describe('check', () => {
           indeterminateKeys: []
         },
         tree: disabledNodeTestTree
+      },
+      {
+        explain: 'input keys are null',
+        input: null,
+        output: {
+          checkedKeys: [],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
+      },
+      {
+        explain: 'input keys are null',
+        input: undefined,
+        output: {
+          checkedKeys: [],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
       }
     ].forEach(testCase => {
       it(testCase.explain, () => {
@@ -187,6 +205,32 @@ describe('check', () => {
           ],
           indeterminateKeys: []
         }
+      },
+      {
+        explain: 'nullish input (null)',
+        checkedKeys: ['0-0-0'],
+        checkedKey: null,
+        output: {
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'nullish input (undefined)',
+        checkedKeys: ['0-0-0'],
+        checkedKey: undefined,
+        output: {
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
       }
     ].forEach(testCase => {
       it(testCase.explain, () => {
@@ -224,6 +268,40 @@ describe('check', () => {
         output: {
           checkedKeys: ['0-0-0-1'],
           indeterminateKeys: ['0-0-0']
+        }
+      },
+      {
+        explain: 'nullish input (null)',
+        checkedKeys: [
+          '0-0-0',
+          '0-0-0-0',
+          '0-0-0-1'
+        ],
+        uncheckedKey: null,
+        output: {
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'nullish input (undefined)',
+        checkedKeys: [
+          '0-0-0',
+          '0-0-0-0',
+          '0-0-0-1'
+        ],
+        uncheckedKey: undefined,
+        output: {
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
         }
       }
     ].forEach(testCase => {

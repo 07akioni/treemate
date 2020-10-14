@@ -1,7 +1,7 @@
 import {
   TreeNode,
   RawNode,
-  CheckResult,
+  CheckState,
   Key
 } from './interface'
 
@@ -50,7 +50,12 @@ export function isNodeInvalid (rawNode: RawNode): boolean {
   return rawNode.isLeaf === true && rawNode.children !== undefined
 }
 
-export function unwrapResult (result: CheckResult | Key[]): Key[] {
+export function unwrapResult (result?: CheckState | Key[] | null): Key[] | null {
+  if (result === undefined || result === null) return null
   if (Array.isArray(result)) return result
   return result.checkedKeys
+}
+
+export function isNullish (value: any): boolean {
+  return value === null || value === undefined
 }
