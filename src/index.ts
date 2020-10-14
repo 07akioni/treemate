@@ -6,7 +6,8 @@ import {
   TreeMateInstance,
   TreeMateOptions,
   Key,
-  CheckResult
+  CheckResult,
+  GetPathOptions
 } from './interface'
 import {
   getCheckedKeys
@@ -134,9 +135,10 @@ export function TreeMate (
       }
       return null
     },
-    getPath (activeKey: Key) {
+    getPath (key: Key, options: GetPathOptions = {}) {
       return getPath(
-        activeKey,
+        key,
+        options,
         treemate
       )
     },

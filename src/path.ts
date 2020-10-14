@@ -1,20 +1,18 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable no-labels */
-import { Key, MergedActivePath, TreeMateInstance } from './interface'
+import { GetPathOptions, Key, MergedPath, TreeMateInstance } from './interface'
 
-export function getPath (activeKey: Key, treeMate: TreeMateInstance): MergedActivePath {
+export function getPath (key: Key | null, options: GetPathOptions, treeMate: TreeMateInstance): MergedPath {
   const treeNodeMap = treeMate.treeNodeMap
-  let activeTreeNode = treeNodeMap.get(activeKey) ?? null
-  const mergedActivePath: MergedActivePath = {
+  let treeNode = key === null ? null : (treeNodeMap.get(key) ?? null)
+  const mergedPath: MergedPath = {
     keyPath: [],
     treeNodePath: [],
-    activeTreeNode
+    treeNode
   }
-  while (activeTreeNode) {
-    mergedActivePath.treeNodePath.push(activeTreeNode)
-    activeTreeNode = activeTreeNode.parent
+  while (treeNode) {
+    mergedPath.treeNodePath.push(treeNode)
+    treeNode = treeNode.parent
   }
-  mergedActivePath.treeNodePath.reverse()
-  mergedActivePath.keyPath = mergedActivePath.treeNodePath.map(treeNode => treeNode.key)
-  return mergedActivePath
+  mergedPath.treeNodePath.reverse()
+  mergedPath.keyPath = mergedPath.treeNodePath.map(treeNode => treeNode.key)
+  return mergedPath
 }

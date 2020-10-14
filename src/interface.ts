@@ -45,10 +45,14 @@ export interface TreeMateOptions {
   getKey?: (data: { parentKey: Key | null, index: number, node: RawNode }) => Key
 }
 
-export interface MergedActivePath {
+export interface MergedPath {
   keyPath: Key[]
   treeNodePath: TreeNode[]
-  activeTreeNode: TreeNode | null
+  treeNode: TreeNode | null
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface GetPathOptions {
 }
 
 export interface TreeMateInstance {
@@ -58,7 +62,7 @@ export interface TreeMateInstance {
   getCheckedKeys: (checkedKeys: Key[]) => MergedKeys
   check: (checkedKey: Key, checkedKeys: Key[]) => MergedKeys
   uncheck: (uncheckedKey: Key, checkedKeys: Key[]) => MergedKeys
-  getPath: (activeKey: Key) => MergedActivePath
+  getPath: (key: Key, options?: GetPathOptions) => MergedPath
   getFirstAvailableNode: () => TreeNode | null
 }
 
