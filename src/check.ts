@@ -89,6 +89,9 @@ export function getCheckedKeys (
     keysToCheck?: Key[]
     keysToUncheck?: Key[]
     cascade: boolean
+    // `leafOnly` only works when keysToCheck or keysToUncheck is set.
+    // Since view should always be sync with the input data.
+    // We only want the data model value to be leaf only.
     leafOnly: boolean
   },
   treeMate: TreeMateInstance
@@ -144,6 +147,11 @@ export function getCheckedKeys (
     )
   }
 
+  const leafCheckedKeySet = leafOnly ? new Set(extendedCheckedKeySet) : null
+  if (leafOnly) {
+    console.log('!!!', Array.from(leafCheckedKeySet as any))
+  }
+
   const syntheticCheckedKeySet: Set<Key> = extendedCheckedKeySet
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
   const maxLevel = Math.max.apply(null, Array.from(levelTreeNodeMap.keys()))
@@ -182,7 +190,7 @@ export function getCheckedKeys (
     }
   }
   return {
-    checkedKeys: Array.from(syntheticCheckedKeySet),
+    checkedKeys: Array.from(leafOnly ? leafCheckedKeySet as Set<Key> : syntheticCheckedKeySet),
     indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
   }
 }
@@ -213,7 +221,7 @@ export function getExtendedCheckedKeySet (
           }
         }
       })
-      if (leafOnly && checkedTreeNode.isLeaf) {
+      if (leafOnly && !checkedTreeNode.isLeaf) {
         extendedKeySet.delete(checkedTreeNode.key)
       }
     }
