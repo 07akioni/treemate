@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 import {
   RawNode,
   TreeNode,
@@ -123,14 +124,44 @@ export function TreeMate (
     levelTreeNodeMap,
     options
   )
+  function getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
+  function getNode (key: Key | null | undefined): TreeNode | null {
+    if (key === null || key === undefined) return null
+    return treeNodeMap.get(key) ?? null
+  }
+  function getPrev<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
+  function getPrev (key: Key | null | undefined): TreeNode | null {
+    const node = getNode(key)
+    if (node === null) return null
+    return node.getPrev()
+  }
+  function getNext<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
+  function getNext (key: Key | null | undefined): TreeNode | null {
+    const node = getNode(key)
+    if (node === null) return null
+    return node.getNext()
+  }
+  function getParent<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
+  function getParent (key: Key | null | undefined): TreeNode | null {
+    const node = getNode(key)
+    if (node === null) return null
+    return node.getParent()
+  }
+  function getChild<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
+  function getChild (key: Key | null | undefined): TreeNode | null {
+    const node = getNode(key)
+    if (node === null) return null
+    return node.getChild()
+  }
   const treemate: TreeMateInstance = {
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
-    getNode (key: Key | null | undefined) {
-      if (key === null || key === undefined) return null
-      return treeNodeMap.get(key) ?? null as any
-    },
+    getNode,
+    getPrev,
+    getNext,
+    getParent,
+    getChild,
     getFirstAvailableNode () {
       const { length } = treeNodes
       for (let i = 0; i < length; ++i) {
