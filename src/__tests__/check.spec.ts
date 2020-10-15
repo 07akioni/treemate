@@ -127,12 +127,102 @@ describe('check', () => {
           indeterminateKeys: []
         },
         tree: disabledNodeTestTree
+      },
+      {
+        explain: 'check all available children (non-cascade)',
+        cascade: false,
+        input: ['0-0'],
+        output: {
+          checkedKeys: [
+            '0-0'
+          ],
+          indeterminateKeys: []
+        },
+        tree: basicTree
+      },
+      {
+        explain: 'stop bubble on disabled parent (non-cascade)',
+        cascade: false,
+        input: ['0-0-0'],
+        output: {
+          checkedKeys: [
+            '0-0-0'
+          ],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
+      },
+      {
+        explain: 'stop sink to disabled children (non-cascade)',
+        cascade: false,
+        input: ['0'],
+        output: {
+          checkedKeys: [
+            '0'
+          ],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
+      },
+      {
+        explain: 'bubble on ascendant #1 (non-cascade)',
+        cascade: false,
+        input: ['0-1'],
+        output: {
+          checkedKeys: [
+            '0-1'
+          ],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
+      },
+      {
+        explain: 'bubble on ascendant #2 (non-cascade)',
+        cascade: false,
+        input: ['0-1-0'],
+        output: {
+          checkedKeys: ['0-1-0'],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
+      },
+      {
+        explain: 'doesn\'t affect other nodes if it\'s disabled (non-cascade)',
+        cascade: false,
+        input: ['0-0'],
+        output: {
+          checkedKeys: ['0-0'],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
+      },
+      {
+        explain: 'input keys are null (non-cascade)',
+        cascade: false,
+        input: null,
+        output: {
+          checkedKeys: [],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
+      },
+      {
+        explain: 'input keys are null (non-cascade)',
+        cascade: false,
+        input: undefined,
+        output: {
+          checkedKeys: [],
+          indeterminateKeys: []
+        },
+        tree: disabledNodeTestTree
       }
     ].forEach(testCase => {
       it(testCase.explain, () => {
         const treeMate = TreeMate(testCase.tree)
         expectCheckedStatusSame(
-          treeMate.getCheckedKeys(testCase.input),
+          treeMate.getCheckedKeys(testCase.input, {
+            cascade: testCase.cascade
+          }),
           testCase.output
         )
       })
@@ -231,12 +321,102 @@ describe('check', () => {
           ],
           indeterminateKeys: []
         }
+      },
+      {
+        explain: 'case1 (no cascade)',
+        cascade: false,
+        checkedKeys: [],
+        checkedKey: '0-0-0',
+        output: {
+          checkedKeys: [
+            '0-0-0'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case2 (no cascade)',
+        cascade: false,
+        checkedKeys: [],
+        checkedKey: '0-1',
+        output: {
+          checkedKeys: [
+            '0-1'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case3 (no cascade)',
+        cascade: false,
+        checkedKeys: [],
+        checkedKey: '0-1-0',
+        output: {
+          checkedKeys: ['0-1-0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case4 (no cascade)',
+        cascade: false,
+        checkedKeys: ['0-0-0-0'],
+        checkedKey: '0-0-0-1',
+        output: {
+          checkedKeys: [
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case5 (no cascade)',
+        cascade: false,
+        checkedKeys: [
+          '0-0',
+          '0-0-0-0'
+        ],
+        checkedKey: '0-0-0-1',
+        output: {
+          checkedKeys: [
+            '0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'nullish input (null) (non-cascade)',
+        cascade: false,
+        checkedKeys: ['0-0-0'],
+        checkedKey: null,
+        output: {
+          checkedKeys: [
+            '0-0-0'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'nullish input (undefined) (non-cascade)',
+        cascade: false,
+        checkedKeys: ['0-0-0'],
+        checkedKey: undefined,
+        output: {
+          checkedKeys: [
+            '0-0-0'
+          ],
+          indeterminateKeys: []
+        }
       }
     ].forEach(testCase => {
       it(testCase.explain, () => {
         const treeMate = TreeMate(disabledNodeTestTree)
         expectCheckedStatusSame(
-          treeMate.check(testCase.checkedKey, testCase.checkedKeys),
+          treeMate.check(testCase.checkedKey, testCase.checkedKeys, {
+            cascade: testCase.cascade
+          }),
           testCase.output
         )
       })
@@ -303,12 +483,84 @@ describe('check', () => {
           ],
           indeterminateKeys: []
         }
+      },
+      {
+        explain: 'case1 (non-cascade)',
+        cascade: false,
+        checkedKeys: [
+          '0-0-0',
+          '0-0-0-0',
+          '0-0-0-1'
+        ],
+        uncheckedKey: '0-0-0',
+        output: {
+          checkedKeys: [
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case2 (non-cascade)',
+        cascade: false,
+        checkedKeys: [
+          '0-0-0',
+          '0-0-0-0',
+          '0-0-0-1'
+        ],
+        uncheckedKey: '0-0-0-0',
+        output: {
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'nullish input (null) (non-cascade)',
+        cascade: false,
+        checkedKeys: [
+          '0-0-0',
+          '0-0-0-0',
+          '0-0-0-1'
+        ],
+        uncheckedKey: null,
+        output: {
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'nullish input (undefined) (non-cascade)',
+        cascade: false,
+        checkedKeys: [
+          '0-0-0',
+          '0-0-0-0',
+          '0-0-0-1'
+        ],
+        uncheckedKey: undefined,
+        output: {
+          checkedKeys: [
+            '0-0-0',
+            '0-0-0-0',
+            '0-0-0-1'
+          ],
+          indeterminateKeys: []
+        }
       }
     ].forEach(testCase => {
       it(testCase.explain, () => {
         const treeMate = TreeMate(disabledNodeTestTree)
         expectCheckedStatusSame(
-          treeMate.uncheck(testCase.uncheckedKey, testCase.checkedKeys),
+          treeMate.uncheck(testCase.uncheckedKey, testCase.checkedKeys, {
+            cascade: testCase.cascade
+          }),
           testCase.output
         )
       })

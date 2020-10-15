@@ -5,6 +5,9 @@ import {
 } from './interface'
 import {
   isExpilicitlyNotLoaded,
+  isNullish,
+  merge,
+  minus,
   traverse,
   TRAVERSE_COMMAND
 } from './utils'
@@ -79,19 +82,41 @@ function getExtendedCheckedKeysAfterUncheck (
 export function getCheckedKeys (
   options: {
     checkedKeys?: Key[] | null
+    indeterminateKeys?: Key[] | null
     keysToCheck?: Key[]
     keysToUncheck?: Key[]
+    cascade: boolean
   },
   treeMate: TreeMateInstance
 ): CheckState {
   const {
     checkedKeys,
     keysToCheck,
-    keysToUncheck
+    keysToUncheck,
+    indeterminateKeys,
+    cascade
   } = options
+  if (!cascade) {
+    if (keysToCheck !== undefined) {
+      return {
+        checkedKeys: merge(checkedKeys ?? [], keysToCheck),
+        indeterminateKeys: indeterminateKeys ?? []
+      }
+    } else if (keysToUncheck !== undefined) {
+      return {
+        checkedKeys: minus(checkedKeys ?? [], keysToUncheck),
+        indeterminateKeys: indeterminateKeys ?? []
+      }
+    } else {
+      return {
+        checkedKeys: isNullish(checkedKeys) ? [] : Array.from(checkedKeys as Key[]),
+        indeterminateKeys: isNullish(indeterminateKeys) ? [] : Array.from(indeterminateKeys as Key[])
+      }
+    }
+  }
+  // If not cascade, only use checked keys to get derived value
   if (
-    checkedKeys === null ||
-    checkedKeys === undefined
+    isNullish(checkedKeys)
   ) {
     return {
       checkedKeys: [],
@@ -103,18 +128,18 @@ export function getCheckedKeys (
   if (keysToUncheck !== undefined) {
     extendedCheckedKeys = getExtendedCheckedKeysAfterUncheck(
       keysToUncheck,
-      checkedKeys,
+      checkedKeys as Key[],
       treeMate
     )
   } else if (keysToCheck !== undefined) {
     extendedCheckedKeys = getExtendedCheckedKeysAfterCheck(
       keysToCheck,
-      checkedKeys,
+      checkedKeys as Key[],
       treeMate
     )
   } else {
     extendedCheckedKeys = getExtendedCheckedKeys(
-      checkedKeys,
+      checkedKeys as Key[],
       treeMate
     )
   }

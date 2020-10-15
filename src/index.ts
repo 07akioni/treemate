@@ -7,7 +7,8 @@ import {
   TreeMateOptions,
   Key,
   CheckState,
-  GetPathOptions
+  GetPathOptions,
+  CheckOptions
 } from './interface'
 import {
   getCheckedKeys
@@ -144,35 +145,50 @@ export function TreeMate (
       )
     },
     getCheckedKeys (
-      checkedKeys: Key[] | CheckState | null | undefined
+      checkedKeys: Key[] | CheckState | null | undefined,
+      options: CheckOptions = {}
     ) {
+      const {
+        cascade = true
+      } = options
       return getCheckedKeys(
         {
-          checkedKeys: unwrapResult(checkedKeys)
+          checkedKeys: unwrapResult(checkedKeys),
+          cascade
         },
         treemate
       )
     },
     check (
       keysToCheck: Key | Key[] | null | undefined,
-      checkedKeys: Key[] | CheckState
+      checkedKeys: Key[] | CheckState,
+      options: CheckOptions = {}
     ) {
+      const {
+        cascade = true
+      } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapResult(checkedKeys),
-          keysToCheck: isNullish(keysToCheck) ? [] : toArray(keysToCheck as string | number | Key[])
+          keysToCheck: isNullish(keysToCheck) ? [] : toArray(keysToCheck as string | number | Key[]),
+          cascade
         },
         treemate
       )
     },
     uncheck (
       keysToUncheck: Key | Key[] | null | undefined,
-      checkedKeys: Key[] | CheckState
+      checkedKeys: Key[] | CheckState,
+      options: CheckOptions = {}
     ) {
+      const {
+        cascade = true
+      } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapResult(checkedKeys),
-          keysToUncheck: isNullish(keysToUncheck) ? [] : toArray(keysToUncheck as string | number | Key[])
+          keysToUncheck: isNullish(keysToUncheck) ? [] : toArray(keysToUncheck as string | number | Key[]),
+          cascade
         },
         treemate
       )

@@ -56,6 +56,26 @@ export function unwrapResult (result?: CheckState | Key[] | null): Key[] | null 
   return result.checkedKeys
 }
 
-export function isNullish (value: any): boolean {
-  return value === null || value === undefined
+export function isNullish<T> (value: T): T extends null ? true : T extends undefined ? true : false {
+  return (value === null || value === undefined) as any
+}
+
+export function merge (originalKeys: Key[], keysToAdd: Key[]): Key[] {
+  const set = new Set(originalKeys)
+  keysToAdd.forEach(key => {
+    if (!set.has(key)) {
+      set.add(key)
+    }
+  })
+  return Array.from(set)
+}
+
+export function minus (originalKeys: Key[], keysToRemove: Key[]): Key[] {
+  const set = new Set(originalKeys)
+  keysToRemove.forEach(key => {
+    if (set.has(key)) {
+      set.delete(key)
+    }
+  })
+  return Array.from(set)
 }
