@@ -76,6 +76,7 @@ export interface TreeMateInstance {
   treeNodes: TreeNode[]
   treeNodeMap: TreeNodeMap
   levelTreeNodeMap: LevelTreeNodeMap
+  getNode: <T extends Key | null | undefined>(key: T) => T extends (null | undefined) ? null : (TreeNode | null)
   getCheckedKeys: (
     checkedKeys: Key[] | InputMergedKeys | null | undefined,
     options?: CheckOptions

@@ -127,6 +127,10 @@ export function TreeMate (
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
+    getNode (key: Key | null | undefined) {
+      if (key === null || key === undefined) return null
+      return treeNodeMap.get(key) ?? null as any
+    },
     getFirstAvailableNode () {
       const { length } = treeNodes
       for (let i = 0; i < length; ++i) {
