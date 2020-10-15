@@ -3,10 +3,7 @@ import { TreeMate } from '@/index'
 
 const data = [
   {
-    children: [
-      {},
-      {}
-    ]
+    children: [{}, {}]
   }
 ]
 

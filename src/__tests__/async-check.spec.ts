@@ -4,7 +4,7 @@ import { SubtreeUnloadedError } from '@/check'
 import { disabledNodeTestTree } from './async-check-data/index'
 
 describe('async-check', () => {
-  it('doesn\'t throw error when subtree is loaded', () => {
+  it("doesn't throw error when subtree is loaded", () => {
     const treeMate = TreeMate(disabledNodeTestTree, { async: true })
     let error = null
     try {

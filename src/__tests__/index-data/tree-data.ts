@@ -18,9 +18,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
       const raw0 = {
         key: 0
       }
-      const input = [
-        raw0
-      ]
+      const input = [raw0]
       const node0 = {
         key: 0,
         rawNode: raw0,
@@ -37,9 +35,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         getPrev: () => null,
         getNext: () => null
       }
-      ;(node0 as TreeNode).siblings = [
-        node0 as TreeNode
-      ]
+      ;(node0 as TreeNode).siblings = [node0 as TreeNode]
       const output = (node0 as TreeNode).siblings
       return {
         input,
@@ -63,9 +59,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
       }
       const raw1 = raw0.children[0]
       const raw2 = raw0.children[1]
-      const input = [
-        raw0
-      ]
+      const input = [raw0]
       const node1 = {
         key: 1,
         rawNode: raw1,
@@ -116,14 +110,9 @@ const data: Array<{ createData: CreateData, description: string }> = [
         getPrev: () => null,
         getNext: () => null,
         siblings: [],
-        children: [
-          node1,
-          node2
-        ]
+        children: [node1, node2]
       }
-      ;(node0 as TreeNode).siblings = [
-        node0 as TreeNode
-      ]
+      ;(node0 as TreeNode).siblings = [node0 as TreeNode]
       ;(node1 as TreeNode).siblings = node0.children
       ;(node2 as TreeNode).siblings = node0.children
       ;(node0.children[0] as TreeNode).parent = node0

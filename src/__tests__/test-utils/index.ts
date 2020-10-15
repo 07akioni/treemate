@@ -2,8 +2,7 @@
 import { TreeNode, Key } from '../../interface'
 
 export function expectArrayEqual (array1: Key[], array2: Key[]): void {
-  expect(Array.from(array1).sort())
-    .toEqual(Array.from(array2).sort())
+  expect(Array.from(array1).sort()).toEqual(Array.from(array2).sort())
 }
 
 export function expectCheckedStatusSame (
@@ -16,10 +15,12 @@ export function expectCheckedStatusSame (
     indeterminateKeys: Key[]
   }
 ): void {
-  expect(Array.from(status1.checkedKeys).sort())
-    .toEqual(Array.from(status2.checkedKeys).sort())
-  expect(Array.from(status1.indeterminateKeys).sort())
-    .toEqual(Array.from(status2.indeterminateKeys).sort())
+  expect(Array.from(status1.checkedKeys).sort()).toEqual(
+    Array.from(status2.checkedKeys).sort()
+  )
+  expect(Array.from(status1.indeterminateKeys).sort()).toEqual(
+    Array.from(status2.indeterminateKeys).sort()
+  )
 }
 
 export function expectTreeNodesEqual (
@@ -36,7 +37,7 @@ export function expectTreeNodesEqual (
 }
 
 export function expectTreeNodeEqual (node1: TreeNode, node2: TreeNode): void {
-  Object.keys(node1).forEach(key => {
+  Object.keys(node1).forEach((key) => {
     if (key === 'rawNode') {
       expect(node1.rawNode).toStrictEqual(node2.rawNode)
     } else if (key === 'parent') {
@@ -45,10 +46,10 @@ export function expectTreeNodeEqual (node1: TreeNode, node2: TreeNode): void {
     } else if (key === 'children') {
       expectTreeNodesEqual(node1.children, node2.children)
     } else if (key === 'siblings') {
-      expect(node1.siblings.map(node => node.key)).toEqual(node2.siblings.map(node => node.key))
-    } else if (
-      ['getPrev', 'getNext', 'getParent', 'getChild'].includes(key)
-    ) {
+      expect(node1.siblings.map((node) => node.key)).toEqual(
+        node2.siblings.map((node) => node.key)
+      )
+    } else if (['getPrev', 'getNext', 'getParent', 'getChild'].includes(key)) {
       return true
     } else {
       expect((node1 as any)[key]).toStrictEqual((node2 as any)[key])
