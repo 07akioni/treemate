@@ -1,11 +1,10 @@
 import {
   Key,
   TreeMateInstance,
-  CheckState
+  MergedKeys
 } from './interface'
 import {
   isExpilicitlyNotLoaded,
-  isNullish,
   merge,
   minus,
   traverse,
@@ -81,14 +80,14 @@ function getExtendedCheckedKeysAfterUncheck (
 
 export function getCheckedKeys (
   options: {
-    checkedKeys?: Key[] | null
-    indeterminateKeys?: Key[] | null
+    checkedKeys: Key[]
+    indeterminateKeys: Key[]
     keysToCheck?: Key[]
     keysToUncheck?: Key[]
     cascade: boolean
   },
   treeMate: TreeMateInstance
-): CheckState {
+): MergedKeys {
   const {
     checkedKeys,
     keysToCheck,
@@ -99,28 +98,19 @@ export function getCheckedKeys (
   if (!cascade) {
     if (keysToCheck !== undefined) {
       return {
-        checkedKeys: merge(checkedKeys ?? [], keysToCheck),
-        indeterminateKeys: indeterminateKeys ?? []
+        checkedKeys: merge(checkedKeys, keysToCheck),
+        indeterminateKeys: Array.from(indeterminateKeys)
       }
     } else if (keysToUncheck !== undefined) {
       return {
-        checkedKeys: minus(checkedKeys ?? [], keysToUncheck),
-        indeterminateKeys: indeterminateKeys ?? []
+        checkedKeys: minus(checkedKeys, keysToUncheck),
+        indeterminateKeys: Array.from(indeterminateKeys)
       }
     } else {
       return {
-        checkedKeys: isNullish(checkedKeys) ? [] : Array.from(checkedKeys as Key[]),
-        indeterminateKeys: isNullish(indeterminateKeys) ? [] : Array.from(indeterminateKeys as Key[])
+        checkedKeys: Array.from(checkedKeys),
+        indeterminateKeys: Array.from(indeterminateKeys)
       }
-    }
-  }
-  // If not cascade, only use checked keys to get derived value
-  if (
-    isNullish(checkedKeys)
-  ) {
-    return {
-      checkedKeys: [],
-      indeterminateKeys: []
     }
   }
   const { levelTreeNodeMap } = treeMate
@@ -128,18 +118,18 @@ export function getCheckedKeys (
   if (keysToUncheck !== undefined) {
     extendedCheckedKeys = getExtendedCheckedKeysAfterUncheck(
       keysToUncheck,
-      checkedKeys as Key[],
+      checkedKeys,
       treeMate
     )
   } else if (keysToCheck !== undefined) {
     extendedCheckedKeys = getExtendedCheckedKeysAfterCheck(
       keysToCheck,
-      checkedKeys as Key[],
+      checkedKeys,
       treeMate
     )
   } else {
     extendedCheckedKeys = getExtendedCheckedKeys(
-      checkedKeys as Key[],
+      checkedKeys,
       treeMate
     )
   }

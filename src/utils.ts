@@ -1,7 +1,7 @@
 import {
   TreeNode,
   RawNode,
-  CheckState,
+  InputMergedKeys,
   Key
 } from './interface'
 
@@ -50,16 +50,16 @@ export function isNodeInvalid (rawNode: RawNode): boolean {
   return rawNode.isLeaf === true && rawNode.children !== undefined
 }
 
-export function unwrapResult (result?: CheckState | Key[] | null): Key[] | null {
-  if (result === undefined || result === null) return null
+export function unwrapCheckedKeys (result?: InputMergedKeys | Key[] | null): Key[] {
+  if (result === undefined || result === null) return []
   if (Array.isArray(result)) return result
-  return result.checkedKeys
+  return result.checkedKeys ?? []
 }
 
-export function isNullish<T> (value: T): T extends null ? true : T extends undefined ? true : false {
-  return (value === null || value === undefined) as any
+export function unwrapIndeterminateKeys (result?: InputMergedKeys | Key[] | null): Key[] {
+  if (result === undefined || result === null || Array.isArray(result)) return []
+  return result.indeterminateKeys ?? []
 }
-
 export function merge (originalKeys: Key[], keysToAdd: Key[]): Key[] {
   const set = new Set(originalKeys)
   keysToAdd.forEach(key => {

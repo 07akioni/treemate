@@ -55,9 +55,9 @@ export interface MergedPath {
 export interface GetPathOptions {
 }
 
-export interface CheckState {
-  checkedKeys: Key[]
-  indeterminateKeys: Key[]
+export interface InputMergedKeys {
+  checkedKeys?: Key[] | null
+  indeterminateKeys?: Key[] | null
 }
 
 export interface CheckOptions {
@@ -69,17 +69,17 @@ export interface TreeMateInstance {
   treeNodeMap: TreeNodeMap
   levelTreeNodeMap: LevelTreeNodeMap
   getCheckedKeys: (
-    checkedKeys: Key[] | CheckState | null | undefined,
+    checkedKeys: Key[] | InputMergedKeys | null | undefined,
     options?: CheckOptions
   ) => MergedKeys
   check: (
     keysToCheck: Key | Key[] | null | undefined,
-    checkedKeys: Key[] | CheckState,
+    checkedKeys: Key[] | InputMergedKeys,
     options?: CheckOptions
   ) => MergedKeys
   uncheck: (
     keysToUncheck: Key | Key[] | null | undefined,
-    checkedKeys: Key[] | CheckState,
+    checkedKeys: Key[] | InputMergedKeys,
     options?: CheckOptions
   ) => MergedKeys
   getPath: (key: Key, options?: GetPathOptions) => MergedPath
