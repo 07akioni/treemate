@@ -1,4 +1,4 @@
-import { getExtendedCheckedKeys } from '@/check'
+import { getExtendedCheckedKeySet } from '@/check'
 import { TreeMate } from '@/index'
 
 import {
@@ -30,11 +30,15 @@ describe('check', () => {
     ].forEach((data, index) => {
       it('extended to all avaiabled children #' + String(index + 1), () => {
         const treeMate = TreeMate(extendedCheckedKeysTestTree)
-        const extendedCheckedKeys = getExtendedCheckedKeys(
+        const extendedCheckedKeySet = getExtendedCheckedKeySet(
           data.checkedKeys,
+          false,
           treeMate
         )
-        expectArrayEqual(extendedCheckedKeys, data.extendedCheckedKeys)
+        expectArrayEqual(
+          Array.from(extendedCheckedKeySet),
+          data.extendedCheckedKeys
+        )
       })
     })
   })
@@ -216,66 +220,21 @@ describe('check', () => {
         }
       },
       {
-        explain: 'case2',
-        checkedKeys: [],
-        checkedKey: '0-1',
-        output: {
-          checkedKeys: ['0', '0-1', '0-1-0', '0-1-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
-        explain: 'case3',
-        checkedKeys: [],
-        checkedKey: '0-1-0',
-        output: {
-          checkedKeys: ['0-1-0'],
-          indeterminateKeys: ['0', '0-1']
-        }
-      },
-      {
-        explain: 'case4',
-        checkedKeys: ['0-0-0-0'],
-        checkedKey: '0-0-0-1',
-        output: {
-          checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
-        explain: 'case5',
-        checkedKeys: ['0-0', '0-0-0-0'],
-        checkedKey: '0-0-0-1',
-        output: {
-          checkedKeys: ['0-0', '0-0-0', '0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
-        explain: 'nullish input (null)',
-        checkedKeys: ['0-0-0'],
-        checkedKey: null,
-        output: {
-          checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
-        explain: 'nullish input (undefined)',
-        checkedKeys: ['0-0-0'],
-        checkedKey: undefined,
-        output: {
-          checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
         explain: 'case1 (no cascade)',
         cascade: false,
         checkedKeys: [],
         checkedKey: '0-0-0',
         output: {
           checkedKeys: ['0-0-0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case2',
+        checkedKeys: [],
+        checkedKey: '0-1',
+        output: {
+          checkedKeys: ['0', '0-1', '0-1-0', '0-1-1'],
           indeterminateKeys: []
         }
       },
@@ -290,12 +249,30 @@ describe('check', () => {
         }
       },
       {
+        explain: 'case3',
+        checkedKeys: [],
+        checkedKey: '0-1-0',
+        output: {
+          checkedKeys: ['0-1-0'],
+          indeterminateKeys: ['0', '0-1']
+        }
+      },
+      {
         explain: 'case3 (no cascade)',
         cascade: false,
         checkedKeys: [],
         checkedKey: '0-1-0',
         output: {
           checkedKeys: ['0-1-0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case4',
+        checkedKeys: ['0-0-0-0'],
+        checkedKey: '0-0-0-1',
+        output: {
+          checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
           indeterminateKeys: []
         }
       },
@@ -310,6 +287,15 @@ describe('check', () => {
         }
       },
       {
+        explain: 'case5',
+        checkedKeys: ['0-0', '0-0-0-0'],
+        checkedKey: '0-0-0-1',
+        output: {
+          checkedKeys: ['0-0', '0-0-0', '0-0-0-0', '0-0-0-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
         explain: 'case5 (no cascade)',
         cascade: false,
         checkedKeys: ['0-0', '0-0-0-0'],
@@ -320,12 +306,30 @@ describe('check', () => {
         }
       },
       {
+        explain: 'nullish input (null)',
+        checkedKeys: ['0-0-0'],
+        checkedKey: null,
+        output: {
+          checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
         explain: 'nullish input (null) (non-cascade)',
         cascade: false,
         checkedKeys: ['0-0-0'],
         checkedKey: null,
         output: {
           checkedKeys: ['0-0-0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'nullish input (undefined)',
+        checkedKeys: ['0-0-0'],
+        checkedKey: undefined,
+        output: {
+          checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
           indeterminateKeys: []
         }
       },

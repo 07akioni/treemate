@@ -69,6 +69,7 @@ export interface InputMergedKeys {
 
 export interface CheckOptions {
   cascade?: boolean
+  leafOnly?: boolean
 }
 
 export interface TreeMateInstance {

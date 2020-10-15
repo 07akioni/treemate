@@ -149,13 +149,15 @@ export function TreeMate (
       options: CheckOptions = {}
     ) {
       const {
-        cascade = true
+        cascade = true,
+        leafOnly = false
       } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
           indeterminateKeys: unwrapIndeterminateKeys(checkedKeys),
-          cascade
+          cascade,
+          leafOnly
         },
         treemate
       )
@@ -166,14 +168,16 @@ export function TreeMate (
       options: CheckOptions = {}
     ) {
       const {
-        cascade = true
+        cascade = true,
+        leafOnly = false
       } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
           indeterminateKeys: unwrapIndeterminateKeys(checkedKeys),
           keysToCheck: (keysToCheck === undefined || keysToCheck === null) ? [] : toArray(keysToCheck),
-          cascade
+          cascade,
+          leafOnly
         },
         treemate
       )
@@ -184,14 +188,16 @@ export function TreeMate (
       options: CheckOptions = {}
     ) {
       const {
-        cascade = true
+        cascade = true,
+        leafOnly = false
       } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
           indeterminateKeys: unwrapIndeterminateKeys(checkedKeys),
           keysToUncheck: (keysToUncheck === null || keysToUncheck === undefined) ? [] : toArray(keysToUncheck),
-          cascade
+          cascade,
+          leafOnly
         },
         treemate
       )

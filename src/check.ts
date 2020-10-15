@@ -15,12 +15,17 @@ export class SubtreeUnloadedError extends Error {
   }
 }
 
-function getExtendedCheckedKeysAfterCheck (
+function getExtendedCheckedKeySetAfterCheck (
   checkKeys: Key[],
   currentCheckedKeys: Key[],
+  leafOnly: boolean,
   treeMate: TreeMateInstance
-): Key[] {
-  return getExtendedCheckedKeys(currentCheckedKeys.concat(checkKeys), treeMate)
+): Set<Key> {
+  return getExtendedCheckedKeySet(
+    currentCheckedKeys.concat(checkKeys),
+    leafOnly,
+    treeMate
+  )
 }
 
 function getAvailableAscendantNodeSet (
@@ -45,27 +50,36 @@ function getAvailableAscendantNodeSet (
   return visitedKeys
 }
 
-function getExtendedCheckedKeysAfterUncheck (
+function getExtendedCheckedKeySetAfterUncheck (
   uncheckedKeys: Key[],
   currentCheckedKeys: Key[],
+  leafOnly: boolean,
   treeMate: TreeMateInstance
-): Key[] {
-  const extendedCheckedKeys = getExtendedCheckedKeys(
+): Set<Key> {
+  const extendedCheckedKeySet = getExtendedCheckedKeySet(
     currentCheckedKeys,
+    leafOnly,
     treeMate
   )
-  const extendedKeySetToUncheck = new Set(
-    getExtendedCheckedKeys(uncheckedKeys, treeMate)
+  const extendedKeySetToUncheck = getExtendedCheckedKeySet(
+    uncheckedKeys,
+    leafOnly,
+    treeMate
   )
+
   const ascendantKeySet: Set<Key> = getAvailableAscendantNodeSet(
     uncheckedKeys,
     treeMate
   )
-  return extendedCheckedKeys.filter(
-    (checkedKey) =>
-      !extendedKeySetToUncheck.has(checkedKey) &&
-      !ascendantKeySet.has(checkedKey)
-  )
+  const keysToRemove: Key[] = []
+  extendedCheckedKeySet.forEach(key => {
+    if (
+      extendedKeySetToUncheck.has(key) ||
+      ascendantKeySet.has(key)
+    ) keysToRemove.push(key)
+  })
+  keysToRemove.forEach(key => extendedCheckedKeySet.delete(key))
+  return extendedCheckedKeySet
 }
 
 export function getCheckedKeys (
@@ -75,6 +89,7 @@ export function getCheckedKeys (
     keysToCheck?: Key[]
     keysToUncheck?: Key[]
     cascade: boolean
+    leafOnly: boolean
   },
   treeMate: TreeMateInstance
 ): MergedKeys {
@@ -83,7 +98,8 @@ export function getCheckedKeys (
     keysToCheck,
     keysToUncheck,
     indeterminateKeys,
-    cascade
+    cascade,
+    leafOnly
   } = options
   if (!cascade) {
     if (keysToCheck !== undefined) {
@@ -104,24 +120,31 @@ export function getCheckedKeys (
     }
   }
   const { levelTreeNodeMap } = treeMate
-  let extendedCheckedKeys: Key[]
+  let extendedCheckedKeySet: Set<Key>
   if (keysToUncheck !== undefined) {
-    extendedCheckedKeys = getExtendedCheckedKeysAfterUncheck(
+    extendedCheckedKeySet = getExtendedCheckedKeySetAfterUncheck(
       keysToUncheck,
       checkedKeys,
+      leafOnly,
       treeMate
     )
   } else if (keysToCheck !== undefined) {
-    extendedCheckedKeys = getExtendedCheckedKeysAfterCheck(
+    extendedCheckedKeySet = getExtendedCheckedKeySetAfterCheck(
       keysToCheck,
       checkedKeys,
+      leafOnly,
       treeMate
+
     )
   } else {
-    extendedCheckedKeys = getExtendedCheckedKeys(checkedKeys, treeMate)
+    extendedCheckedKeySet = getExtendedCheckedKeySet(
+      checkedKeys,
+      leafOnly,
+      treeMate
+    )
   }
 
-  const syntheticCheckedKeySet: Set<Key> = new Set(extendedCheckedKeys)
+  const syntheticCheckedKeySet: Set<Key> = extendedCheckedKeySet
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
   const maxLevel = Math.max.apply(null, Array.from(levelTreeNodeMap.keys()))
   for (let level = maxLevel; level >= 0; level -= 1) {
@@ -164,14 +187,14 @@ export function getCheckedKeys (
   }
 }
 
-export function getExtendedCheckedKeys (
+export function getExtendedCheckedKeySet (
   checkedKeys: Key[],
+  leafOnly: boolean,
   treeMate: TreeMateInstance
-): Key[] {
+): Set<Key> {
   const { treeNodeMap } = treeMate
-  const checkedKeySet: Set<Key> = new Set(checkedKeys)
   const visitedKeySet: Set<Key> = new Set()
-  const extendedCheckedKey: Key[] = []
+  const extendedKeySet: Set<Key> = new Set(checkedKeys)
   checkedKeys.forEach((checkedKey) => {
     const checkedTreeNode = treeNodeMap.get(checkedKey)
     if (checkedTreeNode !== undefined) {
@@ -180,18 +203,20 @@ export function getExtendedCheckedKeys (
         if (visitedKeySet.has(key)) return
         visitedKeySet.add(key)
         if (treeNode.disabled) {
-          if (checkedKeySet.has(key)) {
-            extendedCheckedKey.push(key)
-          }
           return TRAVERSE_COMMAND.STOP
         } else {
           if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
             throw new SubtreeUnloadedError()
           }
-          extendedCheckedKey.push(key)
+          if (!leafOnly || (leafOnly && treeNode.isLeaf)) {
+            extendedKeySet.add(key)
+          }
         }
       })
+      if (leafOnly && checkedTreeNode.isLeaf) {
+        extendedKeySet.delete(checkedTreeNode.key)
+      }
     }
   })
-  return Array.from(new Set(extendedCheckedKey))
+  return extendedKeySet
 }
