@@ -41,8 +41,16 @@ export interface MergedKeys {
 }
 
 export interface TreeMateOptions {
-  getDisabled?: (data: { parentKey: Key | null, index: number, node: RawNode}) => boolean
-  getKey?: (data: { parentKey: Key | null, index: number, node: RawNode }) => Key
+  getDisabled?: (data: {
+    parentKey: Key | null
+    index: number
+    node: RawNode
+  }) => boolean
+  getKey?: (data: {
+    parentKey: Key | null
+    index: number
+    node: RawNode
+  }) => Key
 }
 
 export interface MergedPath {
@@ -52,8 +60,7 @@ export interface MergedPath {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GetPathOptions {
-}
+export interface GetPathOptions {}
 
 export interface InputMergedKeys {
   checkedKeys?: Key[] | null

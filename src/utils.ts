@@ -1,9 +1,4 @@
-import {
-  TreeNode,
-  RawNode,
-  InputMergedKeys,
-  Key
-} from './interface'
+import { TreeNode, RawNode, InputMergedKeys, Key } from './interface'
 
 export function toArray<T> (arg: T): T extends any[] ? T : T[] {
   if (Array.isArray(arg)) return arg as any
@@ -21,7 +16,7 @@ export function traverse (
 ): void {
   const command = callback(treeNode)
   if (treeNode.children !== undefined && command !== TRAVERSE_COMMAND.STOP) {
-    treeNode.children.forEach(childNode => traverse(childNode, callback))
+    treeNode.children.forEach((childNode) => traverse(childNode, callback))
   }
 }
 
@@ -50,19 +45,26 @@ export function isNodeInvalid (rawNode: RawNode): boolean {
   return rawNode.isLeaf === true && rawNode.children !== undefined
 }
 
-export function unwrapCheckedKeys (result?: InputMergedKeys | Key[] | null): Key[] {
+export function unwrapCheckedKeys (
+  result?: InputMergedKeys | Key[] | null
+): Key[] {
   if (result === undefined || result === null) return []
   if (Array.isArray(result)) return result
   return result.checkedKeys ?? []
 }
 
-export function unwrapIndeterminateKeys (result?: InputMergedKeys | Key[] | null): Key[] {
-  if (result === undefined || result === null || Array.isArray(result)) return []
+export function unwrapIndeterminateKeys (
+  result?: InputMergedKeys | Key[] | null
+): Key[] {
+  if (result === undefined || result === null || Array.isArray(result)) {
+    return []
+  }
   return result.indeterminateKeys ?? []
 }
+
 export function merge (originalKeys: Key[], keysToAdd: Key[]): Key[] {
   const set = new Set(originalKeys)
-  keysToAdd.forEach(key => {
+  keysToAdd.forEach((key) => {
     if (!set.has(key)) {
       set.add(key)
     }
@@ -72,7 +74,7 @@ export function merge (originalKeys: Key[], keysToAdd: Key[]): Key[] {
 
 export function minus (originalKeys: Key[], keysToRemove: Key[]): Key[] {
   const set = new Set(originalKeys)
-  keysToRemove.forEach(key => {
+  keysToRemove.forEach((key) => {
     if (set.has(key)) {
       set.delete(key)
     }
