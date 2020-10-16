@@ -148,9 +148,6 @@ export function getCheckedKeys (
   }
 
   const leafCheckedKeySet = leafOnly ? new Set(extendedCheckedKeySet) : null
-  if (leafOnly) {
-    console.log('!!!', Array.from(leafCheckedKeySet as any))
-  }
 
   const syntheticCheckedKeySet: Set<Key> = extendedCheckedKeySet
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
