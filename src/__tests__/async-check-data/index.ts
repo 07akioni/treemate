@@ -38,3 +38,15 @@ export const disabledNodeTestTree = [
     ]
   }
 ]
+
+export const asyncBasicTree = [
+  {
+    key: '0',
+    children: [
+      {
+        key: '1',
+        isLeaf: false
+      }
+    ]
+  }
+]

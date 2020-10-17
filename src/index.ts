@@ -12,7 +12,8 @@ import {
   CheckOptions
 } from './interface'
 import {
-  getCheckedKeys
+  getCheckedKeys,
+  SubtreeNotLoadedError
 } from './check'
 import {
   toArray,
@@ -240,3 +241,6 @@ export function TreeMate (
   }
   return treemate
 }
+
+export { TreeMate as createTreeMate }
+export { SubtreeNotLoadedError }

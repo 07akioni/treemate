@@ -1,4 +1,4 @@
-import { Key, TreeMateInstance, MergedKeys } from './interface'
+import { Key, TreeMateInstance, MergedKeys, TreeNode } from './interface'
 import {
   isExpilicitlyNotLoaded,
   merge,
@@ -7,11 +7,11 @@ import {
   TRAVERSE_COMMAND
 } from './utils'
 
-export class SubtreeUnloadedError extends Error {
+export class SubtreeNotLoadedError extends Error {
   constructor () {
     super()
     this.message =
-      'SubtreeUnloadedError: checking a subtree whose required nodes are not fully loaded.'
+      'SubtreeNotLoadedError: checking a subtree whose required nodes are not fully loaded.'
   }
 }
 
@@ -66,7 +66,6 @@ function getExtendedCheckedKeySetAfterUncheck (
     leafOnly,
     treeMate
   )
-
   const ascendantKeySet: Set<Key> = getAvailableAscendantNodeSet(
     uncheckedKeys,
     treeMate
@@ -89,7 +88,7 @@ export function getCheckedKeys (
     keysToCheck?: Key[]
     keysToUncheck?: Key[]
     cascade: boolean
-    // `leafOnly` only works when keysToCheck or keysToUncheck is set.
+    // `leafOnly` only works when `keysToCheck` or `keysToUncheck` is set.
     // Since view should always be sync with the input data.
     // We only want the data model value to be leaf only.
     leafOnly: boolean
@@ -148,21 +147,31 @@ export function getCheckedKeys (
   }
 
   const leafCheckedKeySet = leafOnly ? new Set(extendedCheckedKeySet) : null
-
   const syntheticCheckedKeySet: Set<Key> = extendedCheckedKeySet
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
   const maxLevel = Math.max.apply(null, Array.from(levelTreeNodeMap.keys()))
+  // cascade check
+  // 1. if tree is fully loaded, it just works
+  // 2. if the tree is not fully loaded, we assume that keys which is in not
+  //    loaded tree are not in checked keys
+  //    for example:
+  //    a -- b(fully-loaded)   -- c(fully-loaded)
+  //      |- d(partial-loaded) -- ?e(not-loaded)
+  //    in the case, `e` is assumed not to be checked, nor we can't calc `d`'s
+  //    and `a`'s status
   for (let level = maxLevel; level >= 0; level -= 1) {
-    const levelTreeNodes = levelTreeNodeMap.get(level) ?? []
-    for (const levelTreeNode of levelTreeNodes) {
-      if (levelTreeNode.disabled) {
+    // it should exists, nor it is a bug
+    const levelTreeNodes = levelTreeNodeMap.get(level)
+    for (const levelTreeNode of levelTreeNodes as TreeNode[]) {
+      if (levelTreeNode.disabled || !levelTreeNode.isShallowLoaded) {
         continue
       }
       const levelTreeNodeKey = levelTreeNode.key
       if (!levelTreeNode.isLeaf) {
         let fullyChecked = true
         let partialChecked = false
-        for (const childNode of levelTreeNode.children ?? []) {
+        // it is shallow loaded, so `children` must exist
+        for (const childNode of levelTreeNode.children as TreeNode[]) {
           const childKey = childNode.key
           if (childNode.disabled) continue
           if (syntheticCheckedKeySet.has(childKey)) {
@@ -211,7 +220,7 @@ export function getExtendedCheckedKeySet (
           return TRAVERSE_COMMAND.STOP
         } else {
           if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
-            throw new SubtreeUnloadedError()
+            throw new SubtreeNotLoadedError()
           }
           if (!leafOnly || (leafOnly && treeNode.isLeaf)) {
             extendedKeySet.add(key)
