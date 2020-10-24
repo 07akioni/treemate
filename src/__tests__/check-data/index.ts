@@ -36,6 +36,18 @@ export const basicTree = [
   }
 ]
 
+export const flattenedBasicTreeKeys = [
+  '0',
+  '0-0',
+  '0-0-0',
+  '0-0-0-0',
+  '0-0-0-1',
+  '0-0-1',
+  '0-1',
+  '0-1-0',
+  '0-1-1'
+]
+
 export const disabledNodeTestTree = [
   {
     key: '0',

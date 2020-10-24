@@ -1,18 +1,13 @@
 import { TreeMate } from '@/index'
-import { basicTree } from './check-data'
+import { basicTree, flattenedBasicTreeKeys } from './check-data'
 
 describe('# flatten', () => {
   it('works', () => {
-    expect(TreeMate(basicTree).flattenedNodes.map((node) => node.key)).toEqual([
-      '0',
-      '0-0',
-      '0-0-0',
-      '0-0-0-0',
-      '0-0-0-1',
-      '0-0-1',
-      '0-1',
-      '0-1-0',
-      '0-1-1'
-    ])
+    expect(TreeMate(basicTree).flattenedNodes.map((node) => node.key)).toEqual(
+      flattenedBasicTreeKeys
+    )
+    expect(
+      TreeMate(basicTree).flattenedNodes.map((node) => node.fIndex)
+    ).toEqual(flattenedBasicTreeKeys.map((_, i) => i))
   })
 })
