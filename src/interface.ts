@@ -22,6 +22,7 @@ export interface TreeNode {
   isLastChild: boolean
   parent: TreeNode | null
   isLeaf: boolean
+  isGroup: boolean
   isShallowLoaded: boolean
   disabled: boolean
   siblings: TreeNode[]

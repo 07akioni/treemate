@@ -18,6 +18,7 @@ import {
   toArray,
   isDisabled,
   isLeaf,
+  isGroup,
   isNodeInvalid,
   unwrapCheckedKeys,
   isShallowLoaded,
@@ -91,6 +92,9 @@ function createTreeNodes<T extends RawNode[] | undefined> (
           })
         }
         return isDisabled(this.rawNode)
+      },
+      get isGroup () {
+        return isGroup(this.rawNode)
       },
       get isLeaf () {
         return isLeaf(this.rawNode)

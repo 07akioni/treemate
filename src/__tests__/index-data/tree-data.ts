@@ -26,6 +26,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         index: 0,
         isFirstChild: true,
         isLastChild: true,
+        isGroup: false,
         parent: null,
         isLeaf: true,
         isShallowLoaded: true,
@@ -69,6 +70,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         fIndex: 1,
         isFirstChild: true,
         isLastChild: false,
+        isGroup: false,
         parent: null, // will be set later
         isLeaf: true,
         disabled: false,
@@ -87,6 +89,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         fIndex: 2,
         isFirstChild: false,
         isLastChild: true,
+        isGroup: false,
         parent: null, // will be set later
         isLeaf: true,
         disabled: false,
@@ -105,6 +108,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         fIndex: 0,
         isFirstChild: true,
         isLastChild: true,
+        isGroup: false,
         parent: null,
         isLeaf: false,
         disabled: false,
