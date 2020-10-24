@@ -81,3 +81,7 @@ export function minus (originalKeys: Key[], keysToRemove: Key[]): Key[] {
   })
   return Array.from(set)
 }
+
+export function isGroup (rawNode: RawNode): boolean {
+  return rawNode?.type === 'group'
+}

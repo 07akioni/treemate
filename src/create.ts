@@ -29,6 +29,9 @@ import {
 import {
   moveMethods
 } from './move'
+import {
+  flatten
+} from './flatten'
 
 function createTreeNodes<T extends RawNode[] | undefined> (
   rawNodes: T,
@@ -153,10 +156,14 @@ export function createTreeMate (
     if (node === null) return null
     return node.getChild()
   }
+  let cachedFlattenedNodes: TreeNode[]
   const treemate: TreeMateInstance = {
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
+    get flattenedNodes () {
+      return cachedFlattenedNodes || (cachedFlattenedNodes = flatten(treeNodes))
+    },
     getNode,
     getPrev,
     getNext,
