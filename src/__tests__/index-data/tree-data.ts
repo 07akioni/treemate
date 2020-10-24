@@ -30,6 +30,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         isLeaf: true,
         isShallowLoaded: true,
         disabled: false,
+        fIndex: 0,
         getParent: () => null,
         getChild: () => null,
         getPrev: () => null,
@@ -65,6 +66,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         rawNode: raw1,
         level: 1,
         index: 0,
+        fIndex: 1,
         isFirstChild: true,
         isLastChild: false,
         parent: null, // will be set later
@@ -82,6 +84,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         rawNode: raw2,
         level: 1,
         index: 1,
+        fIndex: 2,
         isFirstChild: false,
         isLastChild: true,
         parent: null, // will be set later
@@ -99,6 +102,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         rawNode: raw0,
         level: 0,
         index: 0,
+        fIndex: 0,
         isFirstChild: true,
         isLastChild: true,
         parent: null,

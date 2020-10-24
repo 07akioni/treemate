@@ -38,6 +38,7 @@ function createTreeNodes<T extends RawNode[] | undefined> (
   treeNodeMap: TreeNodeMap,
   levelTreeNodeMap: LevelTreeNodeMap,
   options: TreeMateOptions,
+  fIndexRef: [number] = [0],
   parent: TreeNode | null = null,
   level: number = 0
 ): T extends RawNode[] ? TreeNode[] : undefined {
@@ -61,6 +62,7 @@ function createTreeNodes<T extends RawNode[] | undefined> (
       siblings: treeNodes,
       level,
       index,
+      fIndex: fIndexRef[0]++,
       isFirstChild: index === 0,
       isLastChild: index + 1 === rawNodes.length,
       get key () {
@@ -104,6 +106,7 @@ function createTreeNodes<T extends RawNode[] | undefined> (
       treeNodeMap,
       levelTreeNodeMap,
       options,
+      fIndexRef,
       treeNode,
       level + 1
     )

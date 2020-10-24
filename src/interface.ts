@@ -17,6 +17,7 @@ export interface TreeNode {
   rawNode: RawNode
   level: number
   index: number
+  fIndex: number
   isFirstChild: boolean
   isLastChild: boolean
   parent: TreeNode | null
