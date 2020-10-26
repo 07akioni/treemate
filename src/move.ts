@@ -7,12 +7,22 @@ export const moveMethods = {
       const { length } = children
       for (let i = 0; i < length; ++i) {
         const child = children[i]
-        if (!child.disabled) return child
+        if (!child.disabled) {
+          if (child.isGroup) {
+            const childInGroup = child.getChild()
+            if (childInGroup !== null) return childInGroup
+          } else {
+            return child
+          }
+        }
       }
     }
     return null
   },
   getParent (this: TreeNode) {
+    if (this.parent?.isGroup) {
+      return this.parent.getParent()
+    }
     return this.parent
   },
   getNext (this: TreeNode, options: GetPrevNextOptions = {}) {
@@ -24,14 +34,33 @@ export const moveMethods = {
     if (loop) {
       for (let i = this.index + 1; loopCount < length; ++loopCount, i += 1) {
         const index = i % length
-        if (!this.siblings[index].disabled) return this.siblings[index]
+        const sibling = this.siblings[index]
+        if (!sibling.disabled) {
+          if (sibling.isGroup) {
+            const sibInGroup = sibling.getChild()
+            if (sibInGroup !== null) return sibInGroup
+          } else {
+            return sibling
+          }
+        }
       }
     } else {
       const loopTimes = length - 1
       for (let i = this.index + 1; loopCount < loopTimes; ++loopCount, i += 1) {
         if (i > loopTimes) break
-        if (!this.siblings[i].disabled) return this.siblings[i]
+        const sibling = this.siblings[i]
+        if (!sibling.disabled) {
+          if (sibling.isGroup) {
+            const sibInGroup = sibling.getChild()
+            if (sibInGroup !== null) return sibInGroup
+          } else {
+            return sibling
+          }
+        }
       }
+    }
+    if (this.parent?.isGroup) {
+      return this.parent.getNext()
     }
     return null
   },
@@ -44,14 +73,33 @@ export const moveMethods = {
     if (loop) {
       for (let i = this.index + length - 1; loopCount < length; ++loopCount, i -= 1) {
         const index = i % length
-        if (!this.siblings[index].disabled) return this.siblings[index]
+        const sibling = this.siblings[index]
+        if (!sibling.disabled) {
+          if (sibling.isGroup) {
+            const sibInGroup = sibling.getChild()
+            if (sibInGroup !== null) return sibInGroup
+          } else {
+            return sibling
+          }
+        }
       }
     } else {
       const loopTimes = length - 1
       for (let i = this.index - 1; loopCount < loopTimes; ++loopCount, i -= 1) {
         if (i < 0) break
-        if (!this.siblings[i].disabled) return this.siblings[i]
+        const sibling = this.siblings[i]
+        if (!sibling.disabled) {
+          if (sibling.isGroup) {
+            const sibInGroup = sibling.getChild()
+            if (sibInGroup !== null) return sibInGroup
+          } else {
+            return sibling
+          }
+        }
       }
+    }
+    if (this.parent?.isGroup) {
+      return this.parent.getPrev()
     }
     return null
   }

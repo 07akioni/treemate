@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { createTreeMate } from '@/create'
 import { TreeMate } from '@/index'
 import { TreeNode } from '@/interface'
 
-import { basicMoveTree } from './move-data/index'
+import { basicMoveTree, groupMoveTree } from './move-data/index'
 
 describe('move', () => {
   const treeMate = TreeMate(basicMoveTree)
@@ -53,5 +54,32 @@ describe('move', () => {
     cursor = getPrev('3-2')!
     expect(cursor.key).toEqual('3-1')
     expect(getPrev('3-1')).toEqual(null)
+  })
+  describe('moves with group', () => {
+    const treeMate = createTreeMate(groupMoveTree)
+    it('getPrev & getNext', () => {
+      let cursor = treeMate.getNode('0')!
+      cursor = cursor.getNext()!
+      expect(cursor.key).toEqual('1-1')
+      expect(cursor.getParent()).toEqual(null)
+      cursor = cursor.getNext()!
+      expect(cursor.key).toEqual('2')
+      cursor = cursor.getNext()!
+      expect(cursor.key).toEqual('3')
+      cursor = cursor.getChild()!
+      expect(cursor.key).toEqual('3-0')
+      cursor = cursor.getNext()!
+      expect(cursor.key).toEqual('3-2-0')
+      cursor = cursor.getPrev()!
+      expect(cursor.key).toEqual('3-0')
+      cursor = treeMate.getNode('2-0-0')!
+      cursor = cursor.getNext()!
+      expect(cursor.key).toEqual('2-1-1')
+      cursor = cursor.getPrev()!
+      expect(cursor.key).toEqual('2-0-0')
+    })
+    it('getChild', () => {
+      expect(treeMate.getNode('2')!.getChild()!.key).toEqual('2-0-0')
+    })
   })
 })
