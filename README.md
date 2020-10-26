@@ -6,52 +6,85 @@ Help people who want to write a tree component.
 - [x] checked keys & indeterminate keys
 - [x] basic test
 - [x] lint
-- [ ] check action & uncheck action
+- [x] check action & uncheck action
   - [x] full test
-  - [ ] batch check & batch uncheck
+  - [x] batch check & batch uncheck
     - [x] feature
     - [x] API cleaning
-    - [ ] test
-  - [ ] functional disabled prop
+    - [x] test
+  - [x] functional disabled prop
 - [x] <del>async patches</del> support non-complete-data
-  - [ ] support check & uncheck action on partial complete tree
+  - [x] support check & uncheck action on partial complete tree
     - [x] implemented
-    - [ ] well tested
+    - [x] well tested
   - [x] throw error on non-complete tree
+- [ ] getIsGroup
 
-## Usage
-```js
-const { TreeMate } = require('treemate')
+## API
+```ts
+function createTreeMate(nodes: RawNode[], options: TreeMateOptions): TreeMate
 
-const tree = [
-  {
-    key: '0',
-    children: [
-      {
-        key: '0-0'
-      },
-      {
-        key: '0-1'
-      }
-    ]
-  }
-]
+export interface TreeMateOptions {
+  getDisabled?: (node: RawNode) => boolean
+  getKey?: (node: RawNode) => Key
+}
 
-const treemate = TreeMate(tree)
+export interface TreeMateInstance {
+  treeNodes: TreeNode[]
+  treeNodeMap: TreeNodeMap
+  levelTreeNodeMap: LevelTreeNodeMap
+  flattenedNodes: TreeNode[]
+  getNode: KeyToNode
+  getCheckedKeys: (
+    checkedKeys: Key[] | InputMergedKeys | null | undefined,
+    options?: CheckOptions
+  ) => MergedKeys
+  check: (
+    keysToCheck: Key | Key[] | null | undefined,
+    checkedKeys: Key[] | InputMergedKeys,
+    options?: CheckOptions
+  ) => MergedKeys
+  uncheck: (
+    keysToUncheck: Key | Key[] | null | undefined,
+    checkedKeys: Key[] | InputMergedKeys,
+    options?: CheckOptions
+  ) => MergedKeys
+  getPath: (key: Key, options?: GetPathOptions) => MergedPath
+  getFirstAvailableNode: () => TreeNode | null
+  getPrev: KeyToNode
+  getNext: KeyToNode
+  getParent: KeyToNode
+  getChild: KeyToNode
+}
 
-let result = treemate.getCheckedKeys(['0'])
-// {
-//   checkedKeys: ['0', '0-0', '0-1'],
-//   indeterminateKeys: []
-// }
-checkedKeys = treemate.uncheck('0-1', result)
-// {
-//   checkedKeys: ['0-0'],
-//   indeterminateKeys: ['0']
-// }
-checkedKeys = treemate.check('0-1', result)
-// {
-//   checkedKeys: ['0', '0-0', '0-1'],
-//   indeterminateKeys: []
-// }
+interface CheckOptions {
+  cascade: boolean
+  leafOnly: boolean
+}
+
+interface MergedKeys {
+  checkedKeys: Key[],
+  indeterminateKeys: Key[]
+}
+
+interface TreeNode {
+  key: Key
+  rawNode: RawNode
+  level: number
+  index: number
+  fIndex: number
+  isFirstChild: boolean
+  isLastChild: boolean
+  parent: TreeNode | null
+  isLeaf: boolean
+  isGroup: boolean
+  isShallowLoaded: boolean
+  disabled: boolean
+  siblings: TreeNode[]
+  children?: TreeNode[]
+  getPrev: (options?: GetPrevNextOptions) => TreeNode | null
+  getNext: (options?: GetPrevNextOptions) => TreeNode | null
+  getParent: () => TreeNode | null
+  getChild: () => TreeNode | null
+}
 ```
