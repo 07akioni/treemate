@@ -125,3 +125,60 @@ export const groupMoveTree = [
     key: '4'
   }
 ]
+
+export const firstNodeMoveTree1 = [
+  {
+    type: 'group',
+    key: '0',
+    children: [
+      {
+        key: '0-0',
+        disabled: true
+      },
+      {
+        key: '0-1'
+      }
+    ]
+  }
+]
+
+export const firstNodeMoveTree2 = [
+  {
+    type: 'group',
+    key: '0',
+    children: [
+      {
+        key: '0-0',
+        disabled: true
+      },
+      {
+        key: '0-1',
+        disabled: true
+      }
+    ]
+  },
+  {
+    key: '1'
+  }
+]
+
+export const firstNodeMoveTree3 = [
+  {
+    type: 'group',
+    key: '0',
+    children: [
+      {
+        key: '0-0',
+        disabled: true
+      },
+      {
+        key: '0-1',
+        disabled: true
+      }
+    ]
+  },
+  {
+    key: '1',
+    disabled: true
+  }
+]

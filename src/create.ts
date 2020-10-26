@@ -28,7 +28,8 @@ import {
   getPath
 } from './path'
 import {
-  moveMethods
+  moveMethods,
+  getFirstAvailableNode
 } from './move'
 import {
   flatten
@@ -173,14 +174,7 @@ export function createTreeMate (
     getParent,
     getChild,
     getFirstAvailableNode () {
-      const { length } = treeNodes
-      for (let i = 0; i < length; ++i) {
-        const treeNode = treeNodes[i]
-        if (!treeNode.disabled) {
-          return treeNode
-        }
-      }
-      return null
+      return getFirstAvailableNode(treeNodes)
     },
     getPath (key: Key, options: GetPathOptions = {}) {
       return getPath(

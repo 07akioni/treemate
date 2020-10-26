@@ -3,13 +3,30 @@ import { createTreeMate } from '@/create'
 import { TreeMate } from '@/index'
 import { TreeNode } from '@/interface'
 
-import { basicMoveTree, groupMoveTree } from './move-data/index'
+import {
+  basicMoveTree,
+  groupMoveTree,
+  firstNodeMoveTree1,
+  firstNodeMoveTree2,
+  firstNodeMoveTree3
+} from './move-data/index'
 
 describe('move', () => {
   const treeMate = TreeMate(basicMoveTree)
   it('first node', () => {
     const { getFirstAvailableNode } = treeMate
     expect(getFirstAvailableNode()?.key).toEqual('0')
+  })
+  it('first node(extra case)', () => {
+    expect(
+      createTreeMate(firstNodeMoveTree1).getFirstAvailableNode()?.key
+    ).toEqual('0-1')
+    expect(
+      createTreeMate(firstNodeMoveTree2).getFirstAvailableNode()?.key
+    ).toEqual('1')
+    expect(createTreeMate(firstNodeMoveTree3).getFirstAvailableNode()).toEqual(
+      null
+    )
   })
   it('moves', () => {
     const { getNode } = treeMate

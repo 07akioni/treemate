@@ -1,5 +1,18 @@
 import { TreeNode, GetPrevNextOptions } from './interface'
 
+export function getFirstAvailableNode (nodes: TreeNode[]): TreeNode | null {
+  if (nodes.length === 0) return null
+  const node = nodes[0]
+  if (node.isGroup) {
+    const availNodeInGroup = node.getChild()
+    if (availNodeInGroup !== null) return availNodeInGroup
+    return node.getNext()
+  }
+  return node.disabled
+    ? node.getNext()
+    : node
+}
+
 export const moveMethods = {
   getChild (this: TreeNode) {
     const { children } = this
