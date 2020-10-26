@@ -71,11 +71,11 @@ function createTreeNodes<T extends RawNode[] | undefined> (
           getKey
         } = options
         if (getKey) {
-          return getKey({
-            parentKey: parent?.key ?? null,
-            index,
-            node: this.rawNode
-          })
+          // do not pass parent or related things to it
+          // the key need to be specified explicitly
+          return getKey(
+            this.rawNode
+          )
         } else {
           return rawNode.key
         }
@@ -85,11 +85,7 @@ function createTreeNodes<T extends RawNode[] | undefined> (
           getDisabled
         } = options
         if (getDisabled) {
-          return getDisabled({
-            parentKey: parent?.key ?? null,
-            index,
-            node: this.rawNode
-          })
+          return getDisabled(this.rawNode)
         }
         return isDisabled(this.rawNode)
       },

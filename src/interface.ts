@@ -43,16 +43,8 @@ export interface MergedKeys {
 }
 
 export interface TreeMateOptions {
-  getDisabled?: (data: {
-    parentKey: Key | null
-    index: number
-    node: RawNode
-  }) => boolean
-  getKey?: (data: {
-    parentKey: Key | null
-    index: number
-    node: RawNode
-  }) => Key
+  getDisabled?: (node: RawNode) => boolean
+  getKey?: (node: RawNode) => Key
 }
 
 export interface MergedPath {
