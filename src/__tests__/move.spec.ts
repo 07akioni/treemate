@@ -13,7 +13,8 @@ import {
   disabledMoveTree1,
   disabledMoveTree2,
   disabledMoveTree3,
-  disabledMoveTree4
+  disabledMoveTree4,
+  disabledMoveTree5
 } from './move-data/index'
 
 describe('move', () => {
@@ -138,6 +139,10 @@ describe('move', () => {
       expect(tm.getPrev('0-1')).toEqual(null)
       expect(tm.getNext('0-1', { loop: true })?.key).toEqual('0-1')
       expect(tm.getPrev('0-1', { loop: true })?.key).toEqual('0-1')
+    })
+    it('move in disabled #5', () => {
+      const tm = createTreeMate(disabledMoveTree5)
+      expect(tm.getPrev('1-0')?.key).toEqual('0-1')
     })
   })
 })

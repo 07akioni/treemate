@@ -293,3 +293,35 @@ export const disabledMoveTree4 = [
     disabled: true
   }
 ]
+
+export const disabledMoveTree5 = [
+  {
+    type: 'group',
+    key: '0',
+    children: [
+      {
+        key: '0-0'
+      },
+      {
+        key: '0-1'
+      }
+    ]
+  },
+  {
+    type: 'group',
+    key: '1',
+    children: [
+      {
+        key: '1-0',
+        disabled: true
+      },
+      {
+        key: '1-1'
+      }
+    ]
+  },
+  {
+    key: '2',
+    disabled: true
+  }
+]

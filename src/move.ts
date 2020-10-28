@@ -25,13 +25,16 @@ function rawGetNext (node: TreeNode, loop: boolean): TreeNode | null {
 
 function move (
   fromNode: TreeNode,
-  iterate: (node: TreeNode, loop: boolean) => TreeNode | null,
+  dir: 'prev' | 'next',
   options: GetPrevNextOptions = {}
 ): TreeNode | null {
   const {
     loop = false
   } = options
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const iterate = dir === 'prev' ? rawGetPrev : rawGetNext
+  const getChildOptions = {
+    reverse: dir === 'prev'
+  }
   let meet = false
   let endNode: TreeNode | null = null
   function traverse (node: TreeNode | null): void {
@@ -56,7 +59,7 @@ function move (
       }
     }
     if (node.isGroup) {
-      const child = node.getChild()
+      const child = getChild(node, getChildOptions)
       if (child !== null) {
         endNode = child
       } else {
@@ -96,35 +99,44 @@ function rawGetParent (node: TreeNode): TreeNode | null {
   return node.parent
 }
 
-export const moveMethods = {
-  getChild (this: TreeNode) {
-    const { children } = this
-    if (children) {
-      const { length } = children
-      for (let i = 0; i < length; ++i) {
-        const child = children[i]
-        if (!child.disabled) {
-          if (child.isGroup) {
-            const childInGroup = child.getChild()
-            if (childInGroup !== null) return childInGroup
-          } else {
-            return child
-          }
+function getChild (node: TreeNode, options: { reverse?: boolean } = {}): TreeNode | null {
+  const { reverse = false } = options
+  const { children } = node
+  if (children) {
+    const { length } = children
+    const start = reverse ? length - 1 : 0
+    const end = reverse ? -1 : length
+    const delta = reverse ? -1 : 1
+    for (let i = start; i !== end; i += delta) {
+      const child = children[i]
+      if (!child.disabled) {
+        if (child.isGroup) {
+          const childInGroup = getChild(child, options)
+          if (childInGroup !== null) return childInGroup
+        } else {
+          return child
         }
       }
     }
-    return null
+  }
+  return null
+}
+
+export const moveMethods: Pick<TreeNode, 'getChild' | 'getNext' | 'getParent' | 'getPrev'> = {
+  getChild (this: TreeNode) {
+    return getChild(this)
   },
   getParent (this: TreeNode) {
-    if (this.parent?.isGroup) {
-      return this.parent.getParent()
+    const { parent } = this
+    if (parent?.isGroup) {
+      return parent.getParent()
     }
-    return this.parent
+    return parent
   },
   getNext (this: TreeNode, options: GetPrevNextOptions = {}) {
-    return move(this, rawGetNext, options)
+    return move(this, 'next', options)
   },
   getPrev (this: TreeNode, options: GetPrevNextOptions = {}) {
-    return move(this, rawGetPrev, options)
+    return move(this, 'prev', options)
   }
 }
