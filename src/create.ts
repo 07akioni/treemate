@@ -9,7 +9,8 @@ import {
   Key,
   InputMergedKeys,
   GetPathOptions,
-  CheckOptions
+  CheckOptions,
+  GetPrevNextOptions
 } from './interface'
 import {
   getCheckedKeys
@@ -137,16 +138,16 @@ export function createTreeMate (
     return treeNodeMap.get(key) ?? null
   }
   function getPrev<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
-  function getPrev (key: Key | null | undefined): TreeNode | null {
+  function getPrev (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode | null {
     const node = getNode(key)
     if (node === null) return null
-    return node.getPrev()
+    return node.getPrev(options)
   }
   function getNext<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
-  function getNext (key: Key | null | undefined): TreeNode | null {
+  function getNext (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode | null {
     const node = getNode(key)
     if (node === null) return null
-    return node.getNext()
+    return node.getNext(options)
   }
   function getParent<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
   function getParent (key: Key | null | undefined): TreeNode | null {

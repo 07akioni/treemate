@@ -126,6 +126,55 @@ export const groupMoveTree = [
   }
 ]
 
+export const groupMoveTree2 = [
+  {
+    type: 'group',
+    key: '0',
+    children: [
+      {
+        key: '0-0',
+        disabled: true
+      }
+    ]
+  },
+  {
+    type: 'group',
+    key: '1',
+    children: [
+      {
+        key: '1-0',
+        disabled: true
+      },
+      {
+        key: '1-0'
+      }
+    ]
+  },
+  {
+    type: 'group',
+    key: '2',
+    children: [
+      {
+        key: '2-0',
+        disabled: true
+      }
+    ]
+  },
+  {
+    type: 'group',
+    key: '3',
+    children: [
+      {
+        key: '3-0',
+        disabled: true
+      },
+      {
+        key: '3-1'
+      }
+    ]
+  }
+]
+
 export const firstNodeMoveTree1 = [
   {
     type: 'group',
@@ -176,6 +225,68 @@ export const firstNodeMoveTree3 = [
         disabled: true
       }
     ]
+  },
+  {
+    key: '1',
+    disabled: true
+  }
+]
+
+export const disabledMoveTree1 = [
+  {
+    type: 'group',
+    key: '0',
+    children: [
+      {
+        key: '0-0',
+        disabled: true
+      }
+    ]
+  },
+  {
+    key: '1',
+    disabled: true
+  }
+]
+
+export const disabledMoveTree2 = [
+  {
+    key: '0',
+    disabled: true
+  },
+  {
+    key: '1',
+    disabled: true
+  }
+]
+
+export const disabledMoveTree3 = [
+  {
+    type: 'group',
+    key: '0',
+    children: [
+      {
+        key: '0-0',
+        disabled: true
+      },
+      {
+        key: '0-1'
+      }
+    ]
+  },
+  {
+    key: '1',
+    disabled: true
+  }
+]
+
+export const disabledMoveTree4 = [
+  {
+    key: '0',
+    disabled: true
+  },
+  {
+    key: '0-1'
   },
   {
     key: '1',
