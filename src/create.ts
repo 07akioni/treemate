@@ -23,7 +23,8 @@ import {
   isNodeInvalid,
   unwrapCheckedKeys,
   isShallowLoaded,
-  unwrapIndeterminateKeys
+  unwrapIndeterminateKeys,
+  getNonLeafKeys
 } from './utils'
 import {
   getPath
@@ -241,6 +242,9 @@ export function createTreeMate (
         },
         treemate
       )
+    },
+    getNonLeafKeys () {
+      return getNonLeafKeys(treeNodes)
     }
   }
   return treemate

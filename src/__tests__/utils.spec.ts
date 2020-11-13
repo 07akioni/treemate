@@ -1,4 +1,5 @@
 import { isLeaf } from '@/utils'
+import { createTreeMate } from '@/index'
 
 describe('utils', () => {
   describe('#isLeaf', () => {
@@ -35,6 +36,29 @@ describe('utils', () => {
           isLeaf: true
         })
       ).toEqual(true)
+    })
+  })
+  describe('#getNonLeafKeys', () => {
+    it('works', () => {
+      const tm = createTreeMate([
+        {
+          key: 1,
+          children: [
+            {
+              key: 2
+            },
+            {
+              key: 3,
+              children: [
+                {
+                  key: 4
+                }
+              ]
+            }
+          ]
+        }
+      ])
+      expect(tm.getNonLeafKeys()).toEqual([1, 3])
     })
   })
 })

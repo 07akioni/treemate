@@ -20,6 +20,20 @@ export function traverse (
   }
 }
 
+export function getNonLeafKeys (treeNodes: TreeNode[]): Key[] {
+  const keys: Key[] = []
+  function traverse (nodes: TreeNode[]): void {
+    nodes.forEach((node) => {
+      if (!node.isLeaf) {
+        keys.push(node.key)
+        traverse(node.children as TreeNode[])
+      }
+    })
+  }
+  traverse(treeNodes)
+  return keys
+}
+
 export function isLeaf (rawNode: RawNode): boolean {
   const { isLeaf } = rawNode
   if (isLeaf !== undefined) return isLeaf
