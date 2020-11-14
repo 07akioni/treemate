@@ -1,6 +1,6 @@
 {
   "name": "treemate",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
