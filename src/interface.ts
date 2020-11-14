@@ -69,6 +69,10 @@ export interface CheckOptions {
 type KeyToNode = <T extends Key | null | undefined>(key: T) => T extends (null | undefined) ? null : (TreeNode | null)
 type KeyToNodeWithOptions = <T extends Key | null | undefined>(key: T, options?: GetPrevNextOptions) => T extends (null | undefined) ? null : (TreeNode | null)
 
+export interface GetNonLeafKeysOptions {
+  preserveGroup?: boolean
+}
+
 export interface TreeMateInstance {
   treeNodes: TreeNode[]
   treeNodeMap: TreeNodeMap
@@ -91,7 +95,7 @@ export interface TreeMateInstance {
   ) => MergedKeys
   getPath: (key: Key, options?: GetPathOptions) => MergedPath
   getFirstAvailableNode: () => TreeNode | null
-  getNonLeafKeys: () => Key[]
+  getNonLeafKeys: (options?: GetNonLeafKeysOptions) => Key[]
   getPrev: KeyToNodeWithOptions
   getNext: KeyToNodeWithOptions
   getParent: KeyToNode

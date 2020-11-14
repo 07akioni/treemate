@@ -39,26 +39,40 @@ describe('utils', () => {
     })
   })
   describe('#getNonLeafKeys', () => {
+    const data = [
+      {
+        key: 1,
+        children: [
+          {
+            key: 2
+          },
+          {
+            key: 3,
+            children: [
+              {
+                key: 4
+              }
+            ]
+          },
+          {
+            type: 'group',
+            key: 5,
+            children: [
+              {
+                key: 6
+              }
+            ]
+          }
+        ]
+      }
+    ]
     it('works', () => {
-      const tm = createTreeMate([
-        {
-          key: 1,
-          children: [
-            {
-              key: 2
-            },
-            {
-              key: 3,
-              children: [
-                {
-                  key: 4
-                }
-              ]
-            }
-          ]
-        }
-      ])
+      const tm = createTreeMate(data)
       expect(tm.getNonLeafKeys()).toEqual([1, 3])
+    })
+    it('works when `preserveGroup` = true', () => {
+      const tm = createTreeMate(data)
+      expect(tm.getNonLeafKeys({ preserveGroup: true })).toEqual([1, 3, 5])
     })
   })
 })

@@ -10,7 +10,8 @@ import {
   InputMergedKeys,
   GetPathOptions,
   CheckOptions,
-  GetPrevNextOptions
+  GetPrevNextOptions,
+  GetNonLeafKeysOptions
 } from './interface'
 import {
   getCheckedKeys
@@ -243,8 +244,8 @@ export function createTreeMate (
         treemate
       )
     },
-    getNonLeafKeys () {
-      return getNonLeafKeys(treeNodes)
+    getNonLeafKeys (options: GetNonLeafKeysOptions = {}) {
+      return getNonLeafKeys(treeNodes, options)
     }
   }
   return treemate
