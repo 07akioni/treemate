@@ -130,7 +130,7 @@ Get checked status of the tree after some nodes are unchecked.
 
 For `checkedKeys`, `options` and return value, see `getCheckedKeys(checkedKeys, options?)`。
 #### `getPath(key)`
-获取从根到该 `key` 对应节点的路径。返回值形如
+Get the path from root to the node corresponding to the `key`. The return value looks like
 ```ts
 interface MergedPath {
   keyPath: Key[],
@@ -138,21 +138,21 @@ interface MergedPath {
   treeNode: TreeMateNode | null
 }
 ```
-其中 `keyPath` 为路径中各个节点的 `key`。其中 `treeNodePath` 为节点路径。`treeNode` 该 `key` 对应的 `TreeMateNode`。
+The `keyPath` is the `key` of the nodes in path. The `treeNodePath` is the node path. `treeNode` is the `TreeMateNode` corresponding to the `key`.
 #### `getFirstAvailableNode()`
-获取整个树第一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the first not `disabled` `TreeMateNode` of the tree. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 #### `getPrev(key, options)`
-获取该 `key` 对应节点的前一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the first previous not `disabled` sibling `TreeMateNode` of the `key`'s corresponding node. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 
-`options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
+`options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
 #### `getNext(key, options)`
-获取该 `key` 对应节点的后一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the first next not `disabled` sibling `TreeMateNode` of the `key`'s corresponding node. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 
-`options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
+`options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
 #### `getParent(key)`
-获取该 `key` 对应节点的父级 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the parent node of the `key`'s corresponding node. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 #### `getChild(key)`
-获取该 `key` 对应节点第一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the first not `diabled` child node of the `key`'s corresponding node. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 
 ### `TreeMateNode`
 #### `rawNode`
@@ -178,14 +178,14 @@ Sibling nodes array of the node. It's a `TreeMateNode` Array.
 #### `children`
 Child nodes array of the node. It's a `TreeMateNode` Array.
 #### `getPrev(options?)`
-获取该节点的前一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the first previous not `disabled` sibling `TreeMateNode`. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 
-`options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
+`options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
 #### `getNext(options?)`
-获取该节点的后一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the first next not `disabled` sibling `TreeMateNode`. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 
-`options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
+`options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
 #### `getParent()`
-获取该节点的父级 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the parent node of `TreeMateNode`. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 #### `getChild()`
-获取该节点第一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+Get the first not `disabled` child `TreeMateNode`. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.

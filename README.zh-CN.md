@@ -188,4 +188,4 @@ interface MergedPath {
 #### `getParent()`
 获取该节点的父级 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
 #### `getChild()`
-获取该节点第一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
+获取该节点第一个非 `disabled` 的子 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
