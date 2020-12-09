@@ -54,7 +54,7 @@ const treeMateNode = treeMate.getNode(1)
 
 ## API
 ### `createTreeMate`
-#### `createTreeMate(nodes: RawNode[], options): TreeMate`
+#### `createTreeMate(nodes: RawNode[], options?): TreeMate`
 Create a `TreeMate` instance.
 
 `nodes` is a array. Every node looks like
@@ -117,13 +117,13 @@ interface MergedKeys {
   indeterminateKeys: Key[] // half checked
 }
 ```
-#### `check(keysToCheck, checkedKeys, options)`
+#### `check(keysToCheck, checkedKeys, options?)`
 Get checked status of the tree after some nodes are checked.
 
 `keysToCheck` could be `Key | Key[] | null | undefined`。
 
 For `checkedKeys`, `options` and return value, see `getCheckedKeys(checkedKeys, options?)`。
-#### `uncheck(keysToUncheck, checkedKeys, options)`
+#### `uncheck(keysToUncheck, checkedKeys, options?)`
 Get checked status of the tree after some nodes are unchecked.
 
 `keysToCheck` could be `Key | Key[] | null | undefined`。
@@ -141,11 +141,11 @@ interface MergedPath {
 The `keyPath` is the `key` of the nodes in path. The `treeNodePath` is the node path. `treeNode` is the `TreeMateNode` corresponding to the `key`.
 #### `getFirstAvailableNode()`
 Get the first not `disabled` `TreeMateNode` of the tree. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
-#### `getPrev(key, options)`
+#### `getPrev(key, options?)`
 Get the first previous not `disabled` sibling `TreeMateNode` of the `key`'s corresponding node. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 
 `options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
-#### `getNext(key, options)`
+#### `getNext(key, options?)`
 Get the first next not `disabled` sibling `TreeMateNode` of the `key`'s corresponding node. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
 
 `options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.

@@ -54,7 +54,7 @@ const treeMateNode = treeMate.getNode(1)
 
 ## API
 ### `createTreeMate`
-#### `createTreeMate(nodes: RawNode[], options): TreeMate`
+#### `createTreeMate(nodes: RawNode[], options?): TreeMate`
 创建一个 `TreeMate` 实例。
 
 `nodes` 为一个数组，每个节点形如
@@ -117,13 +117,13 @@ interface MergedKeys {
   indeterminateKeys: Key[] // 半选
 }
 ```
-#### `check(keysToCheck, checkedKeys, options)`
+#### `check(keysToCheck, checkedKeys, options?)`
 获取树在勾选一些节点后新的勾选状态。
 
 `keysToCheck` 可以为 `Key | Key[] | null | undefined`。
 
 `checkedKeys`, `options` 和返回值参考 `getCheckedKeys(checkedKeys, options?)`。
-#### `uncheck(keysToUncheck, checkedKeys, options)`
+#### `uncheck(keysToUncheck, checkedKeys, options?)`
 获取树在取消勾选一些节点后新的勾选状态。
 
 `keysToCheck` 可以为 `Key | Key[] | null | undefined`。
@@ -141,11 +141,11 @@ interface MergedPath {
 其中 `keyPath` 为路径中各个节点的 `key`。其中 `treeNodePath` 为节点路径。`treeNode` 该 `key` 对应的 `TreeMateNode`。
 #### `getFirstAvailableNode()`
 获取整个树第一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
-#### `getPrev(key, options)`
+#### `getPrev(key, options?)`
 获取该 `key` 对应节点的前一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
 
 `options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
-#### `getNext(key, options)`
+#### `getNext(key, options?)`
 获取该 `key` 对应节点的后一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
 
 `options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
