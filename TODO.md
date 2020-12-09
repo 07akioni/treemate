@@ -1,0 +1,17 @@
+## TODO
+- [x] checked keys & indeterminate keys
+- [x] basic test
+- [x] lint
+- [x] check action & uncheck action
+  - [x] full test
+  - [x] batch check & batch uncheck
+    - [x] feature
+    - [x] API cleaning
+    - [x] test
+  - [x] functional disabled prop
+- [x] <del>async patches</del> support non-complete-data
+  - [x] support check & uncheck action on partial complete tree
+    - [x] implemented
+    - [x] well tested
+  - [x] throw error on non-complete tree
+- [ ] getIsGroup

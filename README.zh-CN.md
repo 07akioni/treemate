@@ -1,24 +1,24 @@
 # treemate · [![Coverage Status](https://coveralls.io/repos/github/07akioni/treemate/badge.svg)](https://coveralls.io/github/07akioni/treemate)
 
-[中文](README.zh-CN.md) | English
+中文 | [English](README.md)
 
-Help you manipulate tree data structure for user interface. (Can be used in Tree, Select, Dropdown, Table, Menu components and ...)
+帮助人们操作树形数据结构（可以用于 Tree，Select，Dropdown，Table，Menu 等组件）。
 
-1. check nodes in the tree
-2. move along tree nodes
-3. get flattened nodes
-4. get node by key
-5. get path of nodes
-6. support group node
-7. meta info of nodes
+1. 树形结构勾选
+2. 在不同节点间移动
+3. 获取展平节点
+4. 通过 key 获取节点
+5. 获取节点路径
+6. 支持 Group 节点
+7. 各种节点的元信息
 8. ...
 
-## Installation
+## 安装
 ```bash
 npm install --save treemate
 ```
 
-## Basic Usage
+## 基本用法
 ```js
 import { createTreeMate } from 'treemate'
 
@@ -55,80 +55,80 @@ const treeMateNode = treeMate.getNode(1)
 ## API
 ### `createTreeMate`
 #### `createTreeMate(nodes: RawNode[], options): TreeMate`
-Create a `TreeMate` instance.
+创建一个 `TreeMate` 实例。
 
-`nodes` is a array. Every node looks like
+`nodes` 为一个数组，每个节点形如
 ```ts
 interface RawNode {
   key?: Key
   children?: RawNode[]
-  isLeaf?: boolean // Need not to fill if not in async mode
+  isLeaf?: boolean // 非异步状态不需要填写
   disabled?: boolean
   [key: string]: any
 }
 ```
 
-`options` looks like
+`options` 形如
 ```ts
 interface TreeMateOptions {
   getDisabled?: (node: RawNode) => boolean
   getKey?: (node: RawNode) => Key
 }
 ```
-`getDisabled` is used to determine the `disabled` status of a node. `getKey` is used to generate the key of a node inside `TreeMate`.
+`getDisabled` 被用来判断一个节点是否为 `disabled`，`getKey` 被用来生成一个节点在 `TreeMate` 内部的 key。
 
 ### `TreeMate`
 #### `treeNodes`
-Corresponding `TreeMateNode` Array of original data. The tree structure is identical to the original data.
+原数据对应的 `TreeMateNode` 数组，结构完全对应于原数据。
 #### `treeNodeMap`
-A map of `key` to tree node.
+`key` 到节点的 Map。
 #### `flattenedNodes`
-The flattened nodes of the tree.
+被展为一维的树节点。
 #### `getNode(key)`
-Use key to get tree node. Returns `null` if not exists.
+使用 key 获取树节点，不存在时返回 `null`。
 #### `getCheckedKeys(checkedKeys, options?)`
-Get checked status of the tree.
+获取树的勾选状态。
 
-Param `checkedKeys` has two forms:
+参数 `checkedKeys` 有两种输入模式:
 ```ts
-Key[] // 1. currently checked keys
+Key[] // 1. 当前选中的节点
 
-// 2. merged checked status
+// 2. 或者复合状态
 interface InputMergedKeys {
   checkedKeys?: Key[] | null
   indeterminateKeys?: Key[] | null // 半选
 }
 
-// can also be
+// 也可以为
 null | undefined
-// at least it won't throw an error
+// 至少不会报错
 ```
-Param `options` looks like
+参数 `options` 形如：
 ```ts
 interface CheckOptions {
-  cascade?: boolean // cascade check status, default is true
-  leafOnly?: boolean // whether only allow leaf node being checked, default is false
+  cascade?: boolean // 关联全选节点与半选节点，默认为 true
+  leafOnly?: boolean // 是否只允许全选叶节点，默认为 false
 }
 ```
-Return value looks like
+返回值形如
 ```ts
 interface MergedKeys {
   checkedKeys: Key[]
-  indeterminateKeys: Key[] // half checked
+  indeterminateKeys: Key[] // 半选
 }
 ```
 #### `check(keysToCheck, checkedKeys, options)`
-Get checked status of the tree after some nodes are checked.
+获取树在勾选一些节点后新的勾选状态。
 
-`keysToCheck` could be `Key | Key[] | null | undefined`。
+`keysToCheck` 可以为 `Key | Key[] | null | undefined`。
 
-For `checkedKeys`, `options` and return value, see `getCheckedKeys(checkedKeys, options?)`。
+`checkedKeys`, `options` 和返回值参考 `getCheckedKeys(checkedKeys, options?)`。
 #### `uncheck(keysToUncheck, checkedKeys, options)`
-Get checked status of the tree after some nodes are unchecked.
+获取树在取消勾选一些节点后新的勾选状态。
 
-`keysToCheck` could be `Key | Key[] | null | undefined`。
+`keysToCheck` 可以为 `Key | Key[] | null | undefined`。
 
-For `checkedKeys`, `options` and return value, see `getCheckedKeys(checkedKeys, options?)`。
+`checkedKeys`, `options` 和返回值参考 `getCheckedKeys(checkedKeys, options?)`。
 #### `getPath(key)`
 获取从根到该 `key` 对应节点的路径。返回值形如
 ```ts
@@ -156,27 +156,27 @@ interface MergedPath {
 
 ### `TreeMateNode`
 #### `rawNode`
-Corresponding original data node for `TreeMateNode`.
+`TreeMateNode` 对应的原始数据节点。
 #### `level`
-The level of the node, which starts from 0.
+节点的层级，从 0 开始。
 #### `index`
-`index` of node itself.
+节点自身的 `index`。
 #### `fIndex`
-`index` inside `flattenedNodes`.
+在展平节点 `flattenedNodes` 中节点的 `index`。
 #### `parent`
-Parent `TreeMateNode` of the node. It's `null` if not exists.
+节点的父级 `TreeMateNode`，不存在时为 `null`。
 #### `isLeaf`
-Whether node is leaf node.
+是否为叶节点。
 #### `isGroup`
-Whether node is group node.
+是否为 Group 节点。
 #### `isShallowLoaded`
-Whether node's direct child node is loaded.
+是否直接子节点都已经被加载。
 #### `disabled`
-Whether the node is disabled.
+是否为被禁用的节点。
 #### `siblings`
-Sibling nodes array of the node. It's a `TreeMateNode` Array.
+兄弟节点数组，为 `TreeMateNode` 数组。
 #### `children`
-Child nodes array of the node. It's a `TreeMateNode` Array.
+子节点数组，为 `TreeMateNode` 数组。
 #### `getPrev(options?)`
 获取该节点的前一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
 
