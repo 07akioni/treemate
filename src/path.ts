@@ -1,6 +1,6 @@
 import { GetPathOptions, Key, MergedPath, TreeMateInstance } from './interface'
 
-export function getPath (key: Key | null, options: GetPathOptions, treeMate: TreeMateInstance): MergedPath {
+export function getPath (key: Key | null, { includeGroup = false }: GetPathOptions, treeMate: TreeMateInstance): MergedPath {
   const treeNodeMap = treeMate.treeNodeMap
   let treeNode = key === null ? null : (treeNodeMap.get(key) ?? null)
   const mergedPath: MergedPath = {
@@ -9,7 +9,9 @@ export function getPath (key: Key | null, options: GetPathOptions, treeMate: Tre
     treeNode
   }
   while (treeNode) {
-    mergedPath.treeNodePath.push(treeNode)
+    if (includeGroup || !treeNode.isGroup) {
+      mergedPath.treeNodePath.push(treeNode)
+    }
     treeNode = treeNode.parent
   }
   mergedPath.treeNodePath.reverse()
