@@ -1,4 +1,4 @@
 export { createTreeMate } from './create'
 export { createTreeMate as TreeMate } from './create'
 export { SubtreeNotLoadedError } from './check'
-export { RawNode, TreeNode } from './interface'
+export { RawNode, TreeNode, Key } from './interface'

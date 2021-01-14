@@ -1,8 +1,8 @@
 import { GetPathOptions, Key, MergedPath, TreeMateInstance } from './interface'
 
-export function getPath (key: Key | null, { includeGroup = false }: GetPathOptions, treeMate: TreeMateInstance): MergedPath {
+export function getPath (key: Key | null | undefined, { includeGroup = false }: GetPathOptions, treeMate: TreeMateInstance): MergedPath {
   const treeNodeMap = treeMate.treeNodeMap
-  let treeNode = key === null ? null : (treeNodeMap.get(key) ?? null)
+  let treeNode = (key === null || key === undefined) ? null : (treeNodeMap.get(key) ?? null)
   const mergedPath: MergedPath = {
     keyPath: [],
     treeNodePath: [],

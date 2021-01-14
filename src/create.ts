@@ -179,7 +179,7 @@ export function createTreeMate (
     getFirstAvailableNode () {
       return getFirstAvailableNode(treeNodes)
     },
-    getPath (key: Key, options: GetPathOptions = {}) {
+    getPath (key: Key | null | undefined, options: GetPathOptions = {}) {
       return getPath(
         key,
         options,
