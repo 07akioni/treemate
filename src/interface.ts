@@ -95,7 +95,7 @@ export interface TreeMateInstance {
     checkedKeys: Key[] | InputMergedKeys,
     options?: CheckOptions
   ) => MergedKeys
-  getPath: (key: Key, options?: GetPathOptions) => MergedPath
+  getPath: (key: Key | null | undefined, options?: GetPathOptions) => MergedPath
   getFirstAvailableNode: () => TreeNode | null
   getNonLeafKeys: (options?: GetNonLeafKeysOptions) => Key[]
   getPrev: KeyToNodeWithOptions
