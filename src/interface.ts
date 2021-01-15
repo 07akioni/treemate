@@ -10,7 +10,7 @@ export interface RawNode {
 
 export interface KeyedRawNode {
   key: Key
-  children?: RawNode[]
+  children?: KeyedRawNode[]
   isLeaf?: boolean
   disabled?: boolean
   [key: string]: any
