@@ -8,6 +8,14 @@ export interface RawNode {
   [key: string]: any
 }
 
+export interface KeyedRawNode {
+  key: Key
+  children?: RawNode[]
+  isLeaf?: boolean
+  disabled?: boolean
+  [key: string]: any
+}
+
 export interface GetPrevNextOptions {
   loop?: boolean
 }
