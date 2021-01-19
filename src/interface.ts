@@ -83,7 +83,7 @@ export interface GetNonLeafKeysOptions {
   preserveGroup?: boolean
 }
 
-export interface TreeMateInstance {
+export interface TreeMate {
   treeNodes: TreeNode[]
   treeNodeMap: TreeNodeMap
   levelTreeNodeMap: LevelTreeNodeMap

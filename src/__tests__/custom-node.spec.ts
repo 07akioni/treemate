@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { TreeMate } from '@/index'
+import { createTreeMate } from '@/index'
 
 const data = [
   {
@@ -17,7 +17,7 @@ const data = [
 
 describe('custom node', () => {
   it('works', () => {
-    const treemate = TreeMate(data, {
+    const treemate = createTreeMate(data, {
       getDisabled (node) {
         return node.whatever === '0-0'
       },

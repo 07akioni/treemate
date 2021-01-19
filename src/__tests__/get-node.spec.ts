@@ -1,9 +1,9 @@
-import { TreeMate } from '@/index'
+import { createTreeMate } from '@/index'
 
 import { basicTree } from './check-data/index'
 
 describe('# getNode', () => {
-  const treeMate = TreeMate(basicTree)
+  const treeMate = createTreeMate(basicTree)
   it('works with nullish input', () => {
     expect(treeMate.getNode(null)).toEqual(null)
     expect(treeMate.getNode(undefined)).toEqual(null)

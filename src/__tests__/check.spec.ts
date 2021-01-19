@@ -1,5 +1,5 @@
 import { getExtendedCheckedKeySet } from '@/check'
-import { TreeMate } from '@/index'
+import { createTreeMate } from '@/index'
 
 import {
   basicTree,
@@ -29,7 +29,7 @@ describe('check', () => {
       }
     ].forEach((data, index) => {
       it('extended to all avaiabled children #' + String(index + 1), () => {
-        const treeMate = TreeMate(extendedCheckedKeysTestTree)
+        const treeMate = createTreeMate(extendedCheckedKeysTestTree)
         const extendedCheckedKeySet = getExtendedCheckedKeySet(
           data.checkedKeys,
           false,
@@ -198,7 +198,7 @@ describe('check', () => {
       }
     ].forEach((testCase) => {
       it(testCase.explain, () => {
-        const treeMate = TreeMate(testCase.tree)
+        const treeMate = createTreeMate(testCase.tree)
         expectCheckedStatusSame(
           treeMate.getCheckedKeys(testCase.input, {
             cascade: testCase.cascade
@@ -415,7 +415,7 @@ describe('check', () => {
       }
     ].forEach((testCase) => {
       it(testCase.explain, () => {
-        const treeMate = TreeMate(disabledNodeTestTree)
+        const treeMate = createTreeMate(disabledNodeTestTree)
         expectCheckedStatusSame(
           treeMate.check(testCase.checkedKey, testCase.checkedKeys, {
             cascade: testCase.cascade,
@@ -546,7 +546,7 @@ describe('check', () => {
       }
     ].forEach((testCase) => {
       it(testCase.explain, () => {
-        const treeMate = TreeMate(disabledNodeTestTree)
+        const treeMate = createTreeMate(disabledNodeTestTree)
         expectCheckedStatusSame(
           treeMate.uncheck(testCase.uncheckedKey, testCase.checkedKeys, {
             cascade: testCase.cascade,

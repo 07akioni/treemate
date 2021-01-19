@@ -1,4 +1,4 @@
-import { Key, TreeMateInstance, MergedKeys, TreeNode } from './interface'
+import { Key, TreeMate, MergedKeys, TreeNode } from './interface'
 import {
   isExpilicitlyNotLoaded,
   merge,
@@ -19,7 +19,7 @@ function getExtendedCheckedKeySetAfterCheck (
   checkKeys: Key[],
   currentCheckedKeys: Key[],
   leafOnly: boolean,
-  treeMate: TreeMateInstance
+  treeMate: TreeMate
 ): Set<Key> {
   return getExtendedCheckedKeySet(
     currentCheckedKeys.concat(checkKeys),
@@ -30,7 +30,7 @@ function getExtendedCheckedKeySetAfterCheck (
 
 function getAvailableAscendantNodeSet (
   uncheckedKeys: Key[],
-  treeMate: TreeMateInstance
+  treeMate: TreeMate
 ): Set<Key> {
   const visitedKeys: Set<Key> = new Set()
   uncheckedKeys.forEach((uncheckedKey) => {
@@ -54,7 +54,7 @@ function getExtendedCheckedKeySetAfterUncheck (
   uncheckedKeys: Key[],
   currentCheckedKeys: Key[],
   leafOnly: boolean,
-  treeMate: TreeMateInstance
+  treeMate: TreeMate
 ): Set<Key> {
   const extendedCheckedKeySet = getExtendedCheckedKeySet(
     currentCheckedKeys,
@@ -93,7 +93,7 @@ export function getCheckedKeys (
     // We only want the data model value to be leaf only.
     leafOnly: boolean
   },
-  treeMate: TreeMateInstance
+  treeMate: TreeMate
 ): MergedKeys {
   const {
     checkedKeys,
@@ -204,7 +204,7 @@ export function getCheckedKeys (
 export function getExtendedCheckedKeySet (
   checkedKeys: Key[],
   leafOnly: boolean,
-  treeMate: TreeMateInstance
+  treeMate: TreeMate
 ): Set<Key> {
   const { treeNodeMap } = treeMate
   const visitedKeySet: Set<Key> = new Set()

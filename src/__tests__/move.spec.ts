@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { createTreeMate } from '@/create'
-import { TreeMate } from '@/index'
+import { createTreeMate } from '@/index'
 import { TreeNode } from '@/interface'
 
 import {
@@ -18,7 +17,7 @@ import {
 } from './move-data/index'
 
 describe('move', () => {
-  const treeMate = TreeMate(basicMoveTree)
+  const treeMate = createTreeMate(basicMoveTree)
   it('first node', () => {
     const { getFirstAvailableNode } = treeMate
     expect(getFirstAvailableNode()?.key).toEqual('0')

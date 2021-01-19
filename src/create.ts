@@ -4,7 +4,7 @@ import {
   TreeNode,
   TreeNodeMap,
   LevelTreeNodeMap,
-  TreeMateInstance,
+  TreeMate,
   TreeMateOptions,
   Key,
   InputMergedKeys,
@@ -125,7 +125,7 @@ function createTreeNodes<T extends RawNode[] | undefined> (
 export function createTreeMate (
   rawNodes: RawNode[],
   options: TreeMateOptions = {}
-): TreeMateInstance {
+): TreeMate {
   const treeNodeMap: TreeNodeMap = new Map()
   const levelTreeNodeMap: LevelTreeNodeMap = new Map()
   const treeNodes: TreeNode[] = createTreeNodes(
@@ -164,7 +164,7 @@ export function createTreeMate (
     return node.getChild()
   }
   let cachedFlattenedNodes: TreeNode[]
-  const treemate: TreeMateInstance = {
+  const treemate: TreeMate = {
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,

@@ -1,4 +1,4 @@
-import { TreeMate } from '@/index'
+import { createTreeMate } from '@/index'
 import { SubtreeNotLoadedError } from '@/check'
 import { expectCheckedStatusSame } from './test-utils'
 import { disabledNodeTestTree, asyncBasicTree } from './async-check-data/index'
@@ -6,7 +6,7 @@ import { disabledNodeTestTree, asyncBasicTree } from './async-check-data/index'
 describe('async-check', () => {
   describe('#check (async)', () => {
     it("doesn't throw error when subtree is loaded", () => {
-      const treeMate = TreeMate(disabledNodeTestTree)
+      const treeMate = createTreeMate(disabledNodeTestTree)
       let error = null
       try {
         expectCheckedStatusSame(treeMate.check('0-0-0', []), {
@@ -23,7 +23,7 @@ describe('async-check', () => {
       expect(error).toBeFalsy()
     })
     it('throws error when subtree is not loaded', () => {
-      const treeMate = TreeMate(disabledNodeTestTree)
+      const treeMate = createTreeMate(disabledNodeTestTree)
       let error = null
       try {
         treeMate.check('0', [])
@@ -35,7 +35,7 @@ describe('async-check', () => {
   })
   describe('#uncheck (async)', () => {
     it("doesn't throw error when subtree is loaded", () => {
-      const treeMate = TreeMate(disabledNodeTestTree)
+      const treeMate = createTreeMate(disabledNodeTestTree)
       let error = null
       try {
         expectCheckedStatusSame(
@@ -58,7 +58,7 @@ describe('async-check', () => {
       expect(error).toBeFalsy()
     })
     it('throws error when subtree is not loaded', () => {
-      const treeMate = TreeMate(disabledNodeTestTree)
+      const treeMate = createTreeMate(disabledNodeTestTree)
       let error = null
       try {
         treeMate.uncheck('0', [])
@@ -70,14 +70,14 @@ describe('async-check', () => {
   })
   describe('#getCheckedKeys (async)', () => {
     it('do not check when nothing is checked', () => {
-      const treeMate = TreeMate(asyncBasicTree)
+      const treeMate = createTreeMate(asyncBasicTree)
       expectCheckedStatusSame(treeMate.getCheckedKeys([]), {
         checkedKeys: [],
         indeterminateKeys: []
       })
     })
     it('do check keys which is loaded', () => {
-      const treeMate = TreeMate(disabledNodeTestTree)
+      const treeMate = createTreeMate(disabledNodeTestTree)
       expectCheckedStatusSame(treeMate.getCheckedKeys(['0-0-0-0']), {
         checkedKeys: ['0-0-0-0'],
         indeterminateKeys: ['0-0-0']
@@ -88,7 +88,7 @@ describe('async-check', () => {
       })
     })
     it('throws error when subtree is not loaded', () => {
-      const treeMate = TreeMate(asyncBasicTree)
+      const treeMate = createTreeMate(asyncBasicTree)
       let error = null
       try {
         expectCheckedStatusSame(treeMate.getCheckedKeys(['0']), {
