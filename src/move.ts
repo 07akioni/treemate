@@ -1,6 +1,6 @@
 import { TreeNode, GetPrevNextOptions } from './interface'
 
-export function getFirstAvailableNode<R, G> (nodes: Array<TreeNode<R, G>>): TreeNode<R> | null {
+export function getFirstAvailableNode<R, G, E> (nodes: Array<TreeNode<R, G, E>>): TreeNode<R> | null {
   if (nodes.length === 0) return null
   const node = nodes[0]
   if (node.isGroup) {
@@ -52,6 +52,7 @@ function move (
     } else {
       if (
         !node.disabled &&
+        !node.isGhost &&
         !node.isGroup
       ) {
         endNode = node
@@ -66,11 +67,11 @@ function move (
         traverse(iterate(node, loop))
       }
     } else {
-      const parent = rawGetParent(node)
       const nextNode = iterate(node, false)
       if (nextNode !== null) {
         traverse(nextNode)
       } else {
+        const parent = rawGetParent(node)
         if (parent?.isGroup) {
           traverse(iterate(parent, loop))
         } else if (loop) {
@@ -109,7 +110,7 @@ function getChild (node: TreeNode, options: { reverse?: boolean } = {}): TreeNod
     const delta = reverse ? -1 : 1
     for (let i = start; i !== end; i += delta) {
       const child = children[i]
-      if (!child.disabled) {
+      if (!child.disabled && !child.isGhost) {
         if (child.isGroup) {
           const childInGroup = getChild(child, options)
           if (childInGroup !== null) return childInGroup
@@ -124,9 +125,11 @@ function getChild (node: TreeNode, options: { reverse?: boolean } = {}): TreeNod
 
 export const moveMethods: Pick<TreeNode, 'getChild' | 'getNext' | 'getParent' | 'getPrev'> = {
   getChild (this: TreeNode) {
+    if (this.isGhost) return null
     return getChild(this)
   },
   getParent (this: TreeNode) {
+    if (this.isGhost) return null
     const { parent } = this
     if (parent?.isGroup) {
       return parent.getParent()
@@ -134,9 +137,11 @@ export const moveMethods: Pick<TreeNode, 'getChild' | 'getNext' | 'getParent' | 
     return parent
   },
   getNext (this: TreeNode, options: GetPrevNextOptions = {}) {
+    if (this.isGhost) return null
     return move(this, 'next', options)
   },
   getPrev (this: TreeNode, options: GetPrevNextOptions = {}) {
+    if (this.isGhost) return null
     return move(this, 'prev', options)
   }
 }

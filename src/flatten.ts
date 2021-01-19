@@ -5,7 +5,7 @@ import {
   isGroup
 } from './utils'
 
-export function flatten<R, G> (treeNodes: Array<TreeNode<R, G>>, flattenedNodes: Array<TreeNode<R, G>> = []): Array<TreeNode<R, G>> {
+export function flatten<R, G, E> (treeNodes: Array<TreeNode<R, G, E>>, flattenedNodes: Array<TreeNode<R, G, E>> = []): Array<TreeNode<R, G, E>> {
   treeNodes.forEach(treeNode => {
     flattenedNodes.push(treeNode)
     if (treeNode.isLeaf) {

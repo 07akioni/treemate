@@ -38,16 +38,16 @@ import {
   flatten
 } from './flatten'
 
-function createTreeNodes<R, G> (
-  rawNodes: Array<R | G>,
-  treeNodeMap: TreeNodeMap<R, G>,
-  levelTreeNodeMap: LevelTreeNodeMap<R, G>,
-  options: TreeMateOptions<R, G>,
+function createTreeNodes<R, G, E> (
+  rawNodes: Array<R | G | E>,
+  treeNodeMap: TreeNodeMap<R, G, E>,
+  levelTreeNodeMap: LevelTreeNodeMap<R, G, E>,
+  options: TreeMateOptions<R, G, E>,
   fIndexRef: [number] = [0],
   parent: TreeNode | null = null,
   level: number = 0
-): Array<TreeNode<R, G>> {
-  const treeNodes: Array<TreeNode<R, G>> = []
+): Array<TreeNode<R, G, E>> {
+  const treeNodes: Array<TreeNode<R, G, E>> = []
   rawNodes.forEach((rawNode, index) => {
     if (
       process.env.NODE_ENV !== 'production' &&
@@ -103,12 +103,19 @@ function createTreeNodes<R, G> (
       get isShallowLoaded () {
         return isShallowLoaded(this.rawNode)
       },
+      get isGhost () {
+        const {
+          getIsGhost
+        } = options
+        if (getIsGhost) return getIsGhost(this.rawNode)
+        return false
+      },
       parent: parent
     })
-    const treeNode: TreeNode<R, G> = Object.setPrototypeOf(rawTreeNode, moveMethods)
+    const treeNode: TreeNode<R, G, E> = Object.setPrototypeOf(rawTreeNode, moveMethods)
     const rawChildren = (rawNode as any).children as R[] | undefined
     if (rawChildren !== undefined) {
-      treeNode.children = createTreeNodes<R, G>(
+      treeNode.children = createTreeNodes<R, G, E>(
         rawChildren,
         treeNodeMap,
         levelTreeNodeMap,
@@ -126,19 +133,19 @@ function createTreeNodes<R, G> (
   return treeNodes as any
 }
 
-export function createTreeMate<R=RawNode, G=R> (
+export function createTreeMate<R=RawNode, G=R, E=R> (
   rawNodes: Array<R | G>,
-  options: TreeMateOptions<R, G> = {}
-): TreeMate<R, G> {
-  const treeNodeMap: TreeNodeMap<R, G> = new Map()
-  const levelTreeNodeMap: LevelTreeNodeMap<R, G> = new Map()
-  const treeNodes: Array<TreeNode<R, G>> = createTreeNodes<R, G>(
+  options: TreeMateOptions<R, G, E> = {}
+): TreeMate<R, G, E> {
+  const treeNodeMap: TreeNodeMap<R, G, E> = new Map()
+  const levelTreeNodeMap: LevelTreeNodeMap<R, G, E> = new Map()
+  const treeNodes: Array<TreeNode<R, G, E>> = createTreeNodes<R, G, E>(
     rawNodes,
     treeNodeMap,
     levelTreeNodeMap,
     options
   )
-  function getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R, G>
+  function getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
   function getNode (key: Key | null | undefined): TreeNode | null {
     if (key === null || key === undefined) return null
     return treeNodeMap.get(key) ?? null
@@ -167,8 +174,8 @@ export function createTreeMate<R=RawNode, G=R> (
     if (node === null) return null
     return node.getChild()
   }
-  let cachedFlattenedNodes: Array<TreeNode<R, G>>
-  const treemate: TreeMate<R, G> = {
+  let cachedFlattenedNodes: Array<TreeNode<R, G, E>>
+  const treemate: TreeMate<R, G, E> = {
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
@@ -184,7 +191,7 @@ export function createTreeMate<R=RawNode, G=R> (
       return getFirstAvailableNode(treeNodes)
     },
     getPath <T extends boolean>(key: Key | null | undefined, options: GetPathOptions<T> = {}) {
-      return getPath<R, G, T>(
+      return getPath<R, G, E, T>(
         key,
         options,
         treemate
