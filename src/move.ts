@@ -1,6 +1,6 @@
 import { TreeNode, GetPrevNextOptions } from './interface'
 
-export function getFirstAvailableNode (nodes: TreeNode[]): TreeNode | null {
+export function getFirstAvailableNode<R, G> (nodes: Array<TreeNode<R, G>>): TreeNode<R> | null {
   if (nodes.length === 0) return null
   const node = nodes[0]
   if (node.isGroup) {
@@ -8,7 +8,7 @@ export function getFirstAvailableNode (nodes: TreeNode[]): TreeNode | null {
   }
   return node.disabled
     ? node.getNext()
-    : node
+    : node as unknown as TreeNode<R>
 }
 
 function rawGetNext (node: TreeNode, loop: boolean): TreeNode | null {

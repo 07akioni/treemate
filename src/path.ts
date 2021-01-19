@@ -1,9 +1,9 @@
 import { GetPathOptions, Key, MergedPath, TreeMate } from './interface'
 
-export function getPath (key: Key | null | undefined, { includeGroup = false }: GetPathOptions, treeMate: TreeMate): MergedPath {
+export function getPath<R, G, T extends boolean> (key: Key | null | undefined, { includeGroup = false as any }: GetPathOptions<T>, treeMate: TreeMate<R, G>): T extends true ? MergedPath<R, G> : MergedPath<R, R> {
   const treeNodeMap = treeMate.treeNodeMap
   let treeNode = (key === null || key === undefined) ? null : (treeNodeMap.get(key) ?? null)
-  const mergedPath: MergedPath = {
+  const mergedPath: MergedPath<R, G> = {
     keyPath: [],
     treeNodePath: [],
     treeNode
@@ -16,5 +16,5 @@ export function getPath (key: Key | null | undefined, { includeGroup = false }: 
   }
   mergedPath.treeNodePath.reverse()
   mergedPath.keyPath = mergedPath.treeNodePath.map(treeNode => treeNode.key)
-  return mergedPath
+  return mergedPath as any
 }

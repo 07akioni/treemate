@@ -20,50 +20,51 @@ export interface GetPrevNextOptions {
   loop?: boolean
 }
 
-export interface TreeNode {
+export interface TreeNode<R=RawNode, G=R> {
   key: Key
-  rawNode: RawNode
+  rawNode: R | G
   level: number
   index: number
   fIndex: number
   isFirstChild: boolean
   isLastChild: boolean
-  parent: TreeNode | null
+  parent: TreeNode<R, G> | null
   isLeaf: boolean
   isGroup: boolean
   isShallowLoaded: boolean
   disabled: boolean
-  siblings: TreeNode[]
-  children?: TreeNode[]
-  getPrev: (options?: GetPrevNextOptions) => TreeNode | null
-  getNext: (options?: GetPrevNextOptions) => TreeNode | null
-  getParent: () => TreeNode | null
-  getChild: () => TreeNode | null
+  siblings: Array<TreeNode<R, G>>
+  children?: Array<TreeNode<R, G>>
+  getPrev: (options?: GetPrevNextOptions) => TreeNode<R> | null
+  getNext: (options?: GetPrevNextOptions) => TreeNode<R> | null
+  getParent: () => TreeNode<R> | null
+  getChild: () => TreeNode<R> | null
 }
 
-export type TreeNodeMap = Map<Key, TreeNode>
+export type TreeNodeMap<R, G> = Map<Key, TreeNode<R, G>>
 
-export type LevelTreeNodeMap = Map<number, TreeNode[]>
+export type LevelTreeNodeMap<R, G> = Map<number, Array<TreeNode<R, G>>>
 
 export interface MergedKeys {
   checkedKeys: Key[]
   indeterminateKeys: Key[]
 }
 
-export interface TreeMateOptions {
-  getDisabled?: (node: RawNode) => boolean
-  getKey?: (node: RawNode) => Key
+export interface TreeMateOptions<R, G> {
+  getKey?: (node: R | G) => Key
+  getDisabled?: (node: R | G) => boolean
+  getIsGroup?: (node: R | G) => boolean
 }
 
-export interface MergedPath {
+export interface MergedPath<R, G=R> {
   keyPath: Key[]
-  treeNodePath: TreeNode[]
-  treeNode: TreeNode | null
+  treeNodePath: Array<TreeNode<R, G>>
+  treeNode: TreeNode<R, G> | null
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GetPathOptions {
-  includeGroup?: boolean
+export interface GetPathOptions<T extends boolean> {
+  includeGroup?: T
 }
 
 export interface InputMergedKeys {
@@ -76,19 +77,20 @@ export interface CheckOptions {
   leafOnly?: boolean
 }
 
-type KeyToNode = <T extends Key | null | undefined>(key: T) => T extends (null | undefined) ? null : (TreeNode | null)
-type KeyToNodeWithOptions = <T extends Key | null | undefined>(key: T, options?: GetPrevNextOptions) => T extends (null | undefined) ? null : (TreeNode | null)
+type KeyToNode<R, G> = <T extends Key | null | undefined>(key: T) => T extends (null | undefined) ? null : (TreeNode<R, G> | null)
+type KeyToNonGroupNode<R> = <T extends Key | null | undefined>(key: T) => T extends (null | undefined) ? null : (TreeNode<R, R> | null)
+type KeyToNonGroupNodeWithOptions<R> = <T extends Key | null | undefined>(key: T, options?: GetPrevNextOptions) => T extends (null | undefined) ? null : (TreeNode<R, R> | null)
 
 export interface GetNonLeafKeysOptions {
   preserveGroup?: boolean
 }
 
-export interface TreeMate {
-  treeNodes: TreeNode[]
-  treeNodeMap: TreeNodeMap
-  levelTreeNodeMap: LevelTreeNodeMap
-  flattenedNodes: TreeNode[]
-  getNode: KeyToNode
+export interface TreeMate<R=RawNode, G=R> {
+  treeNodes: Array<TreeNode<R, G>>
+  treeNodeMap: TreeNodeMap<R, G>
+  levelTreeNodeMap: LevelTreeNodeMap<R, G>
+  flattenedNodes: Array<TreeNode<R, G>>
+  getNode: KeyToNode<R, G>
   getCheckedKeys: (
     checkedKeys: Key[] | InputMergedKeys | null | undefined,
     options?: CheckOptions
@@ -103,11 +105,11 @@ export interface TreeMate {
     checkedKeys: Key[] | InputMergedKeys,
     options?: CheckOptions
   ) => MergedKeys
-  getPath: (key: Key | null | undefined, options?: GetPathOptions) => MergedPath
-  getFirstAvailableNode: () => TreeNode | null
+  getPath: <T extends boolean>(key: Key | null | undefined, options?: GetPathOptions<T>) => T extends true ? MergedPath<R, G> : MergedPath<R, R>
+  getFirstAvailableNode: () => TreeNode<R, R> | null
   getNonLeafKeys: (options?: GetNonLeafKeysOptions) => Key[]
-  getPrev: KeyToNodeWithOptions
-  getNext: KeyToNodeWithOptions
-  getParent: KeyToNode
-  getChild: KeyToNode
+  getPrev: KeyToNonGroupNodeWithOptions<R>
+  getNext: KeyToNonGroupNodeWithOptions<R>
+  getParent: KeyToNonGroupNode<R>
+  getChild: KeyToNonGroupNode<R>
 }

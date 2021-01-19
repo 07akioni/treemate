@@ -38,19 +38,16 @@ import {
   flatten
 } from './flatten'
 
-function createTreeNodes<T extends RawNode[] | undefined> (
-  rawNodes: T,
-  treeNodeMap: TreeNodeMap,
-  levelTreeNodeMap: LevelTreeNodeMap,
-  options: TreeMateOptions,
+function createTreeNodes<R, G> (
+  rawNodes: Array<R | G>,
+  treeNodeMap: TreeNodeMap<R, G>,
+  levelTreeNodeMap: LevelTreeNodeMap<R, G>,
+  options: TreeMateOptions<R, G>,
   fIndexRef: [number] = [0],
   parent: TreeNode | null = null,
   level: number = 0
-): T extends RawNode[] ? TreeNode[] : undefined {
-  if (rawNodes === undefined) {
-    return rawNodes as any
-  }
-  const treeNodes: TreeNode[] = []
+): Array<TreeNode<R, G>> {
+  const treeNodes: Array<TreeNode<R, G>> = []
   rawNodes.forEach((rawNode, index) => {
     if (
       process.env.NODE_ENV !== 'production' &&
@@ -81,7 +78,7 @@ function createTreeNodes<T extends RawNode[] | undefined> (
             this.rawNode
           )
         } else {
-          return rawNode.key
+          return (rawNode as RawNode).key
         }
       },
       get disabled () {
@@ -94,6 +91,10 @@ function createTreeNodes<T extends RawNode[] | undefined> (
         return isDisabled(this.rawNode)
       },
       get isGroup () {
+        const {
+          getIsGroup
+        } = options
+        if (getIsGroup) return getIsGroup(this.rawNode)
         return isGroup(this.rawNode)
       },
       get isLeaf () {
@@ -104,16 +105,19 @@ function createTreeNodes<T extends RawNode[] | undefined> (
       },
       parent: parent
     })
-    const treeNode: TreeNode = Object.setPrototypeOf(rawTreeNode, moveMethods)
-    treeNode.children = createTreeNodes(
-      rawNode.children,
-      treeNodeMap,
-      levelTreeNodeMap,
-      options,
-      fIndexRef,
-      treeNode,
-      level + 1
-    )
+    const treeNode: TreeNode<R, G> = Object.setPrototypeOf(rawTreeNode, moveMethods)
+    const rawChildren = (rawNode as any).children as R[] | undefined
+    if (rawChildren !== undefined) {
+      treeNode.children = createTreeNodes<R, G>(
+        rawChildren,
+        treeNodeMap,
+        levelTreeNodeMap,
+        options,
+        fIndexRef,
+        treeNode,
+        level + 1
+      )
+    }
     treeNodes.push(treeNode)
     treeNodeMap.set(treeNode.key, treeNode)
     if (!levelTreeNodeMap.has(level)) levelTreeNodeMap.set(level, [])
@@ -122,49 +126,49 @@ function createTreeNodes<T extends RawNode[] | undefined> (
   return treeNodes as any
 }
 
-export function createTreeMate (
-  rawNodes: RawNode[],
-  options: TreeMateOptions = {}
-): TreeMate {
-  const treeNodeMap: TreeNodeMap = new Map()
-  const levelTreeNodeMap: LevelTreeNodeMap = new Map()
-  const treeNodes: TreeNode[] = createTreeNodes(
+export function createTreeMate<R=RawNode, G=R> (
+  rawNodes: Array<R | G>,
+  options: TreeMateOptions<R, G> = {}
+): TreeMate<R, G> {
+  const treeNodeMap: TreeNodeMap<R, G> = new Map()
+  const levelTreeNodeMap: LevelTreeNodeMap<R, G> = new Map()
+  const treeNodes: Array<TreeNode<R, G>> = createTreeNodes<R, G>(
     rawNodes,
     treeNodeMap,
     levelTreeNodeMap,
     options
   )
-  function getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
+  function getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R, G>
   function getNode (key: Key | null | undefined): TreeNode | null {
     if (key === null || key === undefined) return null
     return treeNodeMap.get(key) ?? null
   }
-  function getPrev<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
-  function getPrev (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode | null {
+  function getPrev<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
+  function getPrev (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode<R> | null {
     const node = getNode(key)
     if (node === null) return null
     return node.getPrev(options)
   }
-  function getNext<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
-  function getNext (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode | null {
+  function getNext<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
+  function getNext (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode<R> | null {
     const node = getNode(key)
     if (node === null) return null
     return node.getNext(options)
   }
-  function getParent<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
-  function getParent (key: Key | null | undefined): TreeNode | null {
+  function getParent<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
+  function getParent (key: Key | null | undefined): TreeNode<R> | null {
     const node = getNode(key)
     if (node === null) return null
     return node.getParent()
   }
-  function getChild<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode
-  function getChild (key: Key | null | undefined): TreeNode | null {
+  function getChild<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
+  function getChild (key: Key | null | undefined): TreeNode<R> | null {
     const node = getNode(key)
     if (node === null) return null
     return node.getChild()
   }
-  let cachedFlattenedNodes: TreeNode[]
-  const treemate: TreeMate = {
+  let cachedFlattenedNodes: Array<TreeNode<R, G>>
+  const treemate: TreeMate<R, G> = {
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
@@ -179,8 +183,8 @@ export function createTreeMate (
     getFirstAvailableNode () {
       return getFirstAvailableNode(treeNodes)
     },
-    getPath (key: Key | null | undefined, options: GetPathOptions = {}) {
-      return getPath(
+    getPath <T extends boolean>(key: Key | null | undefined, options: GetPathOptions<T> = {}) {
+      return getPath<R, G, T>(
         key,
         options,
         treemate
