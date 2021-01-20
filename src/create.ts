@@ -136,7 +136,7 @@ function createTreeNodes<R, G, I> (
 }
 
 export function createTreeMate<R=RawNode, G=R, I=R> (
-  rawNodes: Array<R | G>,
+  rawNodes: Array<R | G | I>,
   options: TreeMateOptions<R, G, I> = {}
 ): TreeMate<R, G, I> {
   const treeNodeMap: TreeNodeMap<R, G, I> = new Map()
