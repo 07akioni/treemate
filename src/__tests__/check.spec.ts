@@ -220,6 +220,24 @@ describe('check', () => {
         }
       },
       {
+        explain: 'case1 (do nothing)',
+        checkedKeys: [],
+        checkedKey: undefined,
+        output: {
+          checkedKeys: [],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case1 (batch-check)',
+        checkedKeys: [],
+        checkedKey: ['0-0-0', '0-1-0'],
+        output: {
+          checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1', '0-1-0'],
+          indeterminateKeys: ['0', '0-1']
+        }
+      },
+      {
         explain: 'case1 (leaf-only)',
         leafOnly: true,
         checkedKeys: [],
@@ -233,6 +251,16 @@ describe('check', () => {
         explain: 'case1 (no cascade)',
         cascade: false,
         checkedKeys: [],
+        checkedKey: '0-0-0',
+        output: {
+          checkedKeys: ['0-0-0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case1 (no cascade, dupe)',
+        cascade: false,
+        checkedKeys: ['0-0-0'],
         checkedKey: '0-0-0',
         output: {
           checkedKeys: ['0-0-0'],
@@ -423,6 +451,22 @@ describe('check', () => {
           }),
           testCase.output
         )
+        expectCheckedStatusSame(
+          treeMate.check(
+            testCase.checkedKey,
+            {
+              checkedKeys: testCase.checkedKeys,
+              indeterminateKeys: testCase.cascade
+                ? ['should be ingored']
+                : undefined
+            },
+            {
+              cascade: testCase.cascade,
+              leafOnly: testCase.leafOnly
+            }
+          ),
+          testCase.output
+        )
       })
     })
   })
@@ -452,6 +496,16 @@ describe('check', () => {
         cascade: false,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
         uncheckedKey: '0-0-0',
+        output: {
+          checkedKeys: ['0-0-0-0', '0-0-0-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case1 (non-cascade, non-exist keys)',
+        cascade: false,
+        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
+        uncheckedKey: ['0-0-0', '666'],
         output: {
           checkedKeys: ['0-0-0-0', '0-0-0-1'],
           indeterminateKeys: []

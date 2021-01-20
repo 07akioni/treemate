@@ -1,14 +1,12 @@
 import { TreeNode, GetPrevNextOptions } from './interface'
 
-export function getFirstAvailableNode<R, G, E> (nodes: Array<TreeNode<R, G, E>>): TreeNode<R> | null {
+export function getFirstAvailableNode<R, G, I> (nodes: Array<TreeNode<R, G, I>>): TreeNode<R> | null {
   if (nodes.length === 0) return null
   const node = nodes[0]
-  if (node.isGroup) {
+  if (node.isGroup || node.ignored || node.disabled) {
     return node.getNext()
   }
-  return node.disabled
-    ? node.getNext()
-    : node as unknown as TreeNode<R>
+  return node as unknown as TreeNode<R>
 }
 
 function rawGetNext (node: TreeNode, loop: boolean): TreeNode | null {
@@ -129,7 +127,6 @@ export const moveMethods: Pick<TreeNode, 'getChild' | 'getNext' | 'getParent' | 
     return getChild(this)
   },
   getParent (this: TreeNode) {
-    if (this.ignored) return null
     const { parent } = this
     if (parent?.isGroup) {
       return parent.getParent()
@@ -137,11 +134,9 @@ export const moveMethods: Pick<TreeNode, 'getChild' | 'getNext' | 'getParent' | 
     return parent
   },
   getNext (this: TreeNode, options: GetPrevNextOptions = {}) {
-    if (this.ignored) return null
     return move(this, 'next', options)
   },
   getPrev (this: TreeNode, options: GetPrevNextOptions = {}) {
-    if (this.ignored) return null
     return move(this, 'prev', options)
   }
 }

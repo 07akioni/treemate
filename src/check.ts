@@ -136,7 +136,6 @@ export function getCheckedKeys (
       checkedKeys,
       leafOnly,
       treeMate
-
     )
   } else {
     extendedCheckedKeySet = getExtendedCheckedKeySet(

@@ -1,15 +1,12 @@
 import {
   TreeNode
 } from './interface'
-import {
-  isGroup
-} from './utils'
 
-export function flatten<R, G, E> (treeNodes: Array<TreeNode<R, G, E>>, flattenedNodes: Array<TreeNode<R, G, E>> = []): Array<TreeNode<R, G, E>> {
+export function flatten<R, G, I> (treeNodes: Array<TreeNode<R, G, I>>, flattenedNodes: Array<TreeNode<R, G, I>> = []): Array<TreeNode<R, G, I>> {
   treeNodes.forEach(treeNode => {
     flattenedNodes.push(treeNode)
     if (treeNode.isLeaf) {
-    } else if (isGroup(treeNode.rawNode)) {
+    } else if (treeNode.isGroup) {
       flatten(treeNode.children as TreeNode[], flattenedNodes)
     } else {
       flatten(treeNode.children as TreeNode[], flattenedNodes)

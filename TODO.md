@@ -14,4 +14,6 @@
     - [x] implemented
     - [x] well tested
   - [x] throw error on non-complete tree
-- [ ] getIsGroup
+- [x] getIsGroup
+- [x] getIgnored
+- [ ] check work with ignored node

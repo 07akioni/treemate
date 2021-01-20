@@ -1,6 +1,6 @@
 import { GetPathOptions, Key, MergedPath, TreeMate, TreeNode } from './interface'
 
-export function getPath<R, G, E, T extends boolean> (key: Key | null | undefined, { includeGroup = false as any }: GetPathOptions<T>, treeMate: TreeMate<R, G, E>): T extends true ? MergedPath<R, G> : MergedPath<R, R> {
+export function getPath<R, G, I, T extends boolean> (key: Key | null | undefined, { includeGroup = false as any }: GetPathOptions<T>, treeMate: TreeMate<R, G, I>): T extends true ? MergedPath<R, G> : MergedPath<R, R> {
   const treeNodeMap = treeMate.treeNodeMap
   let treeNode = (key === null || key === undefined) ? null : (treeNodeMap.get(key) ?? null)
   const mergedPath: MergedPath<R, G> = {

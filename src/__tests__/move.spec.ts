@@ -77,6 +77,21 @@ describe('move', () => {
     expect(cursor.key).toEqual('3-1')
     expect(getPrev('3-1')).toEqual(null)
   })
+  it("returns none is node doesn't exist", () => {
+    const { getChild, getParent, getNext, getPrev } = treeMate
+    expect(getChild('666')).toEqual(null)
+    expect(getParent('666')).toEqual(null)
+    expect(getNext('666')).toEqual(null)
+    expect(getPrev('666')).toEqual(null)
+    expect(getChild(null)).toEqual(null)
+    expect(getParent(null)).toEqual(null)
+    expect(getNext(null)).toEqual(null)
+    expect(getPrev(null)).toEqual(null)
+    expect(getChild(undefined)).toEqual(null)
+    expect(getParent(undefined)).toEqual(null)
+    expect(getNext(undefined)).toEqual(null)
+    expect(getPrev(undefined)).toEqual(null)
+  })
   describe('moves with group', () => {
     const treeMate = createTreeMate(groupMoveTree)
     it('getPrev & getNext', () => {

@@ -12,5 +12,16 @@ describe('index', () => {
         expectTreeNodesEqual(treeNodes, output)
       })
     })
+    it('warns when node is invalid', () => {
+      const spy = jest.spyOn(console, 'error')
+      createTreeMate([
+        {
+          isLeaf: true,
+          children: []
+        }
+      ])
+      expect(spy).toHaveBeenCalled()
+      spy.mockRestore()
+    })
   })
 })

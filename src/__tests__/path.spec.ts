@@ -1,6 +1,7 @@
 import { createTreeMate } from '..'
 import { basicTree } from './check-data'
 import { groupMoveTree } from './move-data'
+import { tree2 } from './ignored-data'
 
 describe('getPath', () => {
   it('works', () => {
@@ -24,5 +25,13 @@ describe('getPath', () => {
       '2-1',
       '2-1-1'
     ])
+  })
+  it('returns no path for ignored node', () => {
+    const tm = createTreeMate(tree2, {
+      getIgnored (node) {
+        return !!node.ignored
+      }
+    })
+    expect(tm.getPath('1-0').treeNode).toEqual(null)
   })
 })
