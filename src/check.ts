@@ -163,7 +163,7 @@ export function getCheckedKeys (
     // it should exists, nor it is a bug
     const levelTreeNodes = levelTreeNodeMap.get(level)
     for (const levelTreeNode of levelTreeNodes as TreeNode[]) {
-      if (levelTreeNode.disabled || !levelTreeNode.isShallowLoaded) {
+      if (levelTreeNode.disabled || !levelTreeNode.shallowLoaded) {
         continue
       }
       const levelTreeNodeKey = levelTreeNode.key

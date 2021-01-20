@@ -169,7 +169,7 @@ Parent `TreeMateNode` of the node. It's `null` if not exists.
 Whether node is leaf node.
 #### `isGroup`
 Whether node is group node.
-#### `isShallowLoaded`
+#### `shallowLoaded`
 Whether node's direct child node is loaded.
 #### `disabled`
 Whether the node is disabled.

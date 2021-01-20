@@ -100,14 +100,14 @@ function createTreeNodes<R, G, E> (
       get isLeaf () {
         return isLeaf(this.rawNode)
       },
-      get isShallowLoaded () {
+      get shallowLoaded () {
         return isShallowLoaded(this.rawNode)
       },
-      get isGhost () {
+      get ignored () {
         const {
-          getIsGhost
+          getIgnored
         } = options
-        if (getIsGhost) return getIsGhost(this.rawNode)
+        if (getIgnored) return getIgnored(this.rawNode)
         return false
       },
       parent: parent
@@ -145,33 +145,48 @@ export function createTreeMate<R=RawNode, G=R, E=R> (
     levelTreeNodeMap,
     options
   )
+  // get only raw node
   function getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
   function getNode (key: Key | null | undefined): TreeNode | null {
     if (key === null || key === undefined) return null
-    return treeNodeMap.get(key) ?? null
+    const tmNode = treeNodeMap.get(key)
+    if (tmNode && !tmNode.isGroup && !tmNode.ignored) {
+      return tmNode
+    }
+    return null
+  }
+  // get group & raw node, for internally usage
+  function _getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R, G>
+  function _getNode (key: Key | null | undefined): TreeNode | null {
+    if (key === null || key === undefined) return null
+    const tmNode = treeNodeMap.get(key)
+    if (tmNode && !tmNode.ignored) {
+      return tmNode
+    }
+    return null
   }
   function getPrev<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
   function getPrev (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode<R> | null {
-    const node = getNode(key)
-    if (node === null) return null
+    const node = _getNode(key)
+    if (!node) return null
     return node.getPrev(options)
   }
   function getNext<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
   function getNext (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode<R> | null {
-    const node = getNode(key)
-    if (node === null) return null
+    const node = _getNode(key)
+    if (!node) return null
     return node.getNext(options)
   }
   function getParent<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
   function getParent (key: Key | null | undefined): TreeNode<R> | null {
-    const node = getNode(key)
-    if (node === null) return null
+    const node = _getNode(key)
+    if (!node) return null
     return node.getParent()
   }
   function getChild<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
   function getChild (key: Key | null | undefined): TreeNode<R> | null {
-    const node = getNode(key)
-    if (node === null) return null
+    const node = _getNode(key)
+    if (!node) return null
     return node.getChild()
   }
   let cachedFlattenedNodes: Array<TreeNode<R, G, E>>

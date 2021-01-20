@@ -32,8 +32,8 @@ export interface TreeNode<R=RawNode, G=R, E=R> {
   parent: TreeNode<R, G> | null
   isLeaf: boolean
   isGroup: boolean
-  isGhost: boolean
-  isShallowLoaded: boolean
+  ignored: boolean
+  shallowLoaded: boolean
   disabled: boolean
   siblings: Array<TreeNode<R, G, E>>
   children?: Array<TreeNode<R, G, E>>
@@ -56,7 +56,7 @@ export interface TreeMateOptions<R, G, E> {
   getKey?: (node: R | G | E) => Key
   getDisabled?: (node: R | G | E) => boolean
   getIsGroup?: (node: R | G | E) => boolean
-  getIsGhost?: (node: R | G | E) => boolean
+  getIgnored?: (node: R | G | E) => boolean
 }
 
 export interface MergedPath<R, G=R> {

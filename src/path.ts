@@ -8,12 +8,12 @@ export function getPath<R, G, E, T extends boolean> (key: Key | null | undefined
     treeNodePath: [],
     treeNode: treeNode as TreeNode<R, G> | null
   }
-  if (treeNode?.isGhost) {
+  if (treeNode?.ignored) {
     mergedPath.treeNode = null
     return mergedPath as any
   }
   while (treeNode) {
-    if (!treeNode.isGhost && (includeGroup || !treeNode.isGroup)) {
+    if (!treeNode.ignored && (includeGroup || !treeNode.isGroup)) {
       mergedPath.treeNodePath.push(treeNode as any)
     }
     treeNode = treeNode.parent as any

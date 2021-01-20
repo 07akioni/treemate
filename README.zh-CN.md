@@ -169,7 +169,7 @@ interface MergedPath {
 是否为叶节点。
 #### `isGroup`
 是否为 Group 节点。
-#### `isShallowLoaded`
+#### `shallowLoaded`
 是否直接子节点都已经被加载。
 #### `disabled`
 是否为被禁用的节点。
