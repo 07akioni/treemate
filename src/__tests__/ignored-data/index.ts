@@ -7,7 +7,7 @@ export const tree1 = [
       },
       {
         key: '0-1',
-        ignored: true
+        type: 'ignored'
       },
       {
         key: '0-2'
@@ -24,7 +24,7 @@ export const tree2Keys = ['0', '1', '1-0', '1-1', '1-2', '1-3', '2', '2-0']
 export const tree2 = [
   {
     key: '0',
-    ignored: true
+    type: 'ignored'
   },
   {
     key: '1',
@@ -32,7 +32,7 @@ export const tree2 = [
     children: [
       {
         key: '1-0',
-        ignored: true
+        type: 'ignored'
       },
       {
         key: '1-1'
@@ -47,7 +47,7 @@ export const tree2 = [
   },
   {
     key: '2',
-    group: true,
+    type: 'group',
     children: [
       {
         key: '2-0'

@@ -29,7 +29,7 @@ describe('getPath', () => {
   it('returns no path for ignored node', () => {
     const tm = createTreeMate(tree2, {
       getIgnored (node) {
-        return !!node.ignored
+        return node.type === 'ignored'
       }
     })
     expect(tm.getPath('1-0').treeNode).toEqual(null)

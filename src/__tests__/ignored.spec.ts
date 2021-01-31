@@ -4,21 +4,17 @@ import { tree1, tree2 } from './ignored-data'
 describe('ignored node', () => {
   const options: TreeMateOptions<
   RawNode,
-  | {
+  {
     type: 'group'
-    [k: string]: any
-  }
-  | {
-    group: true
     [k: string]: any
   },
   {
-    ignored: true
+    type: 'ignored'
     [k: string]: any
   }
   > = {
     getIgnored (node) {
-      return !!node.ignored
+      return node.type === 'ignored'
     },
     getIsGroup (node) {
       return node.type === 'group' || node.group === true

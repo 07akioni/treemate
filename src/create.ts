@@ -110,6 +110,7 @@ function createTreeNodes<R, G, I> (
           getIgnored
         } = options
         if (getIgnored) return getIgnored(this.rawNode)
+        // by default there is no ignored node
         return false
       },
       parent: parent
