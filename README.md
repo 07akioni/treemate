@@ -19,6 +19,9 @@ npm install --save treemate
 ```
 
 ## Basic Usage
+
+Currently the doc doesn't follow the latest type definition. I will update it when I have time.
+
 ```js
 import { createTreeMate } from 'treemate'
 

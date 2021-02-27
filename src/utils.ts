@@ -117,3 +117,13 @@ export function minus (originalKeys: Key[], keysToRemove: Key[]): Key[] {
 export function isGroup (rawNode: RawNode): boolean {
   return rawNode?.type === 'group'
 }
+
+export type IndexGetter = (key: Key) => number | null
+
+export function createIndexGetter <R, G, I> (treeNodes: Array<TreeNode<R, G, I>>): IndexGetter {
+  const map = new Map<Key, number>()
+  treeNodes.forEach((treeNode, i) => {
+    map.set(treeNode.key, i)
+  })
+  return (key: Key) => map.get(key) ?? null
+}
