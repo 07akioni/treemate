@@ -27,13 +27,16 @@
     "husky": "^4.3.0",
     "jest": "^26.4.2",
     "prettier": "2.2.1",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "vitepress": "^0.12.2"
   },
   "scripts": {
     "build": "tsc --project tsconfig.build.esm.json && tsc --project tsconfig.build.cjs.json ",
     "lint": "prettier --write src/**/* && eslint --fix \"./src/**/*.ts\"",
     "release": "npm run build && npm publish",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs"
   },
   "repository": {
     "type": "git",
