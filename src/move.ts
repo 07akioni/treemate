@@ -1,12 +1,14 @@
 import { TreeNode, GetPrevNextOptions } from './interface'
 
-export function getFirstAvailableNode<R, G, I> (nodes: Array<TreeNode<R, G, I>>): TreeNode<R> | null {
+export function getFirstAvailableNode<R, G, I> (
+  nodes: Array<TreeNode<R, G, I>>
+): TreeNode<R> | null {
   if (nodes.length === 0) return null
   const node = nodes[0]
   if (node.isGroup || node.ignored || node.disabled) {
     return node.getNext()
   }
-  return node as unknown as TreeNode<R>
+  return (node as unknown) as TreeNode<R>
 }
 
 function rawGetNext (node: TreeNode, loop: boolean): TreeNode | null {
@@ -26,9 +28,7 @@ function move (
   dir: 'prev' | 'next',
   options: GetPrevNextOptions = {}
 ): TreeNode | null {
-  const {
-    loop = false
-  } = options
+  const { loop = false } = options
   const iterate = dir === 'prev' ? rawGetPrev : rawGetNext
   const getChildOptions = {
     reverse: dir === 'prev'
@@ -40,19 +40,12 @@ function move (
     if (node === fromNode) {
       if (!meet) {
         meet = true
-      } else if (
-        !fromNode.disabled &&
-        !fromNode.isGroup
-      ) {
+      } else if (!fromNode.disabled && !fromNode.isGroup) {
         endNode = fromNode
         return
       }
     } else {
-      if (
-        !node.disabled &&
-        !node.ignored &&
-        !node.isGroup
-      ) {
+      if (!node.disabled && !node.ignored && !node.isGroup) {
         endNode = node
         return
       }
@@ -98,7 +91,10 @@ function rawGetParent (node: TreeNode): TreeNode | null {
   return node.parent
 }
 
-function getChild (node: TreeNode, options: { reverse?: boolean } = {}): TreeNode | null {
+function getChild (
+  node: TreeNode,
+  options: { reverse?: boolean } = {}
+): TreeNode | null {
   const { reverse = false } = options
   const { children } = node
   if (children) {
@@ -121,7 +117,10 @@ function getChild (node: TreeNode, options: { reverse?: boolean } = {}): TreeNod
   return null
 }
 
-export const moveMethods: Pick<TreeNode, 'getChild' | 'getNext' | 'getParent' | 'getPrev'> = {
+export const moveMethods: Pick<
+TreeNode,
+'getChild' | 'getNext' | 'getParent' | 'getPrev'
+> = {
   getChild (this: TreeNode) {
     if (this.ignored) return null
     return getChild(this)

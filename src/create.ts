@@ -13,9 +13,7 @@ import {
   GetPrevNextOptions,
   GetNonLeafKeysOptions
 } from './interface'
-import {
-  getCheckedKeys
-} from './check'
+import { getCheckedKeys } from './check'
 import {
   toArray,
   isDisabled,
@@ -27,73 +25,49 @@ import {
   unwrapIndeterminateKeys,
   getNonLeafKeys
 } from './utils'
-import {
-  getPath
-} from './path'
-import {
-  moveMethods,
-  getFirstAvailableNode
-} from './move'
-import {
-  flatten
-} from './flatten'
+import { getPath } from './path'
+import { moveMethods, getFirstAvailableNode } from './move'
+import { flatten } from './flatten'
 
 function createTreeNodes<R, G, I> (
   rawNodes: Array<R | G | I>,
   treeNodeMap: TreeNodeMap<R, G, I>,
   levelTreeNodeMap: LevelTreeNodeMap<R, G, I>,
   options: TreeMateOptions<R, G, I>,
-  fIndexRef: [number] = [0],
   parent: TreeNode | null = null,
   level: number = 0
 ): Array<TreeNode<R, G, I>> {
   const treeNodes: Array<TreeNode<R, G, I>> = []
   rawNodes.forEach((rawNode, index) => {
-    if (
-      process.env.NODE_ENV !== 'production' &&
-      isNodeInvalid(rawNode)
-    ) {
-      console.error(
-        '[treemate]: node',
-        rawNode,
-        'is invalid'
-      )
+    if (process.env.NODE_ENV !== 'production' && isNodeInvalid(rawNode)) {
+      console.error('[treemate]: node', rawNode, 'is invalid')
     }
-    const rawTreeNode = ({
+    const rawTreeNode = {
       rawNode,
       siblings: treeNodes,
       level,
       index,
-      fIndex: fIndexRef[0]++,
       isFirstChild: index === 0,
       isLastChild: index + 1 === rawNodes.length,
       get key () {
-        const {
-          getKey
-        } = options
+        const { getKey } = options
         if (getKey) {
           // do not pass parent or related things to it
           // the key need to be specified explicitly
-          return getKey(
-            this.rawNode
-          )
+          return getKey(this.rawNode)
         } else {
           return (rawNode as RawNode).key
         }
       },
       get disabled () {
-        const {
-          getDisabled
-        } = options
+        const { getDisabled } = options
         if (getDisabled) {
           return getDisabled(this.rawNode)
         }
         return isDisabled(this.rawNode)
       },
       get isGroup () {
-        const {
-          getIsGroup
-        } = options
+        const { getIsGroup } = options
         if (getIsGroup) {
           return getIsGroup(this.rawNode)
         }
@@ -106,16 +80,17 @@ function createTreeNodes<R, G, I> (
         return isShallowLoaded(this.rawNode)
       },
       get ignored () {
-        const {
-          getIgnored
-        } = options
+        const { getIgnored } = options
         if (getIgnored) return getIgnored(this.rawNode)
         // by default there is no ignored node
         return false
       },
       parent: parent
-    })
-    const treeNode: TreeNode<R, G, I> = Object.setPrototypeOf(rawTreeNode, moveMethods)
+    }
+    const treeNode: TreeNode<R, G, I> = Object.setPrototypeOf(
+      rawTreeNode,
+      moveMethods
+    )
     const rawChildren = (rawNode as any).children as R[] | undefined
     if (rawChildren !== undefined) {
       treeNode.children = createTreeNodes<R, G, I>(
@@ -123,7 +98,6 @@ function createTreeNodes<R, G, I> (
         treeNodeMap,
         levelTreeNodeMap,
         options,
-        fIndexRef,
         treeNode,
         level + 1
       )
@@ -136,7 +110,7 @@ function createTreeNodes<R, G, I> (
   return treeNodes as any
 }
 
-export function createTreeMate<R=RawNode, G=R, I=R> (
+export function createTreeMate<R = RawNode, G = R, I = R> (
   rawNodes: Array<R | G | I>,
   options: TreeMateOptions<R, G, I> = {}
 ): TreeMate<R, G, I> {
@@ -149,7 +123,9 @@ export function createTreeMate<R=RawNode, G=R, I=R> (
     options
   )
   // get only raw node
-  function getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
+  function getNode<T> (
+    key: Key | null | undefined
+  ): T extends null | undefined ? null : TreeNode<R>
   function getNode (key: Key | null | undefined): TreeNode | null {
     if (key === null || key === undefined) return null
     const tmNode = treeNodeMap.get(key)
@@ -159,7 +135,9 @@ export function createTreeMate<R=RawNode, G=R, I=R> (
     return null
   }
   // get group & raw node, for internally usage
-  function _getNode<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R, G>
+  function _getNode<T> (
+    key: Key | null | undefined
+  ): T extends null | undefined ? null : TreeNode<R, G>
   function _getNode (key: Key | null | undefined): TreeNode | null {
     if (key === null || key === undefined) return null
     const tmNode = treeNodeMap.get(key)
@@ -168,37 +146,50 @@ export function createTreeMate<R=RawNode, G=R, I=R> (
     }
     return null
   }
-  function getPrev<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
-  function getPrev (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode<R> | null {
+  function getPrev<T> (
+    key: Key | null | undefined
+  ): T extends null | undefined ? null : TreeNode<R>
+  function getPrev (
+    key: Key | null | undefined,
+    options?: GetPrevNextOptions
+  ): TreeNode<R> | null {
     const node = _getNode(key)
     if (!node) return null
     return node.getPrev(options)
   }
-  function getNext<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
-  function getNext (key: Key | null | undefined, options?: GetPrevNextOptions): TreeNode<R> | null {
+  function getNext<T> (
+    key: Key | null | undefined
+  ): T extends null | undefined ? null : TreeNode<R>
+  function getNext (
+    key: Key | null | undefined,
+    options?: GetPrevNextOptions
+  ): TreeNode<R> | null {
     const node = _getNode(key)
     if (!node) return null
     return node.getNext(options)
   }
-  function getParent<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
+  function getParent<T> (
+    key: Key | null | undefined
+  ): T extends null | undefined ? null : TreeNode<R>
   function getParent (key: Key | null | undefined): TreeNode<R> | null {
     const node = _getNode(key)
     if (!node) return null
     return node.getParent()
   }
-  function getChild<T> (key: Key | null | undefined): T extends (null | undefined) ? null : TreeNode<R>
+  function getChild<T> (
+    key: Key | null | undefined
+  ): T extends null | undefined ? null : TreeNode<R>
   function getChild (key: Key | null | undefined): TreeNode<R> | null {
     const node = _getNode(key)
     if (!node) return null
     return node.getChild()
   }
-  let cachedFlattenedNodes: Array<TreeNode<R, G, I>>
   const treemate: TreeMate<R, G, I> = {
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
-    get flattenedNodes () {
-      return cachedFlattenedNodes || (cachedFlattenedNodes = flatten(treeNodes))
+    getFlattenedNodes (expandedKeys?: Key[]) {
+      return flatten(treeNodes, expandedKeys)
     },
     getNode,
     getPrev,
@@ -208,21 +199,17 @@ export function createTreeMate<R=RawNode, G=R, I=R> (
     getFirstAvailableNode () {
       return getFirstAvailableNode(treeNodes)
     },
-    getPath <T extends boolean>(key: Key | null | undefined, options: GetPathOptions<T> = {}) {
-      return getPath<R, G, I, T>(
-        key,
-        options,
-        treemate
-      )
+    getPath<T extends boolean>(
+      key: Key | null | undefined,
+      options: GetPathOptions<T> = {}
+    ) {
+      return getPath<R, G, I, T>(key, options, treemate)
     },
     getCheckedKeys (
       checkedKeys: Key[] | InputMergedKeys | null | undefined,
       options: CheckOptions = {}
     ) {
-      const {
-        cascade = true,
-        leafOnly = false
-      } = options
+      const { cascade = true, leafOnly = false } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
@@ -238,15 +225,15 @@ export function createTreeMate<R=RawNode, G=R, I=R> (
       checkedKeys: Key[] | InputMergedKeys,
       options: CheckOptions = {}
     ) {
-      const {
-        cascade = true,
-        leafOnly = false
-      } = options
+      const { cascade = true, leafOnly = false } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
           indeterminateKeys: unwrapIndeterminateKeys(checkedKeys),
-          keysToCheck: (keysToCheck === undefined || keysToCheck === null) ? [] : toArray(keysToCheck),
+          keysToCheck:
+            keysToCheck === undefined || keysToCheck === null
+              ? []
+              : toArray(keysToCheck),
           cascade,
           leafOnly
         },
@@ -258,15 +245,15 @@ export function createTreeMate<R=RawNode, G=R, I=R> (
       checkedKeys: Key[] | InputMergedKeys,
       options: CheckOptions = {}
     ) {
-      const {
-        cascade = true,
-        leafOnly = false
-      } = options
+      const { cascade = true, leafOnly = false } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
           indeterminateKeys: unwrapIndeterminateKeys(checkedKeys),
-          keysToUncheck: (keysToUncheck === null || keysToUncheck === undefined) ? [] : toArray(keysToUncheck),
+          keysToUncheck:
+            keysToUncheck === null || keysToUncheck === undefined
+              ? []
+              : toArray(keysToUncheck),
           cascade,
           leafOnly
         },

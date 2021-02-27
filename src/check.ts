@@ -71,13 +71,10 @@ function getExtendedCheckedKeySetAfterUncheck (
     treeMate
   )
   const keysToRemove: Key[] = []
-  extendedCheckedKeySet.forEach(key => {
-    if (
-      extendedKeySetToUncheck.has(key) ||
-      ascendantKeySet.has(key)
-    ) keysToRemove.push(key)
+  extendedCheckedKeySet.forEach((key) => {
+    if (extendedKeySetToUncheck.has(key) || ascendantKeySet.has(key)) { keysToRemove.push(key) }
   })
-  keysToRemove.forEach(key => extendedCheckedKeySet.delete(key))
+  keysToRemove.forEach((key) => extendedCheckedKeySet.delete(key))
   return extendedCheckedKeySet
 }
 
@@ -195,7 +192,9 @@ export function getCheckedKeys (
     }
   }
   return {
-    checkedKeys: Array.from(leafOnly ? leafCheckedKeySet as Set<Key> : syntheticCheckedKeySet),
+    checkedKeys: Array.from(
+      leafOnly ? (leafCheckedKeySet as Set<Key>) : syntheticCheckedKeySet
+    ),
     indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
   }
 }

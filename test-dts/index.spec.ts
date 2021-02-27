@@ -28,5 +28,7 @@ describe('Select', () => {
     includeGroup: false
   })
   expectType<MergedPath<BaseOption>>(path2)
-  test.skip('skip', () => {})
+  it('passed', () => {
+    expect(true)
+  })
 })

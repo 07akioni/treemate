@@ -1,4 +1,10 @@
-import { TreeNode, RawNode, InputMergedKeys, Key, GetNonLeafKeysOptions } from './interface'
+import {
+  TreeNode,
+  RawNode,
+  InputMergedKeys,
+  Key,
+  GetNonLeafKeysOptions
+} from './interface'
 
 export function toArray<T> (arg: T): T extends any[] ? T : T[] {
   if (Array.isArray(arg)) return arg as any
@@ -20,20 +26,25 @@ export function traverse (
   }
 }
 
-export function getNonLeafKeys (treeNodes: TreeNode[], options: GetNonLeafKeysOptions = {}): Key[] {
+export function getNonLeafKeys (
+  treeNodes: TreeNode[],
+  options: GetNonLeafKeysOptions = {}
+): Key[] {
   const { preserveGroup = false } = options
   const keys: Key[] = []
-  const cb = preserveGroup ? (node: TreeNode) => {
-    if (!node.isLeaf) {
-      keys.push(node.key)
-      traverse(node.children as TreeNode[])
+  const cb = preserveGroup
+    ? (node: TreeNode) => {
+      if (!node.isLeaf) {
+        keys.push(node.key)
+        traverse(node.children as TreeNode[])
+      }
     }
-  } : (node: TreeNode) => {
-    if (!node.isLeaf) {
-      if (!node.isGroup) keys.push(node.key)
-      traverse(node.children as TreeNode[])
+    : (node: TreeNode) => {
+      if (!node.isLeaf) {
+        if (!node.isGroup) keys.push(node.key)
+        traverse(node.children as TreeNode[])
+      }
     }
-  }
   function traverse (nodes: TreeNode[]): void {
     nodes.forEach(cb)
   }

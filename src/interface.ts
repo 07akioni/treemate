@@ -21,12 +21,11 @@ export interface GetPrevNextOptions {
 }
 
 // R=RawNode, G=GroupNode, I=IgnoredNode
-export interface TreeNode<R=RawNode, G=R, I=R> {
+export interface TreeNode<R = RawNode, G = R, I = R> {
   key: Key
   rawNode: R | G | I
   level: number
   index: number
-  fIndex: number
   isFirstChild: boolean
   isLastChild: boolean
   parent: TreeNode<R, G> | null
@@ -59,7 +58,7 @@ export interface TreeMateOptions<R, G, I> {
   getIgnored?: (node: R | G | I) => boolean
 }
 
-export interface MergedPath<R, G=R> {
+export interface MergedPath<R, G = R> {
   keyPath: Key[]
   treeNodePath: Array<TreeNode<R, G>>
   treeNode: TreeNode<R, G> | null
@@ -80,20 +79,27 @@ export interface CheckOptions {
   leafOnly?: boolean
 }
 
-type KeyToNode<R, G> = <T extends Key | null | undefined>(key: T) => T extends (null | undefined) ? null : (TreeNode<R, G> | null)
-type KeyToNonGroupNode<R> = <T extends Key | null | undefined>(key: T) => T extends (null | undefined) ? null : (TreeNode<R, R> | null)
-type KeyToNonGroupNodeWithOptions<R> = <T extends Key | null | undefined>(key: T, options?: GetPrevNextOptions) => T extends (null | undefined) ? null : (TreeNode<R, R> | null)
+type KeyToNode<R, G> = <T extends Key | null | undefined>(
+  key: T
+) => T extends null | undefined ? null : TreeNode<R, G> | null
+type KeyToNonGroupNode<R> = <T extends Key | null | undefined>(
+  key: T
+) => T extends null | undefined ? null : TreeNode<R, R> | null
+type KeyToNonGroupNodeWithOptions<R> = <T extends Key | null | undefined>(
+  key: T,
+  options?: GetPrevNextOptions
+) => T extends null | undefined ? null : TreeNode<R, R> | null
 
 export interface GetNonLeafKeysOptions {
   preserveGroup?: boolean
 }
 
-export interface TreeMate<R=RawNode, G=R, I=R> {
+export interface TreeMate<R = RawNode, G = R, I = R> {
   treeNodes: Array<TreeNode<R, G, I>>
   treeNodeMap: TreeNodeMap<R, G, I>
   levelTreeNodeMap: LevelTreeNodeMap<R, G, I>
   // flattened nodes is view related, so Ignored should be included
-  flattenedNodes: Array<TreeNode<R, G, I>>
+  getFlattenedNodes: (expandedKeys?: Key[]) => Array<TreeNode<R, G, I>>
   // I don't want Ignored & GroupNode to be accessed by getNode
   getNode: KeyToNode<R, R>
   // check related methods
@@ -114,7 +120,10 @@ export interface TreeMate<R=RawNode, G=R, I=R> {
   getNonLeafKeys: (options?: GetNonLeafKeysOptions) => Key[]
   // If include group, GroupNode & RawNode will be included
   // If not include group, only RawNode will be included
-  getPath: <T extends boolean>(key: Key | null | undefined, options?: GetPathOptions<T>) => T extends true ? MergedPath<R, G> : MergedPath<R>
+  getPath: <T extends boolean>(
+    key: Key | null | undefined,
+    options?: GetPathOptions<T>
+  ) => T extends true ? MergedPath<R, G> : MergedPath<R>
   // In movement related methods, only RawNode can be accessed
   getFirstAvailableNode: () => TreeNode<R> | null
   getPrev: KeyToNonGroupNodeWithOptions<R>
