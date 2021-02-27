@@ -4,7 +4,6 @@
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "dependencies": {},
   "sideEffects": false,
   "files": [
     "es",
