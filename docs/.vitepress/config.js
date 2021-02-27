@@ -5,6 +5,10 @@ module.exports = {
       {
         text: 'treemate',
         link: '/'
+      },
+      {
+        text: 'treemate（中文）',
+        link: '/zh-CN'
       }
     ]
   }
