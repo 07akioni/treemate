@@ -171,7 +171,7 @@ const treeMate = createTreeMate<BaseNode>(data)
 //      disabled?: boolean
 //      isLeaf? boolean
 //    }
-//    ignored nodee and group node should be in the data.
+//    ignored node and group node should be in the data.
 const treeMate = createTreeMate(data)
 ```
 
@@ -204,7 +204,6 @@ treeMate.treeNodeMap.get(key)
 
 ```js
 TreeNode {
-  // stable prop
   key,
   rawNode, // hold the ref to the original data node, can be very useful
   level, // from 0
@@ -273,7 +272,7 @@ interface MergedKeys {
 ```ts
 const { checkedKeys, indeterminateKeys } = treeMate.getCheckedKeys([1])
 const { checkedKeys, indeterminateKeys } = treeMate.getCheckedKeys([1], {
-  cascade: true
+  cascade: false
 })
 const { checkedKeys, indeterminateKeys } = treeMate.getCheckedKeys({
   checkedKeys: [1],
@@ -350,7 +349,7 @@ Returns the flattened tree nodes with corresponding `expandedKeys`. If `expanded
 
 #### `createIndexGetter(flattenedNodes)`
 
-Create an index getter from the flattenedNodes.
+Create an index getter from the `flattenedNodes`.
 
 ```ts
 import { createIndexGetter } from 'treemate'

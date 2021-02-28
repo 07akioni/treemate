@@ -45,7 +45,7 @@ Node {
 
 如果你不需要 Group 节点，可以跨过这一节。
 
-A group node contains a key, a type prop with value `group` and a children of its child node (can be a group node any more).
+一个 Group 节点包含一个 key，一个名为 type 的属性，值为 `group`，还有一个 children 属性包含了它的子节点（不能包含 Group 节点）。
 
 ```
 GroupNode {
@@ -55,9 +55,9 @@ GroupNode {
 }
 ```
 
-The group node itself will be ignored when moving along the nodes, and the children of the group node is view as the same level of the group node.
+在不同节点的移动过程中，Group 节点自身会被忽略，Group 节点的子节点会被看作为和 Group 在同一层的节点。
 
-For eaxample, in the following tree, the group child 2 will be viewed as node 1's next node. node 2 will be viewed as group child 2's next node.
+例如在下面的树中，group node 2 是 node 1 的下一个节点，group child 2 的下一个节点是 node 2.
 
 ```
 - node 1
@@ -67,19 +67,19 @@ For eaxample, in the following tree, the group child 2 will be viewed as node 1'
 - node 2
 ```
 
-#### Ignored Node
+#### Ignored 节点
 
-Some time's you may want to put some render only nodes in the tree. For example:
+有的时候你需要一些仅需渲染的节点。例如
 
 ```
 - node 1
-- divider (render only)
+- 分割线 (render only)
 - node 2
 ```
 
-In data aspect, the divider node is meaning less. You can make it a ignored node. The ignored node will be ignored when moving along the nodes. (node 2 will be view the next node as node 1.) Also, `getNode` method won't return the ignored node.
+在数据层面，分割线节点没有实际意义。你可以把它作为一个 Ignored 节点。这个节点在节点移动的过程中会被忽略。（node 2 会被看作 node 1 的下一个节点。）同时 `getNode` 方法也不会返回 Ignored 节点。
 
-An ignored node should also contains a key (for modern frontend framework to do efficient diff)
+Ignored 节点也应该包含一个 key（为现代前端框架的 diff 过程使用）。
 
 ```
 IgnoredNode {
@@ -88,19 +88,19 @@ IgnoredNode {
 }
 ```
 
-## Usage
+## 使用方式
 
-### Create a Treemate
+### 创建一个 Treemate
 
-`createTreeMate` method accepts a array of node as data. It returns a treemate instance.
+`createTreeMate` 方法接受一个节点的数组作为输入数据，返回一个 treemate 的实例。
 
-In javascript:
+在 javascript 中使用：
 
 ```js
 import { createTreeMate } from 'treemate'
 
 const data = [
-  // non-leaf node
+  // 非叶节点
   {
     key: 1,
     children: [
@@ -109,16 +109,16 @@ const data = [
       }
     ]
   },
-  // leaf node
+  // 叶节点
   {
     key: 3
   },
-  // ignored node
+  // ignored 节点
   {
     key: 4,
     type: 'ignored'
   },
-  // group node
+  // group 节点
   {
     key: 5,
     type: 'group',
@@ -133,7 +133,7 @@ const data = [
 const treeMate = createTreeMate(data)
 ```
 
-In typescript, the data looks amost same. However `createTreeMate` accepts 3 optional generic parameter to specify the types of node, group node and ignored node.
+在 typescript 中，data 没什么区别。但是 `createTreeMate` 接受 3 个可选的泛型参数，这些参数为普通节点、Group 节点和 Ignored 节点的类型。
 
 ```ts
 interface BaseNode {
@@ -152,32 +152,32 @@ interface IgnoredNode {
   type: 'ignored'
 }
 
-// 1. specify all node types
+// 1. 指名左右节点的类型
 const treeMate = createTreeMate<BaseNode, GroupNode, IgnoredNode>(data)
 
-// 2. equals to createTreeMate<BaseNode, GroupNode, BaseNode>()
-//    which mean no ignored node is in the data.
+// 2. 等价于 createTreeMate<BaseNode, GroupNode, BaseNode>()
+//    也就是说在数据中不会出现 Ignored 节点
 const treeMate = createTreeMate<BaseNode, GroupNode>(data)
 
-// 3. equals to createTreeMate<BaseNode, BaseNode, BaseNode>()
-//    which mean no ignored node and group node is in the data.
+// 3. 等价于 createTreeMate<BaseNode, BaseNode, BaseNode>()
+//    也就是说 Ignored 节点和 Group 节点不会出现在数据中
 const treeMate = createTreeMate<BaseNode>(data)
 
-// 4. without generic parameter
-//    it will use a builtin node type as basic node type.
+// 4. 不写任何泛型参数
+//    它会使用一个内置的类型作为基本节点的类型
 //    RawNode {
 //      key: string | number
 //      children?: RawNode[]
 //      disabled?: boolean
 //      isLeaf? boolean
 //    }
-//    ignored nodee and group node should be in the data.
+//    Ignored 节点和 Group 节点不会出现在数据中
 const treeMate = createTreeMate(data)
 ```
 
-### Custom `createTreeMate` Options
+### 自定义 `createTreeMate` 的选项
 
-If you want another way to determine a way to specify if a node's key or its disabled, group, ignored status. You can pass an option when create treemate.
+如果希望通过其他方式来判定一个节点的 key 和 diabled、group、ignored 的状态，你可以给 create treemate 传递一个选项。
 
 ```ts
 const treeMate = createTreeMate(data, {
@@ -188,92 +188,91 @@ const treeMate = createTreeMate(data, {
 })
 ```
 
-### Get a Node from Tree
+### 从树中获取一个节点
 
-Now suppose we have a treemate instance.
+假设我们有一个 treemate 的实例。
 
 ```ts
-const tmNode = treeMate.getNode(key) // if not exist return null
+const tmNode = treeMate.getNode(key) // 如果不存在该节点会返回 null
 
-// Caveat: getNode won't return group node & ignored node!
-// If you do need to get them, you can use the treeNodeMap, eg:
+// 注意：getNode 不会返回 Group 节点和 Ignored 节点！
+// 如果你需要获取这些节点，你可以使用 treeNodeMap，例如：
 treeMate.treeNodeMap.get(key)
 ```
 
-### Props of a TreeNode
+### TreeMateNode 树节点的属性
 
 ```js
-TreeNode {
-  // stable prop
+TreeMateNode {
   key,
-  rawNode, // hold the ref to the original data node, can be very useful
-  level, // from 0
-  index, // its index in its parent node (or root array)
+  rawNode, // 对于原始数据节点的引用，很可能有用
+  level,   // 从 0 开始
+  index,   // 它在父节点（或者根数组）中的 index
   siblings,
   isFirstChild,
   isLastChild,
-  parent, // its parent TreeNode (not data node)
-  isShallowLoaded, // use when on partial data is loaded
+  parent,          // 父树节点（不是数据节点）
+  isShallowLoaded, // 在局部加载数据时会用到
   isLeaf,
   isGroup,
-  ignored, // boolean
-  disabled, // disabled
-  children?, // its child TreeNodes (not data node)
-  getPrev, // method
-  getNext, // method
-  getParent, // method
-  getChild // method
+  ignored,     // boolean
+  disabled,    // disabled
+  children?,   // 它的子树节点（不是原始数据节点）
+  getPrev(),   // 方法
+  getNext(),   // 方法
+  getParent(), // 方法
+  getChild()   // 方法
 }
 ```
 
-### Do Check and Uncheck in the Tree
+### 在树中勾选节点或取消勾选节点
 
 #### `TreeMate.getCheckedKeys(checkedKeys, options?)`
 
-Get checked status of the tree.
+获取树的勾选状态。
 
-Node has `disabled = true` will be block cascade check's propagation.
+`disabled = true` 的节点会阻止关联勾选的检查传播。
 
-Param `checkedKeys` has two forms:
+参数 `checkedKeys` 有两种形式：
 
 ```ts
-Key[] // 1. currently checked keys
+Key[] // 1. 当前勾选的节点
 
-// 2. merged checked status
+// 2. 当前的综合勾选状态
 interface InputMergedKeys {
   checkedKeys?: Key[] | null
   indeterminateKeys?: Key[] | null // half checked
 }
 
-// it can also be
+// 也可以是
 null | undefined
-// viewed as an empty array
+// 会被当作空数组看待
 ```
 
-Param `options` looks like
+选项 `options` 形如：
 
 ```ts
 interface CheckOptions {
-  cascade?: boolean // cascade check status, default is true
-  leafOnly?: boolean // whether only allow leaf node being checked, default is false
+  cascade?: boolean // 是否关联勾选，子级勾选会影响父级状态，默认为 true
+  leafOnly?: boolean // 是否只允许叶节点被勾选，默认为 false
 }
 ```
 
-Return value looks like
+返回值形如：
 
 ```ts
 interface MergedKeys {
   checkedKeys: Key[]
-  indeterminateKeys: Key[] // half checked
+  indeterminateKeys: Key[] // 半选
 }
 ```
 
-##### Usage
+##### 使用举例
 
 ```ts
 const { checkedKeys, indeterminateKeys } = treeMate.getCheckedKeys([1])
 const { checkedKeys, indeterminateKeys } = treeMate.getCheckedKeys([1], {
-  cascade: true
+  cascade: false
 })
 const { checkedKeys, indeterminateKeys } = treeMate.getCheckedKeys({
   checkedKeys: [1],
@@ -284,73 +283,74 @@ const { checkedKeys, indeterminateKeys } = treeMate.getCheckedKeys({
 
 #### `TreeMate.check(keysToCheck, checkedKeys, options?)`
 
-Get checked status of the tree after some nodes are checked.
+获取树在勾选一些节点后新的勾选状态。
 
-`keysToCheck` could be `Key | Key[] | null | undefined`.
+`keysToCheck` 可以为 `Key | Key[] | null | undefined`。
 
-For `checkedKeys`, `options` and return value, see `getCheckedKeys(checkedKeys, options?)`.
+`checkedKeys`，`options` 和返回值参考 `getCheckedKeys(checkedKeys, options?)`。
 
 #### `TreeMate.uncheck(keysToUncheck, checkedKeys, options?)`
 
-Get checked status of the tree after some nodes are unchecked.
+获取树在取消勾选一些节点后新的勾选状态。
 
-`keysToCheck` could be `Key | Key[] | null | undefined`.
+`keysToCheck` 可以为 `Key | Key[] | null | undefined`。
 
-For `checkedKeys`, `options` and return value, see `getCheckedKeys(checkedKeys, options?)`.
+`checkedKeys`, `options` 和返回值参考 `getCheckedKeys(checkedKeys, options?)`。
 
-### Do Move in the Tree
+### 在树中移动
 
 #### `TreeMate.getPrev(key, options?)`
 
-Get the first previous not `disabled` sibling `TreeMateNode` of the `key`'s corresponding node. In the traverse process, the `group | ignored` node itself will be dismissed. If node doesn't exist, return `null`.
+获取该 `key` 对应节点的前一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group | ignored` 节点自身会被忽略，不存在时返回 `null`。
 
-`options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
+`options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
 
 #### `TreeMate.getNext(key, options?)`
 
-Get the first next not `disabled` sibling `TreeMateNode` of the `key`'s corresponding node. In the traverse process, the `group | ignored` node itself will be dismissed. If node doesn't exist, return `null`.
+获取该 `key` 对应节点的后一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group | ignored` 节点自身会被忽略，不存在时返回 `null`。
 
-`options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
+`options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
 
 #### `TreeMate.getParent(key)`
 
-Get the parent node of the `key`'s corresponding node. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
+获取该 `key` 对应节点的父级 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
 
 #### `TreeMate.getChild(key)`
 
-Get the first not `diabled` child node of the `key`'s corresponding node. In the traverse process, the `group | ignored` node itself will be dismissed. If node doesn't exist, return `null`.
+获取该 `key` 对应节点第一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group | ignored` 节点自身会被忽略，不存在时返回 `null`。
 
-#### `TreeNode.getPrev(options?)`
+#### `TreeMateNode.getPrev(options?)`
 
-Get the first previous not `disabled` sibling `TreeMateNode`. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
+获取该节点的前一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group | ignored` 节点自身会被忽略，不存在时返回 `null`。
 
-`options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
+`options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
 
-#### `TreeNode.getNext(options?)`
+#### `TreeMateNode.getNext(options?)`
 
-Get the first next not `disabled` sibling `TreeMateNode`. In the traverse process, the `group | ignored` node itself will be dismissed. If node doesn't exist, return `null`.
+获取该节点的后一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group | ignored` 节点自身会被忽略，不存在时返回 `null`。
 
-`options` look like `{ loop?: boolean }`. By default, `loop` is `false`, it won't loop when touches the last node.
+`options` 形如 `{ loop?: boolean }`，默认 `loop` 为 `false`，不会循环寻找。
 
-#### `TreeNode.getParent()`
+#### `TreeMateNode.getParent()`
 
-Get the parent node of `TreeMateNode`. In the traverse process, the `group` node itself will be dismissed. If node doesn't exist, return `null`.
+获取该节点的父级 `TreeMateNode`，寻找过程中 `group` 节点自身会被忽略，不存在时返回 `null`。
 
-#### `TreeNode.getChild()`
+#### `TreeMateNode.getChild()`
 
-Get the first not `disabled` child `TreeMateNode`. In the traverse process, the `group | ignored` node itself will be dismissed. If node doesn't exist, return `null`.
+获取该节点第一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group | ignored` 节点自身会被忽略，不存在时返回 `null`。
 
-### Do Expand & Collapsed on the Tree
+### 展开、折叠树节点
 
-Expand status is will influence the flattened nodes of the tree. The flattened nodes is crucial for virtual list.
+展开状态会影响树的展平状态。展平节点对于虚拟列表至关重要。
 
 #### `TreeMate.getFlattenedNodes(expandedKeys?)`
 
-Returns the flattened tree nodes with corresponding `expandedKeys`. If `expandedKeys` is not provided, treemate will treat it as all expanded.
+获取树对应于 `expandedKeys` 的展平节点。如果 `expandedKeys` 没有传入，treemate 会当作所有节点全部处于展开状态。
+
 
 #### `createIndexGetter(flattenedNodes)`
 
-Create an index getter from the flattenedNodes.
+从展平节点创建一个索引的 getter 函数。
 
 ```ts
 import { createIndexGetter } from 'treemate'
@@ -364,7 +364,7 @@ getIndex(flattenedNodes[0].key) === 0
 
 #### `TreeMate.getPath(key)`
 
-Get the path from root to the node corresponding to the `key`. The return value looks like
+获取从根到该 `key` 对应节点的路径。返回值形如
 
 ```ts
 interface MergedPath {
@@ -374,22 +374,22 @@ interface MergedPath {
 }
 ```
 
-The `keyPath` is the `key` of the nodes in path. The `treeNodePath` is the node path. `treeNode` is the `TreeMateNode` corresponding to the `key`.
+其中 `keyPath` 为路径中各个节点的 `key`。其中 `treeNodePath` 为节点路径。`treeNode` 该 `key` 对应的 `TreeMateNode`。
 
-### Get First Available Node of the Tree
+### 获取树第一个可用的节点
 
-Can be used to get the default pending status of a select menu.
+可以用于获取选择菜单的默认选项。
 
 #### `TreeMate.getFirstAvailableNode()`
 
-Get the first not `disabled` `TreeMateNode` of the tree. In the traverse process, the `group | ignored` node itself will be dismissed. If node doesn't exist, returns `null`.
+获取整个树第一个非 `disabled` 的 `TreeMateNode`，寻找过程中 `group ｜ ignored` 节点自身会被忽略，不存在时返回 `null`。
 
-### Other Props in TreeMate Instance
+### TreeMate 实例的其他属性
 
 #### `TreeMate.treeNodes`
 
-Corresponding `TreeMateNode` Array of original data. The tree structure is identical to the original data.
+原数据对应的 `TreeMateNode` 数组，结构完全对应于原数据。
 
 #### `TreeMate.treeNodeMap`
 
-A map of `key` to tree node. Contains all nodes, including `group | ignored` node.
+`key` 到节点的 Map。包含全部节点，`group | ignored` 节点包含在内。
