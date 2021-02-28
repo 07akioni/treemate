@@ -6,3 +6,4 @@ coverage
 es
 lib
 ~
+.husky

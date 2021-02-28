@@ -1,3 +1,4 @@
+<!-- 请修改 docs/zh-CN.md，项目根目录中的 index.zh-CN.md 只是一个副本 -->
 # treemate · [![Coverage Status](https://coveralls.io/repos/github/07akioni/treemate/badge.svg)](https://coveralls.io/github/07akioni/treemate)
 
 组件开发中树形数据结构的一站式解决方案。

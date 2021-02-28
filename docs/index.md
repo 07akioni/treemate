@@ -1,3 +1,4 @@
+<!-- Please modify docs/index.md, index.md in project root is only a copy -->
 # treemate · [![Coverage Status](https://coveralls.io/repos/github/07akioni/treemate/badge.svg)](https://coveralls.io/github/07akioni/treemate)
 
 All in one solution for tree structure in component developling.
