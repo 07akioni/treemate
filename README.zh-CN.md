@@ -1,4 +1,5 @@
 <!-- 请修改 docs/zh-CN.md，项目根目录中的 index.zh-CN.md 只是一个副本 -->
+
 # treemate · [![Coverage Status](https://coveralls.io/repos/github/07akioni/treemate/badge.svg)](https://coveralls.io/github/07akioni/treemate)
 
 组件开发中树形数据结构的一站式解决方案。
@@ -347,7 +348,6 @@ const { checkedKeys, indeterminateKeys } = treeMate.getCheckedKeys({
 #### `TreeMate.getFlattenedNodes(expandedKeys?)`
 
 获取树对应于 `expandedKeys` 的展平节点。如果 `expandedKeys` 没有传入，treemate 会当作所有节点全部处于展开状态。
-
 
 #### `createIndexGetter(flattenedNodes)`
 

@@ -32,7 +32,7 @@
   },
   "scripts": {
     "build": "tsc --project tsconfig.build.esm.json && tsc --project tsconfig.build.cjs.json ",
-    "lint": "prettier --write src/**/* && eslint --fix \"./src/**/*.ts\"",
+    "lint": "prettier --write src/**/* docs/* *.js && eslint --fix \"./src/**/*.ts\"",
     "release": "npm run build && npm publish",
     "test": "jest --coverage",
     "docs:dev": "vitepress dev docs",
