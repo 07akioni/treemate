@@ -2,7 +2,7 @@
 
 # treemate · [![Coverage Status](https://coveralls.io/repos/github/07akioni/treemate/badge.svg)](https://coveralls.io/github/07akioni/treemate)
 
-https://treemate.vercel.app
+https://treemate.vercel.app/zh-CN.html
 
 组件开发中树形数据结构的一站式解决方案。
 
