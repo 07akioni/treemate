@@ -363,7 +363,7 @@ const getIndex = createIndexGetter(flattenedNodes)
 getIndex(flattenedNodes[0].key) === 0
 ```
 
-### Get Path of a Node
+### 获取节点的路径
 
 #### `TreeMate.getPath(key)`
 
