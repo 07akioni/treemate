@@ -59,6 +59,22 @@ export function isLeaf (rawNode: RawNode): boolean {
   return false
 }
 
+export function defaultGetChildren<T> (
+  node: unknown
+): T[] | undefined {
+  return (node as any).children
+}
+
+export function defaultGetKey (
+  node: unknown
+): Key {
+  return (node as any).key
+}
+
+export function isIgnored (): boolean {
+  return false
+}
+
 export function isShallowLoaded (rawNode: RawNode): boolean {
   const { isLeaf, children } = rawNode
   if (isLeaf === false && children === undefined) return false
@@ -120,7 +136,9 @@ export function isGroup (rawNode: RawNode): boolean {
 
 export type IndexGetter = (key: Key) => number | null
 
-export function createIndexGetter <R, G, I> (treeNodes: Array<TreeNode<R, G, I>>): IndexGetter {
+export function createIndexGetter<R, G, I> (
+  treeNodes: Array<TreeNode<R, G, I>>
+): IndexGetter {
   const map = new Map<Key, number>()
   treeNodes.forEach((treeNode, i) => {
     map.set(treeNode.key, i)
