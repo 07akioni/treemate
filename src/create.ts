@@ -190,6 +190,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     treeNodes,
     treeNodeMap,
     levelTreeNodeMap,
+    maxLevel: Math.max(...levelTreeNodeMap.keys()),
     getFlattenedNodes (expandedKeys?: Key[]) {
       return flatten(treeNodes, expandedKeys)
     },
