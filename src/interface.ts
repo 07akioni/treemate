@@ -52,6 +52,7 @@ export interface MergedKeys {
 }
 
 export interface TreeMateOptions<R, G, I> {
+  getChildren?: (node: R | G) => Array<R | G | I> | undefined
   getKey?: (node: R | G | I) => Key
   getDisabled?: (node: R | G | I) => boolean
   getIsGroup?: (node: R | G | I) => boolean
