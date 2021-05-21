@@ -99,6 +99,8 @@ export interface TreeMate<R = RawNode, G = R, I = R> {
   treeNodes: Array<TreeNode<R, G, I>>
   treeNodeMap: TreeNodeMap<R, G, I>
   levelTreeNodeMap: LevelTreeNodeMap<R, G, I>
+  /** start from 0 */
+  maxLevel: number
   // flattened nodes is view related, so Ignored should be included
   getFlattenedNodes: (expandedKeys?: Key[]) => Array<TreeNode<R, G, I>>
   // I don't want Ignored & GroupNode to be accessed by getNode
