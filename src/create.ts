@@ -32,6 +32,7 @@ import {
 import { getPath } from './path'
 import { moveMethods, getFirstAvailableNode } from './move'
 import { flatten } from './flatten'
+import { contains } from './contains'
 
 function createTreeNodes<R, G, I> (
   rawNodes: Array<R | G | I>,
@@ -92,6 +93,12 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
   } = options
   const nodeProto = {
     ...moveMethods,
+    contains<R, G, I>(
+      this: TreeNode<R, G, I>,
+      node: TreeNode<R, G, I>
+    ): boolean {
+      return contains(this, node)
+    },
     get key (): Key {
       // do not pass parent or related things to it
       // the key need to be specified explicitly
@@ -124,11 +131,11 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
   function getNode<T> (
     key: Key | null | undefined
   ): T extends null | undefined ? null : TreeNode<R>
-  function getNode (key: Key | null | undefined): TreeNode | null {
+  function getNode (key: Key | null | undefined): TreeNode<R> | null {
     if (key === null || key === undefined) return null
     const tmNode = treeNodeMap.get(key)
     if (tmNode && !tmNode.isGroup && !tmNode.ignored) {
-      return tmNode
+      return tmNode as unknown as TreeNode<R>
     }
     return null
   }
@@ -136,11 +143,11 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
   function _getNode<T> (
     key: Key | null | undefined
   ): T extends null | undefined ? null : TreeNode<R, G>
-  function _getNode (key: Key | null | undefined): TreeNode | null {
+  function _getNode (key: Key | null | undefined): TreeNode<R, G> | null {
     if (key === null || key === undefined) return null
     const tmNode = treeNodeMap.get(key)
     if (tmNode && !tmNode.ignored) {
-      return tmNode
+      return tmNode as unknown as TreeNode<R, G>
     }
     return null
   }

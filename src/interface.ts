@@ -40,6 +40,7 @@ export interface TreeNode<R = RawNode, G = R, I = R> {
   getNext: (options?: GetPrevNextOptions) => TreeNode<R> | null
   getParent: () => TreeNode<R> | null
   getChild: () => TreeNode<R> | null
+  contains: (treeNode: TreeNode<R, G, I> | null | undefined) => boolean
 }
 
 export type TreeNodeMap<R, G, I> = Map<Key, TreeNode<R, G, I>>
