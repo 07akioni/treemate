@@ -26,9 +26,8 @@ function rawGetNext (node: TreeNode, loop: boolean): TreeNode | null {
 function move (
   fromNode: TreeNode,
   dir: 'prev' | 'next',
-  options: GetPrevNextOptions = {}
+  { loop = false, includeDisabled = false }: GetPrevNextOptions = {}
 ): TreeNode | null {
-  const { loop = false } = options
   const iterate = dir === 'prev' ? rawGetPrev : rawGetNext
   const getChildOptions = {
     reverse: dir === 'prev'
@@ -45,7 +44,11 @@ function move (
         return
       }
     } else {
-      if (!node.disabled && !node.ignored && !node.isGroup) {
+      if (
+        (!node.disabled || includeDisabled) &&
+        !node.ignored &&
+        !node.isGroup
+      ) {
         endNode = node
         return
       }

@@ -18,6 +18,7 @@ export interface KeyedRawNode {
 
 export interface GetPrevNextOptions {
   loop?: boolean
+  includeDisabled?: boolean
 }
 
 // R=RawNode, G=GroupNode, I=IgnoredNode

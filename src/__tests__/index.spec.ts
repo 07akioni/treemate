@@ -13,7 +13,7 @@ describe('index', () => {
       })
     })
     it('warns when node is invalid', () => {
-      const spy = jest.spyOn(console, 'error')
+      const spy = jest.spyOn(console, 'error').mockImplementation()
       createTreeMate([
         {
           isLeaf: true,
