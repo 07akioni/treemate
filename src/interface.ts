@@ -51,8 +51,10 @@ export interface MergedKeys {
   indeterminateKeys: Key[]
 }
 
+export type GetChildren<R, G, I> = (node: R | G) => Array<R | G | I> | undefined
+
 export interface TreeMateOptions<R, G, I> {
-  getChildren?: (node: R | G) => Array<R | G | I> | undefined
+  getChildren?: GetChildren<R, G, I>
   getKey?: (node: R | G | I) => Key
   getDisabled?: (node: R | G | I) => boolean
   getIsGroup?: (node: R | G | I) => boolean

@@ -11,7 +11,8 @@ import {
   GetPathOptions,
   CheckOptions,
   GetPrevNextOptions,
-  GetNonLeafKeysOptions
+  GetNonLeafKeysOptions,
+  GetChildren
 } from './interface'
 import { getCheckedKeys } from './check'
 import {
@@ -36,8 +37,9 @@ function createTreeNodes<R, G, I> (
   rawNodes: Array<R | G | I>,
   treeNodeMap: TreeNodeMap<R, G, I>,
   levelTreeNodeMap: LevelTreeNodeMap<R, G, I>,
-  options: Required<TreeMateOptions<R, G, I>>,
-  parent: TreeNode | null = null,
+  nodeProto: any,
+  getChildren: GetChildren<R, G, I>,
+  parent: TreeNode<R, G> | null = null,
   level: number = 0
 ): Array<TreeNode<R, G, I>> {
   const treeNodes: Array<TreeNode<R, G, I>> = []
@@ -45,48 +47,24 @@ function createTreeNodes<R, G, I> (
     if (process.env.NODE_ENV !== 'production' && isNodeInvalid(rawNode)) {
       console.error('[treemate]: node', rawNode, 'is invalid')
     }
-    const rawTreeNode = {
-      rawNode,
-      siblings: treeNodes,
-      level,
-      index,
-      isFirstChild: index === 0,
-      isLastChild: index + 1 === rawNodes.length,
-      get key () {
-        // do not pass parent or related things to it
-        // the key need to be specified explicitly
-        return options.getKey(this.rawNode)
-      },
-      get disabled () {
-        return options.getDisabled(this.rawNode)
-      },
-      get isGroup () {
-        return options.getIsGroup(this.rawNode)
-      },
-      get isLeaf () {
-        return isLeaf(this.rawNode)
-      },
-      get shallowLoaded () {
-        return isShallowLoaded(this.rawNode)
-      },
-      get ignored () {
-        return options.getIgnored(this.rawNode)
-      },
-      parent: parent
-    }
-    const treeNode: TreeNode<R, G, I> = Object.setPrototypeOf(
-      rawTreeNode,
-      moveMethods
-    )
+    const treeNode: TreeNode<R, G, I> = Object.create(nodeProto)
+    treeNode.rawNode = rawNode
+    treeNode.siblings = treeNodes
+    treeNode.level = level
+    treeNode.index = index
+    treeNode.isFirstChild = index === 0
+    treeNode.isLastChild = index + 1 === rawNodes.length
+    treeNode.parent = parent
     if (!treeNode.ignored) {
-      const rawChildren = options.getChildren(rawNode as R | G)
+      const rawChildren = getChildren(rawNode as R | G)
       if (rawChildren !== undefined) {
         treeNode.children = createTreeNodes<R, G, I>(
           rawChildren,
           treeNodeMap,
           levelTreeNodeMap,
-          options,
-          treeNode,
+          nodeProto,
+          getChildren,
+          (treeNode as unknown) as TreeNode<R, G>,
           level + 1
         )
       }
@@ -112,17 +90,35 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     getIsGroup = isGroup,
     getKey = defaultGetKey
   } = options
+  const nodeProto = {
+    ...moveMethods,
+    get key (): Key {
+      // do not pass parent or related things to it
+      // the key need to be specified explicitly
+      return getKey((this as any).rawNode)
+    },
+    get disabled (): boolean {
+      return getDisabled((this as any).rawNode)
+    },
+    get isGroup (): boolean {
+      return getIsGroup((this as any).rawNode)
+    },
+    get isLeaf (): boolean {
+      return isLeaf((this as any).rawNode)
+    },
+    get shallowLoaded (): boolean {
+      return isShallowLoaded((this as any).rawNode)
+    },
+    get ignored (): boolean {
+      return getIgnored((this as any).rawNode)
+    }
+  }
   const treeNodes: Array<TreeNode<R, G, I>> = createTreeNodes<R, G, I>(
     rawNodes,
     treeNodeMap,
     levelTreeNodeMap,
-    {
-      getDisabled,
-      getIgnored,
-      getChildren,
-      getIsGroup,
-      getKey
-    }
+    nodeProto,
+    getChildren
   )
   // get only raw node
   function getNode<T> (
