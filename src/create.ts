@@ -91,35 +91,38 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     getIsGroup = isGroup,
     getKey = defaultGetKey
   } = options
-  const nodeProto = {
-    ...moveMethods,
-    contains<R, G, I>(
-      this: TreeNode<R, G, I>,
-      node: TreeNode<R, G, I>
-    ): boolean {
-      return contains(this, node)
+  const nodeProto = Object.assign(
+    {
+      get key (): Key {
+        // do not pass parent or related things to it
+        // the key need to be specified explicitly
+        return getKey((this as any).rawNode)
+      },
+      get disabled (): boolean {
+        return getDisabled((this as any).rawNode)
+      },
+      get isGroup (): boolean {
+        return getIsGroup((this as any).rawNode)
+      },
+      get isLeaf (): boolean {
+        return isLeaf((this as any).rawNode)
+      },
+      get shallowLoaded (): boolean {
+        return isShallowLoaded((this as any).rawNode)
+      },
+      get ignored (): boolean {
+        return getIgnored((this as any).rawNode)
+      },
+      contains<R, G, I>(
+        this: TreeNode<R, G, I>,
+        node: TreeNode<R, G, I>
+      ): boolean {
+        return contains(this, node)
+      }
     },
-    get key (): Key {
-      // do not pass parent or related things to it
-      // the key need to be specified explicitly
-      return getKey((this as any).rawNode)
-    },
-    get disabled (): boolean {
-      return getDisabled((this as any).rawNode)
-    },
-    get isGroup (): boolean {
-      return getIsGroup((this as any).rawNode)
-    },
-    get isLeaf (): boolean {
-      return isLeaf((this as any).rawNode)
-    },
-    get shallowLoaded (): boolean {
-      return isShallowLoaded((this as any).rawNode)
-    },
-    get ignored (): boolean {
-      return getIgnored((this as any).rawNode)
-    }
-  }
+    moveMethods
+  )
+
   const treeNodes: Array<TreeNode<R, G, I>> = createTreeNodes<R, G, I>(
     rawNodes,
     treeNodeMap,
@@ -135,7 +138,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     if (key === null || key === undefined) return null
     const tmNode = treeNodeMap.get(key)
     if (tmNode && !tmNode.isGroup && !tmNode.ignored) {
-      return tmNode as unknown as TreeNode<R>
+      return (tmNode as unknown) as TreeNode<R>
     }
     return null
   }
@@ -147,7 +150,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     if (key === null || key === undefined) return null
     const tmNode = treeNodeMap.get(key)
     if (tmNode && !tmNode.ignored) {
-      return tmNode as unknown as TreeNode<R, G>
+      return (tmNode as unknown) as TreeNode<R, G>
     }
     return null
   }
