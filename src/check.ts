@@ -15,11 +15,11 @@ export class SubtreeNotLoadedError extends Error {
   }
 }
 
-function getExtendedCheckedKeySetAfterCheck (
+function getExtendedCheckedKeySetAfterCheck<R, G, I> (
   checkKeys: Key[],
   currentCheckedKeys: Key[],
   leafOnly: boolean,
-  treeMate: TreeMate
+  treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   return getExtendedCheckedKeySet(
     currentCheckedKeys.concat(checkKeys),
@@ -28,9 +28,9 @@ function getExtendedCheckedKeySetAfterCheck (
   )
 }
 
-function getAvailableAscendantNodeSet (
+function getAvailableAscendantNodeSet<R, G, I> (
   uncheckedKeys: Key[],
-  treeMate: TreeMate
+  treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   const visitedKeys: Set<Key> = new Set()
   uncheckedKeys.forEach((uncheckedKey) => {
@@ -50,11 +50,11 @@ function getAvailableAscendantNodeSet (
   return visitedKeys
 }
 
-function getExtendedCheckedKeySetAfterUncheck (
+function getExtendedCheckedKeySetAfterUncheck<R, G, I> (
   uncheckedKeys: Key[],
   currentCheckedKeys: Key[],
   leafOnly: boolean,
-  treeMate: TreeMate
+  treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   const extendedCheckedKeySet = getExtendedCheckedKeySet(
     currentCheckedKeys,
@@ -78,7 +78,7 @@ function getExtendedCheckedKeySetAfterUncheck (
   return extendedCheckedKeySet
 }
 
-export function getCheckedKeys (
+export function getCheckedKeys<R, G, I> (
   options: {
     checkedKeys: Key[]
     indeterminateKeys: Key[]
@@ -90,7 +90,7 @@ export function getCheckedKeys (
     // We only want the data model value to be leaf only.
     leafOnly: boolean
   },
-  treeMate: TreeMate
+  treeMate: TreeMate<R, G, I>
 ): MergedKeys {
   const {
     checkedKeys,
@@ -158,7 +158,7 @@ export function getCheckedKeys (
   for (let level = maxLevel; level >= 0; level -= 1) {
     // it should exists, nor it is a bug
     const levelTreeNodes = levelTreeNodeMap.get(level)
-    for (const levelTreeNode of levelTreeNodes as TreeNode[]) {
+    for (const levelTreeNode of levelTreeNodes as Array<TreeNode<R, G, I>>) {
       if (levelTreeNode.disabled || !levelTreeNode.shallowLoaded) {
         continue
       }
@@ -167,7 +167,7 @@ export function getCheckedKeys (
         let fullyChecked = true
         let partialChecked = false
         // it is shallow loaded, so `children` must exist
-        for (const childNode of levelTreeNode.children as TreeNode[]) {
+        for (const childNode of levelTreeNode.children as Array<TreeNode<R, G, I>>) {
           const childKey = childNode.key
           if (childNode.disabled) continue
           if (syntheticCheckedKeySet.has(childKey)) {
@@ -199,10 +199,10 @@ export function getCheckedKeys (
   }
 }
 
-export function getExtendedCheckedKeySet (
+export function getExtendedCheckedKeySet<R, G, I> (
   checkedKeys: Key[],
   leafOnly: boolean,
-  treeMate: TreeMate
+  treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   const { treeNodeMap } = treeMate
   const visitedKeySet: Set<Key> = new Set()

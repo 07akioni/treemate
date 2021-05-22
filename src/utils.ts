@@ -16,9 +16,9 @@ export const TRAVERSE_COMMAND = {
   STOP: 'STOP'
 }
 
-export function traverse (
-  treeNode: TreeNode,
-  callback: (treeNode: TreeNode) => any
+export function traverse<R, G, I> (
+  treeNode: TreeNode<R, G, I>,
+  callback: (treeNode: TreeNode<R, G, I>) => any
 ): void {
   const command = callback(treeNode)
   if (treeNode.children !== undefined && command !== TRAVERSE_COMMAND.STOP) {
@@ -26,26 +26,26 @@ export function traverse (
   }
 }
 
-export function getNonLeafKeys (
-  treeNodes: TreeNode[],
+export function getNonLeafKeys<R, G, I> (
+  treeNodes: Array<TreeNode<R, G, I>>,
   options: GetNonLeafKeysOptions = {}
 ): Key[] {
   const { preserveGroup = false } = options
   const keys: Key[] = []
   const cb = preserveGroup
-    ? (node: TreeNode) => {
+    ? (node: TreeNode<R, G, I>) => {
       if (!node.isLeaf) {
         keys.push(node.key)
-        traverse(node.children as TreeNode[])
+        traverse(node.children as Array<TreeNode<R, G, I>>)
       }
     }
-    : (node: TreeNode) => {
+    : (node: TreeNode<R, G, I>) => {
       if (!node.isLeaf) {
         if (!node.isGroup) keys.push(node.key)
-        traverse(node.children as TreeNode[])
+        traverse(node.children as Array<TreeNode<R, G, I>>)
       }
     }
-  function traverse (nodes: TreeNode[]): void {
+  function traverse (nodes: Array<TreeNode<R, G, I>>): void {
     nodes.forEach(cb)
   }
   traverse(treeNodes)
