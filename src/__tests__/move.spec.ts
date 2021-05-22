@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createTreeMate } from '@/index'
-import { TreeNode } from '@/interface'
 
 import {
   basicMoveTree,
@@ -35,7 +34,7 @@ describe('move', () => {
   })
   it('moves', () => {
     const { getNode } = treeMate
-    let cursor = getNode('0') as TreeNode
+    let cursor = getNode('0')!
     cursor = cursor.getNext()!
     expect(cursor.key).toEqual('2')
     expect(cursor.getChild()).toEqual(null)
@@ -56,7 +55,7 @@ describe('move', () => {
     expect(cursor.getPrev()).toEqual(null)
   })
   it('moves by key', () => {
-    let cursor = treeMate.treeNodeMap.get('0') as TreeNode
+    let cursor = treeMate.treeNodeMap.get('0')!
     const { getChild, getParent, getNext, getPrev } = treeMate
     cursor = getNext('0')!
     expect(cursor.key).toEqual('2')
@@ -91,6 +90,16 @@ describe('move', () => {
     expect(getParent(undefined)).toEqual(null)
     expect(getNext(undefined)).toEqual(null)
     expect(getPrev(undefined)).toEqual(null)
+  })
+  it('includeDisabled=false', () => {
+    const { getNode } = treeMate
+    let cursor = getNode('0')!
+    cursor = cursor.getPrev({ includeDisabled: true })!
+    expect(cursor.key).toEqual('-1')
+    cursor = cursor
+      .getNext({ includeDisabled: true })!
+      .getNext({ includeDisabled: true })!
+    expect(cursor.key).toEqual('1')
   })
   describe('moves with group', () => {
     const treeMate = createTreeMate(groupMoveTree)
