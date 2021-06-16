@@ -16,13 +16,13 @@ export const TRAVERSE_COMMAND = {
   STOP: 'STOP'
 }
 
-export function traverse<R, G, I> (
+export function traverseWithCb<R, G, I> (
   treeNode: TreeNode<R, G, I>,
   callback: (treeNode: TreeNode<R, G, I>) => any
 ): void {
   const command = callback(treeNode)
   if (treeNode.children !== undefined && command !== TRAVERSE_COMMAND.STOP) {
-    treeNode.children.forEach((childNode) => traverse(childNode, callback))
+    treeNode.children.forEach((childNode) => traverseWithCb(childNode, callback))
   }
 }
 

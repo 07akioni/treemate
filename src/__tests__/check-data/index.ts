@@ -129,5 +129,48 @@ export const extendedCheckedKeysTestTree = [
         ]
       }
     ]
+  },
+  {
+    key: '2',
+    children: [
+      {
+        key: '2-0'
+      },
+      {
+        disabled: true,
+        key: '2-1',
+        children: [
+          {
+            key: '2-1-0'
+          },
+          {
+            key: '2-1-1'
+          }
+        ]
+      }
+    ]
+  }
+]
+
+export const cascadeDisabledTestTree = [
+  {
+    key: '1',
+    children: [
+      {
+        key: '1-0'
+      },
+      {
+        disabled: true,
+        key: '1-1',
+        children: [
+          {
+            key: '1-1-0'
+          },
+          {
+            key: '1-1-1'
+          }
+        ]
+      }
+    ]
   }
 ]
