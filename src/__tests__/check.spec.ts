@@ -1,8 +1,10 @@
 import { getExtendedCheckedKeySet } from '@/check'
 import { createTreeMate } from '@/index'
+import { RawNode } from '@/interface'
 
 import {
   basicTree,
+  cascadeDisabledTestTree,
   disabledNodeTestTree,
   extendedCheckedKeysTestTree
 } from './check-data/index'
@@ -26,6 +28,10 @@ describe('check', () => {
       {
         checkedKeys: ['1-1'],
         extendedCheckedKeys: ['1-1', '1-1-0']
+      },
+      {
+        checkedKeys: ['2', '2-1'],
+        extendedCheckedKeys: ['2', '2-0', '2-1']
       }
     ].forEach((data, index) => {
       it('extended to all avaiabled children #' + String(index + 1), () => {
@@ -195,10 +201,20 @@ describe('check', () => {
           indeterminateKeys: []
         },
         tree: disabledNodeTestTree
+      },
+      {
+        explain: 'cascade disabled',
+        cascade: true,
+        input: ['1', '1-1'],
+        output: {
+          checkedKeys: ['1', '1-0', '1-1'],
+          indeterminateKeys: []
+        },
+        tree: cascadeDisabledTestTree
       }
     ].forEach((testCase) => {
       it(testCase.explain, () => {
-        const treeMate = createTreeMate(testCase.tree)
+        const treeMate = createTreeMate<RawNode>(testCase.tree)
         expectCheckedStatusSame(
           treeMate.getCheckedKeys(testCase.input, {
             cascade: testCase.cascade

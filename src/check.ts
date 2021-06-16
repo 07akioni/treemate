@@ -3,7 +3,7 @@ import {
   isExpilicitlyNotLoaded,
   merge,
   minus,
-  traverse,
+  traverseWithCb,
   TRAVERSE_COMMAND
 } from './utils'
 
@@ -72,7 +72,9 @@ function getExtendedCheckedKeySetAfterUncheck<R, G, I> (
   )
   const keysToRemove: Key[] = []
   extendedCheckedKeySet.forEach((key) => {
-    if (extendedKeySetToUncheck.has(key) || ascendantKeySet.has(key)) { keysToRemove.push(key) }
+    if (extendedKeySetToUncheck.has(key) || ascendantKeySet.has(key)) {
+      keysToRemove.push(key)
+    }
   })
   keysToRemove.forEach((key) => extendedCheckedKeySet.delete(key))
   return extendedCheckedKeySet
@@ -167,7 +169,9 @@ export function getCheckedKeys<R, G, I> (
         let fullyChecked = true
         let partialChecked = false
         // it is shallow loaded, so `children` must exist
-        for (const childNode of levelTreeNode.children as Array<TreeNode<R, G, I>>) {
+        for (const childNode of levelTreeNode.children as Array<
+        TreeNode<R, G, I>
+        >) {
           const childKey = childNode.key
           if (childNode.disabled) continue
           if (syntheticCheckedKeySet.has(childKey)) {
@@ -210,19 +214,18 @@ export function getExtendedCheckedKeySet<R, G, I> (
   checkedKeys.forEach((checkedKey) => {
     const checkedTreeNode = treeNodeMap.get(checkedKey)
     if (checkedTreeNode !== undefined) {
-      traverse(checkedTreeNode, (treeNode) => {
+      traverseWithCb(checkedTreeNode, (treeNode) => {
+        if (treeNode.disabled) {
+          return TRAVERSE_COMMAND.STOP
+        }
         const { key } = treeNode
         if (visitedKeySet.has(key)) return
         visitedKeySet.add(key)
-        if (treeNode.disabled) {
-          return TRAVERSE_COMMAND.STOP
-        } else {
-          if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
-            throw new SubtreeNotLoadedError()
-          }
-          if (!leafOnly || (leafOnly && treeNode.isLeaf)) {
-            extendedKeySet.add(key)
-          }
+        if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
+          throw new SubtreeNotLoadedError()
+        }
+        if (!leafOnly || (leafOnly && treeNode.isLeaf)) {
+          extendedKeySet.add(key)
         }
       })
       if (leafOnly && !checkedTreeNode.isLeaf) {
