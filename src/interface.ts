@@ -72,6 +72,7 @@ export interface MergedPath<R, G = R> {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface GetPathOptions<T extends boolean> {
   includeGroup?: T
+  includeSelf?: boolean
 }
 
 export interface InputMergedKeys {
