@@ -365,7 +365,7 @@ getIndex(flattenedNodes[0].key) === 0
 
 ### Get Path of a Node
 
-#### `TreeMate.getPath(key)`
+#### `TreeMate.getPath(key, options?)`
 
 Get the path from root to the node corresponding to the `key`. The return value looks like
 
@@ -378,6 +378,8 @@ interface MergedPath {
 ```
 
 The `keyPath` is the `key` of the nodes in path. The `treeNodePath` is the node path. `treeNode` is the `TreeMateNode` corresponding to the `key`.
+
+`options` looks like `{ includeSelf?: boolean, includeGroup?: boolean }`, by default `includeSelf` is true and `includeGroup` is false.
 
 ### Get First Available Node of the Tree
 

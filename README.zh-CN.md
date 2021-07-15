@@ -365,7 +365,7 @@ getIndex(flattenedNodes[0].key) === 0
 
 ### 获取节点的路径
 
-#### `TreeMate.getPath(key)`
+#### `TreeMate.getPath(key, options)`
 
 获取从根到该 `key` 对应节点的路径。返回值形如
 
@@ -378,6 +378,9 @@ interface MergedPath {
 ```
 
 其中 `keyPath` 为路径中各个节点的 `key`。其中 `treeNodePath` 为节点路径。`treeNode` 该 `key` 对应的 `TreeMateNode`。
+
+`options` 形如 `{ includeSelf?: boolean, includeGroup?: boolean }`，默认 `includeSelf` 为 true，`includeGroup` 为 false。
+
 
 ### 获取树第一个可用的节点
 
