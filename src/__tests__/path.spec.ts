@@ -26,6 +26,24 @@ describe('getPath', () => {
       '2-1-1'
     ])
   })
+  it('works with `includeSelf`', () => {
+    const treeMate = createTreeMate(groupMoveTree)
+    expect(
+      treeMate.getPath('2-1-1', {
+        includeSelf: false
+      }).keyPath
+    ).toEqual(['2'])
+    expect(
+      treeMate.getPath('2', {
+        includeSelf: false
+      }).keyPath
+    ).toEqual([])
+    expect(
+      treeMate.getPath(null, {
+        includeSelf: false
+      }).keyPath
+    ).toEqual([])
+  })
   it('returns no path for ignored node', () => {
     const tm = createTreeMate(tree2, {
       getIgnored (node) {

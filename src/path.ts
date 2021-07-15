@@ -8,7 +8,7 @@ import {
 
 export function getPath<R, G, I, T extends boolean> (
   key: Key | null | undefined,
-  { includeGroup = false as any }: GetPathOptions<T>,
+  { includeGroup = false as any, includeSelf = true }: GetPathOptions<T>,
   treeMate: TreeMate<R, G, I>
 ): T extends true ? MergedPath<R, G> : MergedPath<R, R> {
   const treeNodeMap = treeMate.treeNodeMap
@@ -30,6 +30,7 @@ export function getPath<R, G, I, T extends boolean> (
     treeNode = treeNode.parent as any
   }
   mergedPath.treeNodePath.reverse()
+  if (!includeSelf) mergedPath.treeNodePath.pop()
   mergedPath.keyPath = mergedPath.treeNodePath.map((treeNode) => treeNode.key)
   return mergedPath as any
 }
