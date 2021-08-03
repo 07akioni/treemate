@@ -259,6 +259,7 @@ Param `options` looks like
 interface CheckOptions {
   cascade?: boolean // cascade check status, default is true
   leafOnly?: boolean // whether only allow leaf node being checked, default is false
+  checkStrategy?: string // set show strategy when checked 'all' | 'parent' | 'child'
 }
 ```
 

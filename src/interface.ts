@@ -83,6 +83,7 @@ export interface InputMergedKeys {
 export interface CheckOptions {
   cascade?: boolean
   leafOnly?: boolean
+  checkStrategy?: string
 }
 
 type KeyToNode<R, G> = <T extends Key | null | undefined>(
