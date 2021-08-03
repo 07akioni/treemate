@@ -102,36 +102,24 @@ export function getCheckedKeys<R, G, I> (
     indeterminateKeys,
     cascade,
     leafOnly,
-    checkStrategy,
+    checkStrategy
   } = options
   if (!cascade) {
     if (keysToCheck !== undefined) {
-      const result = {
-        checkedKeys: handleCheckStrategy({
-          checkedKeys: merge(checkedKeys, keysToCheck),
-          indeterminateKeys: Array.from(indeterminateKeys)
-        }, checkStrategy, treeMate),
-        indeterminateKeys: Array.from(indeterminateKeys),
+      return {
+        checkedKeys: merge(checkedKeys, keysToCheck),
+        indeterminateKeys: Array.from(indeterminateKeys)
       }
-      return result
     } else if (keysToUncheck !== undefined) {
-      const result = {
-        checkedKeys: handleCheckStrategy({
-          checkedKeys: minus(checkedKeys, keysToUncheck),
-          indeterminateKeys: Array.from(indeterminateKeys)
-        }, checkStrategy, treeMate),
-        indeterminateKeys: Array.from(indeterminateKeys),
+      return {
+        checkedKeys: minus(checkedKeys, keysToUncheck),
+        indeterminateKeys: Array.from(indeterminateKeys)
       }
-      return result
     } else {
-      const result = {
-        checkedKeys: handleCheckStrategy({
-          checkedKeys: Array.from(checkedKeys),
-          indeterminateKeys: Array.from(indeterminateKeys)
-        }, checkStrategy, treeMate),
-        indeterminateKeys: Array.from(indeterminateKeys),
+      return {
+        checkedKeys: Array.from(checkedKeys),
+        indeterminateKeys: Array.from(indeterminateKeys)
       }
-      return result
     }
   }
   const { levelTreeNodeMap } = treeMate
@@ -216,12 +204,12 @@ export function getCheckedKeys<R, G, I> (
       ),
       indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
     }, checkStrategy, treeMate),
-    indeterminateKeys: Array.from(syntheticIndeterminateKeySet),
+    indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
   }
   return result
 }
 
-function handleCheckStrategy<R, G, I> (res: MergedKeys, checkStrategy: string, treeMate: TreeMate<R, G, I>): Key[]  {
+function handleCheckStrategy<R, G, I> (res: MergedKeys, checkStrategy: string, treeMate: TreeMate<R, G, I>): Key[] {
   let result: Key[] = []
   switch (checkStrategy) {
     case 'all':

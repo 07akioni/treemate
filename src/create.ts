@@ -218,13 +218,14 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
       checkedKeys: Key[] | InputMergedKeys | null | undefined,
       options: CheckOptions = {}
     ) {
-      const { cascade = true, leafOnly = false } = options
+      const { cascade = true, leafOnly = false, checkStrategy = 'all' } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
           indeterminateKeys: unwrapIndeterminateKeys(checkedKeys),
           cascade,
-          leafOnly
+          leafOnly,
+          checkStrategy
         },
         treemate
       )
@@ -234,7 +235,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
       checkedKeys: Key[] | InputMergedKeys,
       options: CheckOptions = {}
     ) {
-      const { cascade = true, leafOnly = false } = options
+      const { cascade = true, leafOnly = false, checkStrategy = 'all' } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
@@ -244,7 +245,8 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
               ? []
               : toArray(keysToCheck),
           cascade,
-          leafOnly
+          leafOnly,
+          checkStrategy
         },
         treemate
       )
@@ -254,7 +256,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
       checkedKeys: Key[] | InputMergedKeys,
       options: CheckOptions = {}
     ) {
-      const { cascade = true, leafOnly = false } = options
+      const { cascade = true, leafOnly = false, checkStrategy = 'all' } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
@@ -264,7 +266,8 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
               ? []
               : toArray(keysToUncheck),
           cascade,
-          leafOnly
+          leafOnly,
+          checkStrategy
         },
         treemate
       )
