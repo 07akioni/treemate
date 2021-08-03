@@ -91,6 +91,7 @@ export function getCheckedKeys<R, G, I> (
     // Since view should always be sync with the input data.
     // We only want the data model value to be leaf only.
     leafOnly: boolean
+    checkStrategy: string
   },
   treeMate: TreeMate<R, G, I>
 ): MergedKeys {
@@ -100,24 +101,37 @@ export function getCheckedKeys<R, G, I> (
     keysToUncheck,
     indeterminateKeys,
     cascade,
-    leafOnly
+    leafOnly,
+    checkStrategy,
   } = options
   if (!cascade) {
     if (keysToCheck !== undefined) {
-      return {
-        checkedKeys: merge(checkedKeys, keysToCheck),
-        indeterminateKeys: Array.from(indeterminateKeys)
+      const result = {
+        checkedKeys: handleCheckStrategy({
+          checkedKeys: merge(checkedKeys, keysToCheck),
+          indeterminateKeys: Array.from(indeterminateKeys)
+        }, checkStrategy, treeMate),
+        indeterminateKeys: Array.from(indeterminateKeys),
       }
+      return result
     } else if (keysToUncheck !== undefined) {
-      return {
-        checkedKeys: minus(checkedKeys, keysToUncheck),
-        indeterminateKeys: Array.from(indeterminateKeys)
+      const result = {
+        checkedKeys: handleCheckStrategy({
+          checkedKeys: minus(checkedKeys, keysToUncheck),
+          indeterminateKeys: Array.from(indeterminateKeys)
+        }, checkStrategy, treeMate),
+        indeterminateKeys: Array.from(indeterminateKeys),
       }
+      return result
     } else {
-      return {
-        checkedKeys: Array.from(checkedKeys),
-        indeterminateKeys: Array.from(indeterminateKeys)
+      const result = {
+        checkedKeys: handleCheckStrategy({
+          checkedKeys: Array.from(checkedKeys),
+          indeterminateKeys: Array.from(indeterminateKeys)
+        }, checkStrategy, treeMate),
+        indeterminateKeys: Array.from(indeterminateKeys),
       }
+      return result
     }
   }
   const { levelTreeNodeMap } = treeMate
@@ -195,12 +209,61 @@ export function getCheckedKeys<R, G, I> (
       }
     }
   }
-  return {
-    checkedKeys: Array.from(
-      leafOnly ? (leafCheckedKeySet as Set<Key>) : syntheticCheckedKeySet
-    ),
-    indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
+  const result = {
+    checkedKeys: handleCheckStrategy({
+      checkedKeys: Array.from(
+        leafOnly ? (leafCheckedKeySet as Set<Key>) : syntheticCheckedKeySet
+      ),
+      indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
+    }, checkStrategy, treeMate),
+    indeterminateKeys: Array.from(syntheticIndeterminateKeySet),
   }
+  return result
+}
+
+function handleCheckStrategy<R, G, I> (res: MergedKeys, checkStrategy: string, treeMate: TreeMate<R, G, I>): Key[]  {
+  let result: Key[] = []
+  switch (checkStrategy) {
+    case 'all':
+      result = res.checkedKeys
+      break
+    case 'child':
+      res.checkedKeys.forEach((v) => {
+        const node = treeMate.getNode(v)
+        if (node?.isLeaf) {
+          result.push(v)
+        }
+      })
+      break
+    case 'parent':
+      res.checkedKeys.forEach((v) => {
+        const node = treeMate.getNode(v)
+        if (node !== null) {
+          const flag = isContainChild(node, res.indeterminateKeys)
+          if (node?.parent === null || !flag) {
+            result.push(v)
+          }
+        }
+      })
+      break
+    default:
+      result = res.checkedKeys
+      break
+  }
+  return result
+}
+function isContainChild<R, G, I> (
+  node: TreeNode<R, G, I>,
+  indeterminateKeys: Key[]
+): boolean {
+  const parent = node.parent
+  if (parent !== null) {
+    const flag = indeterminateKeys.includes(parent.key)
+    if (!flag) {
+      return true
+    }
+  }
+  return false
 }
 
 export function getExtendedCheckedKeySet<R, G, I> (
