@@ -190,68 +190,28 @@ export function getCheckedKeys<R, G, I> (
           }
         }
         if (fullyChecked) {
-          syntheticCheckedKeySet.add(levelTreeNodeKey)
+          if (checkStrategy === 'child') {
+            syntheticCheckedKeySet.delete(levelTreeNodeKey)
+          } else {
+            if (checkStrategy === 'parent') {
+              levelTreeNode.children?.forEach(v => {
+                syntheticCheckedKeySet.delete(v.key)
+              })
+            }
+            syntheticCheckedKeySet.add(levelTreeNodeKey)
+          }
         } else if (partialChecked) {
           syntheticIndeterminateKeySet.add(levelTreeNodeKey)
         }
       }
     }
   }
-  const result = {
-    checkedKeys: handleCheckStrategy({
-      checkedKeys: Array.from(
-        leafOnly ? (leafCheckedKeySet as Set<Key>) : syntheticCheckedKeySet
-      ),
-      indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
-    }, checkStrategy, treeMate),
+  return {
+    checkedKeys: Array.from(
+      leafOnly ? (leafCheckedKeySet as Set<Key>) : syntheticCheckedKeySet
+    ),
     indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
   }
-  return result
-}
-
-function handleCheckStrategy<R, G, I> (res: MergedKeys, checkStrategy: string, treeMate: TreeMate<R, G, I>): Key[] {
-  let result: Key[] = []
-  switch (checkStrategy) {
-    case 'all':
-      result = res.checkedKeys
-      break
-    case 'child':
-      res.checkedKeys.forEach((v) => {
-        const node = treeMate.getNode(v)
-        if (node?.isLeaf) {
-          result.push(v)
-        }
-      })
-      break
-    case 'parent':
-      res.checkedKeys.forEach((v) => {
-        const node = treeMate.getNode(v)
-        if (node !== null) {
-          const flag = isContainChild(node, res.indeterminateKeys)
-          if (node?.parent === null || !flag) {
-            result.push(v)
-          }
-        }
-      })
-      break
-    default:
-      result = res.checkedKeys
-      break
-  }
-  return result
-}
-function isContainChild<R, G, I> (
-  node: TreeNode<R, G, I>,
-  indeterminateKeys: Key[]
-): boolean {
-  const parent = node.parent
-  if (parent !== null) {
-    const flag = indeterminateKeys.includes(parent.key)
-    if (!flag) {
-      return true
-    }
-  }
-  return false
 }
 
 export function getExtendedCheckedKeySet<R, G, I> (

@@ -274,6 +274,26 @@ describe('check', () => {
         }
       },
       {
+        explain: 'case1 (checkStrategy is parent)',
+        checkStrategy: 'parent',
+        checkedKeys: [],
+        checkedKey: '0-0-0',
+        output: {
+          checkedKeys: ['0-0-0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case1 (checkStrategy is child)',
+        checkStrategy: 'child',
+        checkedKeys: [],
+        checkedKey: '0-0-0',
+        output: {
+          checkedKeys: ['0-0-0-0', '0-0-0-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
         explain: 'case1 (no cascade, dupe)',
         cascade: false,
         checkedKeys: ['0-0-0'],
@@ -313,6 +333,26 @@ describe('check', () => {
         }
       },
       {
+        explain: 'case2 (checkStrategy is parent)',
+        checkStrategy: 'parent',
+        checkedKeys: [],
+        checkedKey: '0-1',
+        output: {
+          checkedKeys: ['0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case2 (checkStrategy is child)',
+        checkStrategy: 'child',
+        checkedKeys: [],
+        checkedKey: '0-1',
+        output: {
+          checkedKeys: ['0-1-0', '0-1-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
         explain: 'case3',
         checkedKeys: [],
         checkedKey: '0-1-0',
@@ -339,6 +379,26 @@ describe('check', () => {
         output: {
           checkedKeys: ['0-1-0'],
           indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case3 (checkStrategy is parent)',
+        checkStrategy: 'parent',
+        checkedKeys: [],
+        checkedKey: '0-1-0',
+        output: {
+          checkedKeys: ['0-1-0'],
+          indeterminateKeys: ['0', '0-1']
+        }
+      },
+      {
+        explain: 'case3 (checkStrategy is child)',
+        checkStrategy: 'child',
+        checkedKeys: [],
+        checkedKey: '0-1-0',
+        output: {
+          checkedKeys: ['0-1-0'],
+          indeterminateKeys: ['0', '0-1']
         }
       },
       {
@@ -371,6 +431,26 @@ describe('check', () => {
         }
       },
       {
+        explain: 'case4 (checkStrategy is parent)',
+        checkStrategy: 'parent',
+        checkedKeys: ['0-0-0-0'],
+        checkedKey: '0-0-0-1',
+        output: {
+          checkedKeys: ['0-0-0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case4 (checkStrategy is child)',
+        checkStrategy: 'child',
+        checkedKeys: ['0-0-0-0'],
+        checkedKey: '0-0-0-1',
+        output: {
+          checkedKeys: ['0-0-0-0', '0-0-0-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
         explain: 'case5',
         checkedKeys: ['0-0', '0-0-0-0'],
         checkedKey: '0-0-0-1',
@@ -392,6 +472,26 @@ describe('check', () => {
       {
         explain: 'case5 (no cascade)',
         cascade: false,
+        checkedKeys: ['0-0', '0-0-0-0'],
+        checkedKey: '0-0-0-1',
+        output: {
+          checkedKeys: ['0-0', '0-0-0-0', '0-0-0-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case5 (checkStrategy is parent)',
+        checkStrategy: 'parent',
+        checkedKeys: ['0-0', '0-0-0-0'],
+        checkedKey: '0-0-0-1',
+        output: {
+          checkedKeys: ['0-0', '0-0-0'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case5 (checkStrategy is child)',
+        checkStrategy: 'child',
         checkedKeys: ['0-0', '0-0-0-0'],
         checkedKey: '0-0-0-1',
         output: {
@@ -463,7 +563,8 @@ describe('check', () => {
         expectCheckedStatusSame(
           treeMate.check(testCase.checkedKey, testCase.checkedKeys, {
             cascade: testCase.cascade,
-            leafOnly: testCase.leafOnly
+            leafOnly: testCase.leafOnly,
+            checkStrategy: testCase.checkStrategy
           }),
           testCase.output
         )
@@ -478,7 +579,8 @@ describe('check', () => {
             },
             {
               cascade: testCase.cascade,
-              leafOnly: testCase.leafOnly
+              leafOnly: testCase.leafOnly,
+              checkStrategy: testCase.checkStrategy
             }
           ),
           testCase.output
@@ -514,6 +616,26 @@ describe('check', () => {
         uncheckedKey: '0-0-0',
         output: {
           checkedKeys: ['0-0-0-0', '0-0-0-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case1 (checkStrategy is parent)',
+        checkStrategy: 'parent',
+        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
+        uncheckedKey: '0-0-0',
+        output: {
+          checkedKeys: [],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case1 (checkStrategy is child)',
+        checkStrategy: 'child',
+        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
+        uncheckedKey: '0-0-0',
+        output: {
+          checkedKeys: [],
           indeterminateKeys: []
         }
       },
@@ -554,6 +676,26 @@ describe('check', () => {
         output: {
           checkedKeys: ['0-0-0', '0-0-0-1'],
           indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'case2 (checkStrategy is parent)',
+        checkStrategy: 'parent',
+        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
+        uncheckedKey: '0-0-0-0',
+        output: {
+          checkedKeys: ['0-0-0-1'],
+          indeterminateKeys: ['0-0-0']
+        }
+      },
+      {
+        explain: 'case2 (checkStrategy is child)',
+        checkStrategy: 'child',
+        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
+        uncheckedKey: '0-0-0-0',
+        output: {
+          checkedKeys: ['0-0-0-1'],
+          indeterminateKeys: ['0-0-0']
         }
       },
       {
@@ -620,7 +762,8 @@ describe('check', () => {
         expectCheckedStatusSame(
           treeMate.uncheck(testCase.uncheckedKey, testCase.checkedKeys, {
             cascade: testCase.cascade,
-            leafOnly: testCase.leafOnly
+            leafOnly: testCase.leafOnly,
+            checkStrategy: testCase.checkStrategy
           }),
           testCase.output
         )
