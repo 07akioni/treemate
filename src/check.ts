@@ -194,7 +194,8 @@ export function getCheckedKeys<R, G, I> (
             syntheticCheckedKeySet.delete(levelTreeNodeKey)
           } else {
             if (checkStrategy === 'parent') {
-              levelTreeNode.children?.forEach(v => {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              levelTreeNode.children!.forEach(v => {
                 syntheticCheckedKeySet.delete(v.key)
               })
             }
