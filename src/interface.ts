@@ -82,7 +82,6 @@ export interface InputMergedKeys {
 
 export interface CheckOptions {
   cascade?: boolean
-  leafOnly?: boolean
   checkStrategy?: string
 }
 

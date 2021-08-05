@@ -18,12 +18,12 @@ export class SubtreeNotLoadedError extends Error {
 function getExtendedCheckedKeySetAfterCheck<R, G, I> (
   checkKeys: Key[],
   currentCheckedKeys: Key[],
-  leafOnly: boolean,
+  checkStrategy: string,
   treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   return getExtendedCheckedKeySet(
     currentCheckedKeys.concat(checkKeys),
-    leafOnly,
+    checkStrategy,
     treeMate
   )
 }
@@ -53,17 +53,17 @@ function getAvailableAscendantNodeSet<R, G, I> (
 function getExtendedCheckedKeySetAfterUncheck<R, G, I> (
   uncheckedKeys: Key[],
   currentCheckedKeys: Key[],
-  leafOnly: boolean,
+  checkStrategy: string,
   treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   const extendedCheckedKeySet = getExtendedCheckedKeySet(
     currentCheckedKeys,
-    leafOnly,
+    checkStrategy,
     treeMate
   )
   const extendedKeySetToUncheck = getExtendedCheckedKeySet(
     uncheckedKeys,
-    leafOnly,
+    checkStrategy,
     treeMate
   )
   const ascendantKeySet: Set<Key> = getAvailableAscendantNodeSet(
@@ -87,10 +87,6 @@ export function getCheckedKeys<R, G, I> (
     keysToCheck?: Key[]
     keysToUncheck?: Key[]
     cascade: boolean
-    // `leafOnly` only works when `keysToCheck` or `keysToUncheck` is set.
-    // Since view should always be sync with the input data.
-    // We only want the data model value to be leaf only.
-    leafOnly: boolean
     checkStrategy: string
   },
   treeMate: TreeMate<R, G, I>
@@ -101,7 +97,6 @@ export function getCheckedKeys<R, G, I> (
     keysToUncheck,
     indeterminateKeys,
     cascade,
-    leafOnly,
     checkStrategy
   } = options
   if (!cascade) {
@@ -128,25 +123,25 @@ export function getCheckedKeys<R, G, I> (
     extendedCheckedKeySet = getExtendedCheckedKeySetAfterUncheck(
       keysToUncheck,
       checkedKeys,
-      leafOnly,
+      checkStrategy,
       treeMate
     )
   } else if (keysToCheck !== undefined) {
     extendedCheckedKeySet = getExtendedCheckedKeySetAfterCheck(
       keysToCheck,
       checkedKeys,
-      leafOnly,
+      checkStrategy,
       treeMate
     )
   } else {
     extendedCheckedKeySet = getExtendedCheckedKeySet(
       checkedKeys,
-      leafOnly,
+      checkStrategy,
       treeMate
     )
   }
 
-  const leafCheckedKeySet = leafOnly ? new Set(extendedCheckedKeySet) : null
+  const leafCheckedKeySet = checkStrategy === 'child' ? new Set(extendedCheckedKeySet) : null
   const syntheticCheckedKeySet: Set<Key> = extendedCheckedKeySet
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
   const maxLevel = Math.max.apply(null, Array.from(levelTreeNodeMap.keys()))
@@ -190,16 +185,13 @@ export function getCheckedKeys<R, G, I> (
           }
         }
         if (fullyChecked) {
-          if (checkStrategy === 'child') {
-            syntheticCheckedKeySet.delete(levelTreeNodeKey)
-          } else {
-            if (checkStrategy === 'parent') {
-              levelTreeNode.children?.forEach(v => {
-                syntheticCheckedKeySet.delete(v.key)
-              })
-            }
-            syntheticCheckedKeySet.add(levelTreeNodeKey)
+          if (checkStrategy === 'parent') {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            levelTreeNode.children!.forEach(v => {
+              syntheticCheckedKeySet.delete(v.key)
+            })
           }
+          syntheticCheckedKeySet.add(levelTreeNodeKey)
         } else if (partialChecked) {
           syntheticIndeterminateKeySet.add(levelTreeNodeKey)
         }
@@ -208,7 +200,7 @@ export function getCheckedKeys<R, G, I> (
   }
   return {
     checkedKeys: Array.from(
-      leafOnly ? (leafCheckedKeySet as Set<Key>) : syntheticCheckedKeySet
+      checkStrategy === 'child' ? (leafCheckedKeySet as Set<Key>) : syntheticCheckedKeySet
     ),
     indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
   }
@@ -216,7 +208,7 @@ export function getCheckedKeys<R, G, I> (
 
 export function getExtendedCheckedKeySet<R, G, I> (
   checkedKeys: Key[],
-  leafOnly: boolean,
+  checkStrategy: string,
   treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   const { treeNodeMap } = treeMate
@@ -235,11 +227,11 @@ export function getExtendedCheckedKeySet<R, G, I> (
         if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
           throw new SubtreeNotLoadedError()
         }
-        if (!leafOnly || (leafOnly && treeNode.isLeaf)) {
+        if (checkStrategy !== 'child' || (checkStrategy === 'child' && treeNode.isLeaf)) {
           extendedKeySet.add(key)
         }
       })
-      if (leafOnly && !checkedTreeNode.isLeaf) {
+      if (checkStrategy === 'child' && !checkedTreeNode.isLeaf) {
         extendedKeySet.delete(checkedTreeNode.key)
       }
     }

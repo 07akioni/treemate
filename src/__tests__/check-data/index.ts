@@ -87,6 +87,37 @@ export const disabledNodeTestTree = [
   }
 ]
 
+export const disabledCheckTestTree = [
+  {
+    key: '0',
+    children: [
+      {
+        key: '0-0',
+        children: [
+          {
+            key: '0-0-0',
+            disabled: true
+          },
+          {
+            key: '0-0-1'
+          }
+        ]
+      },
+      {
+        key: '0-1',
+        children: [
+          {
+            key: '0-1-0'
+          },
+          {
+            key: '0-1-1'
+          }
+        ]
+      }
+    ]
+  }
+]
+
 export const extendedCheckedKeysTestTree = [
   {
     key: '0',

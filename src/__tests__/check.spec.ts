@@ -6,6 +6,7 @@ import {
   basicTree,
   cascadeDisabledTestTree,
   disabledNodeTestTree,
+  disabledCheckTestTree,
   extendedCheckedKeysTestTree
 } from './check-data/index'
 import { expectCheckedStatusSame, expectArrayEqual } from './test-utils/index'
@@ -38,7 +39,7 @@ describe('check', () => {
         const treeMate = createTreeMate(extendedCheckedKeysTestTree)
         const extendedCheckedKeySet = getExtendedCheckedKeySet(
           data.checkedKeys,
-          false,
+          'all',
           treeMate
         )
         expectArrayEqual(
@@ -254,16 +255,6 @@ describe('check', () => {
         }
       },
       {
-        explain: 'case1 (leaf-only)',
-        leafOnly: true,
-        checkedKeys: [],
-        checkedKey: '0-0-0',
-        output: {
-          checkedKeys: ['0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
         explain: 'case1 (no cascade)',
         cascade: false,
         checkedKeys: [],
@@ -313,16 +304,6 @@ describe('check', () => {
         }
       },
       {
-        explain: 'case2',
-        leafOnly: true,
-        checkedKeys: [],
-        checkedKey: '0-1',
-        output: {
-          checkedKeys: ['0-1-0', '0-1-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
         explain: 'case2 (no cascade)',
         cascade: false,
         checkedKeys: [],
@@ -354,16 +335,6 @@ describe('check', () => {
       },
       {
         explain: 'case3',
-        checkedKeys: [],
-        checkedKey: '0-1-0',
-        output: {
-          checkedKeys: ['0-1-0'],
-          indeterminateKeys: ['0', '0-1']
-        }
-      },
-      {
-        explain: 'case3 (leaf only)',
-        leafOnly: true,
         checkedKeys: [],
         checkedKey: '0-1-0',
         output: {
@@ -411,16 +382,6 @@ describe('check', () => {
         }
       },
       {
-        explain: 'case4 (leaf only)',
-        leafOnly: true,
-        checkedKeys: ['0-0-0-0'],
-        checkedKey: '0-0-0-1',
-        output: {
-          checkedKeys: ['0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
         explain: 'case4 (no cascade)',
         cascade: false,
         checkedKeys: ['0-0-0-0'],
@@ -460,16 +421,6 @@ describe('check', () => {
         }
       },
       {
-        explain: 'case5 (leaf only)',
-        leafOnly: true,
-        checkedKeys: ['0-0', '0-0-0-0'],
-        checkedKey: '0-0-0-1',
-        output: {
-          checkedKeys: ['0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
         explain: 'case5 (no cascade)',
         cascade: false,
         checkedKeys: ['0-0', '0-0-0-0'],
@@ -495,7 +446,7 @@ describe('check', () => {
         checkedKeys: ['0-0', '0-0-0-0'],
         checkedKey: '0-0-0-1',
         output: {
-          checkedKeys: ['0-0', '0-0-0-0', '0-0-0-1'],
+          checkedKeys: ['0-0-0-0', '0-0-0-1'],
           indeterminateKeys: []
         }
       },
@@ -505,16 +456,6 @@ describe('check', () => {
         checkedKey: null,
         output: {
           checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
-        explain: 'nullish input (null) (leaf only)',
-        leafOnly: true,
-        checkedKeys: ['0-0-0'],
-        checkedKey: null,
-        output: {
-          checkedKeys: ['0-0-0-0', '0-0-0-1'],
           indeterminateKeys: []
         }
       },
@@ -538,16 +479,6 @@ describe('check', () => {
         }
       },
       {
-        explain: 'nullish input (undefined) (leaf only)',
-        leafOnly: true,
-        checkedKeys: ['0-0-0'],
-        checkedKey: undefined,
-        output: {
-          checkedKeys: ['0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
         explain: 'nullish input (undefined) (non-cascade)',
         cascade: false,
         checkedKeys: ['0-0-0'],
@@ -563,7 +494,6 @@ describe('check', () => {
         expectCheckedStatusSame(
           treeMate.check(testCase.checkedKey, testCase.checkedKeys, {
             cascade: testCase.cascade,
-            leafOnly: testCase.leafOnly,
             checkStrategy: testCase.checkStrategy
           }),
           testCase.output
@@ -579,7 +509,63 @@ describe('check', () => {
             },
             {
               cascade: testCase.cascade,
-              leafOnly: testCase.leafOnly,
+              checkStrategy: testCase.checkStrategy
+            }
+          ),
+          testCase.output
+        )
+      })
+    })
+  })
+  describe('#check', () => {
+    ;[
+      {
+        explain: 'case1 (checkStrategy is parent)',
+        checkStrategy: 'parent',
+        checkedKeys: ['0-0-0'],
+        checkedKey: '0-0-1',
+        output: {
+          checkedKeys: ['0-0'],
+          indeterminateKeys: ['0']
+        }
+      },
+      {
+        explain: 'case1 (checkStrategy is child)',
+        checkStrategy: 'child',
+        checkedKeys: ['0-0-0'],
+        checkedKey: '0-0-1',
+        output: {
+          checkedKeys: ['0-0-0', '0-0-1'],
+          indeterminateKeys: ['0']
+        }
+      },
+      {
+        explain: 'case1 (checkStrategy is all)',
+        checkStrategy: 'all',
+        checkedKeys: ['0-0-0'],
+        checkedKey: '0-0-1',
+        output: {
+          checkedKeys: ['0-0', '0-0-0', '0-0-1'],
+          indeterminateKeys: ['0']
+        }
+      }
+    ].forEach((testCase) => {
+      it(testCase.explain, () => {
+        const treeMate = createTreeMate(disabledCheckTestTree)
+        expectCheckedStatusSame(
+          treeMate.check(testCase.checkedKey, testCase.checkedKeys, {
+            checkStrategy: testCase.checkStrategy
+          }),
+          testCase.output
+        )
+        expectCheckedStatusSame(
+          treeMate.check(
+            testCase.checkedKey,
+            {
+              checkedKeys: testCase.checkedKeys,
+              indeterminateKeys: ['should be ingored']
+            },
+            {
               checkStrategy: testCase.checkStrategy
             }
           ),
@@ -592,16 +578,6 @@ describe('check', () => {
     ;[
       {
         explain: 'case1',
-        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
-        uncheckedKey: '0-0-0',
-        output: {
-          checkedKeys: [],
-          indeterminateKeys: []
-        }
-      },
-      {
-        explain: 'case1 (leaf only)',
-        leafOnly: true,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
         uncheckedKey: '0-0-0',
         output: {
@@ -659,16 +635,6 @@ describe('check', () => {
         }
       },
       {
-        explain: 'case2 (leaf only)',
-        leafOnly: true,
-        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
-        uncheckedKey: '0-0-0-0',
-        output: {
-          checkedKeys: ['0-0-0-1'],
-          indeterminateKeys: ['0-0-0']
-        }
-      },
-      {
         explain: 'case2 (non-cascade)',
         cascade: false,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
@@ -708,16 +674,6 @@ describe('check', () => {
         }
       },
       {
-        explain: 'nullish input (null) (leaf only)',
-        leafOnly: true,
-        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
-        uncheckedKey: null,
-        output: {
-          checkedKeys: ['0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
         explain: 'nullish input (null) (non-cascade)',
         cascade: false,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
@@ -737,16 +693,6 @@ describe('check', () => {
         }
       },
       {
-        explain: 'nullish input (undefined) (leaf only)',
-        leafOnly: true,
-        checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
-        uncheckedKey: undefined,
-        output: {
-          checkedKeys: ['0-0-0-0', '0-0-0-1'],
-          indeterminateKeys: []
-        }
-      },
-      {
         explain: 'nullish input (undefined) (non-cascade)',
         cascade: false,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
@@ -762,7 +708,6 @@ describe('check', () => {
         expectCheckedStatusSame(
           treeMate.uncheck(testCase.uncheckedKey, testCase.checkedKeys, {
             cascade: testCase.cascade,
-            leafOnly: testCase.leafOnly,
             checkStrategy: testCase.checkStrategy
           }),
           testCase.output

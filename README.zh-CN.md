@@ -258,7 +258,6 @@ null | undefined
 ```ts
 interface CheckOptions {
   cascade?: boolean // 是否关联勾选，子级勾选会影响父级状态，默认为 true
-  leafOnly?: boolean // 是否只允许叶节点被勾选，默认为 false
   checkStrategy?: string // 勾选显示策略 'all' | 'parent' | 'child'
 }
 ```
