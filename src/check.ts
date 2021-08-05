@@ -190,19 +190,18 @@ export function getCheckedKeys<R, G, I> (
           }
         }
         if (fullyChecked) {
-          if (checkStrategy === 'child') {
-            syntheticCheckedKeySet.delete(levelTreeNodeKey)
-          } else {
-            if (checkStrategy === 'parent') {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              levelTreeNode.children!.forEach(v => {
-                syntheticCheckedKeySet.delete(v.key)
-              })
-            }
-            syntheticCheckedKeySet.add(levelTreeNodeKey)
+          if (checkStrategy === 'parent') {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            levelTreeNode.children!.forEach(v => {
+              syntheticCheckedKeySet.delete(v.key)
+            })
           }
+          syntheticCheckedKeySet.add(levelTreeNodeKey)
         } else if (partialChecked) {
           syntheticIndeterminateKeySet.add(levelTreeNodeKey)
+        }
+        if (checkStrategy === 'child') {
+          syntheticCheckedKeySet.delete(levelTreeNodeKey)
         }
       }
     }
