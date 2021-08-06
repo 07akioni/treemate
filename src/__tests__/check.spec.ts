@@ -38,7 +38,6 @@ describe('check', () => {
         const treeMate = createTreeMate(extendedCheckedKeysTestTree)
         const extendedCheckedKeySet = getExtendedCheckedKeySet(
           data.checkedKeys,
-          false,
           treeMate
         )
         expectArrayEqual(
@@ -465,7 +464,7 @@ describe('check', () => {
         checkedKeys: ['0-0', '0-0-0-0'],
         checkedKey: '0-0-0-1',
         output: {
-          checkedKeys: ['0-0-0-0', '0-0-0-1'],
+          checkedKeys: ['0-0', '0-0-0-0', '0-0-0-1'],
           indeterminateKeys: []
         }
       },

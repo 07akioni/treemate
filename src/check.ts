@@ -18,12 +18,10 @@ export class SubtreeNotLoadedError extends Error {
 function getExtendedCheckedKeySetAfterCheck<R, G, I> (
   checkKeys: Key[],
   currentCheckedKeys: Key[],
-  leafOnly: boolean,
   treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   return getExtendedCheckedKeySet(
     currentCheckedKeys.concat(checkKeys),
-    leafOnly,
     treeMate
   )
 }
@@ -53,17 +51,14 @@ function getAvailableAscendantNodeSet<R, G, I> (
 function getExtendedCheckedKeySetAfterUncheck<R, G, I> (
   uncheckedKeys: Key[],
   currentCheckedKeys: Key[],
-  leafOnly: boolean,
   treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   const extendedCheckedKeySet = getExtendedCheckedKeySet(
     currentCheckedKeys,
-    leafOnly,
     treeMate
   )
   const extendedKeySetToUncheck = getExtendedCheckedKeySet(
     uncheckedKeys,
-    leafOnly,
     treeMate
   )
   const ascendantKeySet: Set<Key> = getAvailableAscendantNodeSet(
@@ -128,25 +123,21 @@ export function getCheckedKeys<R, G, I> (
     extendedCheckedKeySet = getExtendedCheckedKeySetAfterUncheck(
       keysToUncheck,
       checkedKeys,
-      leafOnly,
       treeMate
     )
   } else if (keysToCheck !== undefined) {
     extendedCheckedKeySet = getExtendedCheckedKeySetAfterCheck(
       keysToCheck,
       checkedKeys,
-      leafOnly,
       treeMate
     )
   } else {
     extendedCheckedKeySet = getExtendedCheckedKeySet(
       checkedKeys,
-      leafOnly,
       treeMate
     )
   }
 
-  const leafCheckedKeySet = leafOnly ? new Set(extendedCheckedKeySet) : null
   const syntheticCheckedKeySet: Set<Key> = extendedCheckedKeySet
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
   const maxLevel = Math.max.apply(null, Array.from(levelTreeNodeMap.keys()))
@@ -200,23 +191,20 @@ export function getCheckedKeys<R, G, I> (
         } else if (partialChecked) {
           syntheticIndeterminateKeySet.add(levelTreeNodeKey)
         }
-        if (checkStrategy === 'child') {
+        if (checkStrategy === 'child' || leafOnly) {
           syntheticCheckedKeySet.delete(levelTreeNodeKey)
         }
       }
     }
   }
   return {
-    checkedKeys: Array.from(
-      leafOnly ? (leafCheckedKeySet as Set<Key>) : syntheticCheckedKeySet
-    ),
+    checkedKeys: Array.from(syntheticCheckedKeySet),
     indeterminateKeys: Array.from(syntheticIndeterminateKeySet)
   }
 }
 
 export function getExtendedCheckedKeySet<R, G, I> (
   checkedKeys: Key[],
-  leafOnly: boolean,
   treeMate: TreeMate<R, G, I>
 ): Set<Key> {
   const { treeNodeMap } = treeMate
@@ -235,13 +223,8 @@ export function getExtendedCheckedKeySet<R, G, I> (
         if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
           throw new SubtreeNotLoadedError()
         }
-        if (!leafOnly || (leafOnly && treeNode.isLeaf)) {
-          extendedKeySet.add(key)
-        }
+        extendedKeySet.add(key)
       })
-      if (leafOnly && !checkedTreeNode.isLeaf) {
-        extendedKeySet.delete(checkedTreeNode.key)
-      }
     }
   })
   return extendedKeySet
