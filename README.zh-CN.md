@@ -382,7 +382,6 @@ interface MergedPath {
 
 `options` 形如 `{ includeSelf?: boolean, includeGroup?: boolean }`，默认 `includeSelf` 为 true，`includeGroup` 为 false。
 
-
 ### 获取树第一个可用的节点
 
 可以用于获取选择菜单的默认选项。

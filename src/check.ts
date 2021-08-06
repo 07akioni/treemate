@@ -132,11 +132,11 @@ export function getCheckedKeys<R, G, I> (
       treeMate
     )
   } else {
-    extendedCheckedKeySet = getExtendedCheckedKeySet(
-      checkedKeys,
-      treeMate
-    )
+    extendedCheckedKeySet = getExtendedCheckedKeySet(checkedKeys, treeMate)
   }
+
+  const checkStrategyIsParent = checkStrategy === 'parent'
+  const checkStrategyIsChild = checkStrategy === 'child' || leafOnly
 
   const syntheticCheckedKeySet: Set<Key> = extendedCheckedKeySet
   const syntheticIndeterminateKeySet: Set<Key> = new Set()
@@ -181,9 +181,9 @@ export function getCheckedKeys<R, G, I> (
           }
         }
         if (fullyChecked) {
-          if (checkStrategy === 'parent') {
+          if (checkStrategyIsParent) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            levelTreeNode.children!.forEach(v => {
+            levelTreeNode.children!.forEach((v) => {
               syntheticCheckedKeySet.delete(v.key)
             })
           }
@@ -191,7 +191,7 @@ export function getCheckedKeys<R, G, I> (
         } else if (partialChecked) {
           syntheticIndeterminateKeySet.add(levelTreeNodeKey)
         }
-        if (checkStrategy === 'child' || leafOnly) {
+        if (checkStrategyIsChild) {
           syntheticCheckedKeySet.delete(levelTreeNodeKey)
         }
       }

@@ -382,7 +382,6 @@ The `keyPath` is the `key` of the nodes in path. The `treeNodePath` is the node 
 
 `options` looks like `{ includeSelf?: boolean, includeGroup?: boolean }`, by default `includeSelf` is true and `includeGroup` is false.
 
-
 ### Get First Available Node of the Tree
 
 Can be used to get the default pending status of a select menu.
