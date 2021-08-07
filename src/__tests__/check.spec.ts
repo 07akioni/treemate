@@ -565,6 +565,28 @@ describe('check', () => {
           checkedKeys: ['0-0-0'],
           indeterminateKeys: []
         }
+      },
+      {
+        explain: 'child check strategy 1',
+        cascade: true,
+        checkStrategy: 'child',
+        checkedKeys: ['0-1-0', '0-1-1'],
+        checkecKey: undefined,
+        output: {
+          checkedKeys: ['0-1-0', '0-1-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'parent check strategy 1',
+        cascade: true,
+        checkStrategy: 'parent',
+        checkedKeys: ['0-0', '0-1'], // 0-0 is disabled
+        checkecKey: undefined,
+        output: {
+          checkedKeys: ['0', '0-0'],
+          indeterminateKeys: []
+        }
       }
     ].forEach((testCase) => {
       it(testCase.explain, () => {

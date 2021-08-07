@@ -151,48 +151,62 @@ export function getCheckedKeys<R, G, I> (
     // it should exists, nor it is a bug
     const levelTreeNodes = levelTreeNodeMap.get(level)
     for (const levelTreeNode of levelTreeNodes as Array<TreeNode<R, G, I>>) {
+      if (levelTreeNode.isLeaf) continue
+      const levelTreeNodeKey = levelTreeNode.key
+      if (checkStrategyIsChild) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        levelTreeNode.children!.forEach((v) => {
+          if (!v.disabled && !v.isLeaf && syntheticCheckedKeySet.has(v.key)) {
+            syntheticCheckedKeySet.delete(v.key)
+          }
+        })
+        if (level === 0) {
+          if (
+            !levelTreeNode.disabled &&
+            syntheticCheckedKeySet.has(levelTreeNodeKey)
+          ) {
+            syntheticCheckedKeySet.delete(levelTreeNodeKey)
+          }
+        }
+      }
       if (levelTreeNode.disabled || !levelTreeNode.shallowLoaded) {
         continue
       }
-      const levelTreeNodeKey = levelTreeNode.key
-      if (!levelTreeNode.isLeaf) {
-        let fullyChecked = true
-        let partialChecked = false
-        let allDisabled = true
-        // it is shallow loaded, so `children` must exist
-        for (const childNode of levelTreeNode.children as Array<
-        TreeNode<R, G, I>
-        >) {
-          const childKey = childNode.key
-          if (childNode.disabled) continue
-          if (allDisabled) allDisabled = false
-          if (syntheticCheckedKeySet.has(childKey)) {
-            partialChecked = true
-          } else if (syntheticIndeterminateKeySet.has(childKey)) {
-            partialChecked = true
-            fullyChecked = false
+      let fullyChecked = true
+      let partialChecked = false
+      let allDisabled = true
+      // it is shallow loaded, so `children` must exist
+      for (const childNode of levelTreeNode.children as Array<
+      TreeNode<R, G, I>
+      >) {
+        const childKey = childNode.key
+        if (childNode.disabled) continue
+        if (allDisabled) allDisabled = false
+        if (syntheticCheckedKeySet.has(childKey)) {
+          partialChecked = true
+        } else if (syntheticIndeterminateKeySet.has(childKey)) {
+          partialChecked = true
+          fullyChecked = false
+          break
+        } else {
+          fullyChecked = false
+          if (partialChecked) {
             break
-          } else {
-            fullyChecked = false
-            if (partialChecked) {
-              break
-            }
           }
         }
-        if (fullyChecked && !allDisabled) {
-          if (checkStrategyIsParent) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            levelTreeNode.children!.forEach((v) => {
+      }
+      if (fullyChecked && !allDisabled) {
+        if (checkStrategyIsParent) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          levelTreeNode.children!.forEach((v) => {
+            if (!v.disabled && syntheticCheckedKeySet.has(v.key)) {
               syntheticCheckedKeySet.delete(v.key)
-            })
-          }
-          syntheticCheckedKeySet.add(levelTreeNodeKey)
-        } else if (partialChecked) {
-          syntheticIndeterminateKeySet.add(levelTreeNodeKey)
+            }
+          })
         }
-        if (checkStrategyIsChild) {
-          syntheticCheckedKeySet.delete(levelTreeNodeKey)
-        }
+        syntheticCheckedKeySet.add(levelTreeNodeKey)
+      } else if (partialChecked) {
+        syntheticIndeterminateKeySet.add(levelTreeNodeKey)
       }
     }
   }
