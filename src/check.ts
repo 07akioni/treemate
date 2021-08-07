@@ -166,6 +166,9 @@ export function getCheckedKeys<R, G, I> (
         TreeNode<R, G, I>
         >) {
           const childKey = childNode.key
+          if (levelTreeNode.children?.length === 1 && childNode.disabled) {
+            fullyChecked = false
+          }
           if (childNode.disabled) continue
           if (syntheticCheckedKeySet.has(childKey)) {
             partialChecked = true
