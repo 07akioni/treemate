@@ -8,7 +8,9 @@ import {
   disabledNodeTestTree,
   extendedCheckedKeysTestTree,
   allDisabledChildrenTree,
-  emptyChildrenTree
+  emptyChildrenTree,
+  oneLevelTree,
+  childStrategyTestTree
 } from './check-data/index'
 import { expectCheckedStatusSame, expectArrayEqual } from './test-utils/index'
 
@@ -230,13 +232,36 @@ describe('check', () => {
           indeterminateKeys: []
         },
         tree: emptyChildrenTree
+      },
+      {
+        explain: 'child strategy on one level tree',
+        cascade: true,
+        input: ['1'],
+        output: {
+          checkedKeys: ['1'],
+          indeterminateKeys: []
+        },
+        checkStrategy: 'child',
+        tree: oneLevelTree
+      },
+      {
+        explain: 'child strategy case 1',
+        cascade: true,
+        input: ['1-0'],
+        output: {
+          checkedKeys: ['1-0'],
+          indeterminateKeys: ['1']
+        },
+        checkStrategy: 'child',
+        tree: childStrategyTestTree
       }
     ].forEach((testCase) => {
       it(testCase.explain, () => {
         const treeMate = createTreeMate<RawNode>(testCase.tree)
         expectCheckedStatusSame(
           treeMate.getCheckedKeys(testCase.input, {
-            cascade: testCase.cascade
+            cascade: testCase.cascade,
+            checkStrategy: testCase.checkStrategy
           }),
           testCase.output
         )
@@ -581,7 +606,18 @@ describe('check', () => {
         cascade: true,
         checkStrategy: 'child',
         checkedKeys: ['0-1-0', '0-1-1'],
-        checkecKey: undefined,
+        checkedKey: undefined,
+        output: {
+          checkedKeys: ['0-1-0', '0-1-1'],
+          indeterminateKeys: []
+        }
+      },
+      {
+        explain: 'child check strategy 2',
+        cascade: true,
+        checkStrategy: 'child',
+        checkedKeys: ['0', '0-1'],
+        checkedKey: undefined,
         output: {
           checkedKeys: ['0-1-0', '0-1-1'],
           indeterminateKeys: []
@@ -592,7 +628,7 @@ describe('check', () => {
         cascade: true,
         checkStrategy: 'parent',
         checkedKeys: ['0-0', '0-1'], // 0-0 is disabled
-        checkecKey: undefined,
+        checkedKey: undefined,
         output: {
           checkedKeys: ['0', '0-0'],
           indeterminateKeys: []

@@ -189,7 +189,7 @@ export const allDisabledChildrenTree = [
 
 export const emptyChildrenTree = [
   {
-    key: 1,
+    key: '1',
     children: [
       {
         key: '1-1',
@@ -198,7 +198,44 @@ export const emptyChildrenTree = [
     ]
   },
   {
-    key: 2,
+    key: '2',
     children: []
+  }
+]
+
+export const oneLevelTree = [
+  {
+    key: 1
+  },
+  {
+    key: 2
+  }
+]
+
+export const childStrategyTestTree = [
+  {
+    key: '0',
+    children: [
+      {
+        key: '0-0'
+      },
+      {
+        key: '0-1'
+      }
+    ]
+  },
+  {
+    key: '1',
+    children: [
+      {
+        key: '1-0'
+      },
+      {
+        key: '1-1'
+      }
+    ]
+  },
+  {
+    key: '2'
   }
 ]
