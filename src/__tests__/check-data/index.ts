@@ -174,3 +174,15 @@ export const cascadeDisabledTestTree = [
     ]
   }
 ]
+
+export const allDisabledChildrenTree = [
+  {
+    key: 1,
+    children: [
+      {
+        key: 2,
+        disabled: true
+      }
+    ]
+  }
+]

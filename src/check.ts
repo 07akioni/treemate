@@ -82,9 +82,6 @@ export function getCheckedKeys<R, G, I> (
     keysToCheck?: Key[]
     keysToUncheck?: Key[]
     cascade: boolean
-    // `leafOnly` only works when `keysToCheck` or `keysToUncheck` is set.
-    // Since view should always be sync with the input data.
-    // We only want the data model value to be leaf only.
     leafOnly: boolean
     checkStrategy: string
   },
@@ -161,12 +158,14 @@ export function getCheckedKeys<R, G, I> (
       if (!levelTreeNode.isLeaf) {
         let fullyChecked = true
         let partialChecked = false
+        let allDisabled = true
         // it is shallow loaded, so `children` must exist
         for (const childNode of levelTreeNode.children as Array<
         TreeNode<R, G, I>
         >) {
           const childKey = childNode.key
           if (childNode.disabled) continue
+          if (allDisabled) allDisabled = false
           if (syntheticCheckedKeySet.has(childKey)) {
             partialChecked = true
           } else if (syntheticIndeterminateKeySet.has(childKey)) {
@@ -180,7 +179,7 @@ export function getCheckedKeys<R, G, I> (
             }
           }
         }
-        if (fullyChecked) {
+        if (fullyChecked && !allDisabled) {
           if (checkStrategyIsParent) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             levelTreeNode.children!.forEach((v) => {
