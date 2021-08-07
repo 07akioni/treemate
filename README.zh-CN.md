@@ -32,7 +32,7 @@ npm i -D treemate
 
 ### 普通节点，Group 节点和 Ignored 节点
 
-在 treemate 中，一个树由节点（可选的 group 节点和可选的 ignored 节点）组成。
+在 treemate 中，一个树由节点（可选的 group 节点和可选的 ingored 节点）组成。
 
 一个普通节点包括一个 key，可能还包含一个 children 属性，里面是它的子节点。
 

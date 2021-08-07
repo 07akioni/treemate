@@ -186,3 +186,19 @@ export const allDisabledChildrenTree = [
     ]
   }
 ]
+
+export const emptyChildrenTree = [
+  {
+    key: 1,
+    children: [
+      {
+        key: '1-1',
+        children: []
+      }
+    ]
+  },
+  {
+    key: 2,
+    children: []
+  }
+]

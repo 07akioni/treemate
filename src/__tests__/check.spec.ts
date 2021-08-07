@@ -7,7 +7,8 @@ import {
   cascadeDisabledTestTree,
   disabledNodeTestTree,
   extendedCheckedKeysTestTree,
-  allDisabledChildrenTree
+  allDisabledChildrenTree,
+  emptyChildrenTree
 } from './check-data/index'
 import { expectCheckedStatusSame, expectArrayEqual } from './test-utils/index'
 
@@ -220,6 +221,15 @@ describe('check', () => {
           indeterminateKeys: []
         },
         tree: allDisabledChildrenTree
+      },
+      {
+        explain: 'empty children',
+        cascade: true,
+        output: {
+          checkedKeys: [],
+          indeterminateKeys: []
+        },
+        tree: emptyChildrenTree
       }
     ].forEach((testCase) => {
       it(testCase.explain, () => {
