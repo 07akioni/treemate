@@ -153,10 +153,10 @@ export function getCheckedKeys<R, G, I> (
     for (const levelTreeNode of levelTreeNodes as Array<TreeNode<R, G, I>>) {
       if (levelTreeNode.isLeaf) continue
       const levelTreeNodeKey = levelTreeNode.key
-      if (checkStrategyIsChild) {
+      if (checkStrategyIsChild && levelTreeNode.shallowLoaded) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         levelTreeNode.children!.forEach((v) => {
-          if (!v.disabled && !v.isLeaf && syntheticCheckedKeySet.has(v.key)) {
+          if (!v.disabled && !v.isLeaf && v.shallowLoaded && syntheticCheckedKeySet.has(v.key)) {
             syntheticCheckedKeySet.delete(v.key)
           }
         })

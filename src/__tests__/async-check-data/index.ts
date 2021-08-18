@@ -50,3 +50,26 @@ export const asyncBasicTree = [
     ]
   }
 ]
+
+export const asyncCascadeTree = [
+  {
+    key: '0',
+    children: [
+      {
+        key: '1',
+        isLeaf: false
+      },
+      {
+        key: '2',
+        children: [
+          {
+            key: '3'
+          },
+          {
+            key: '4'
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,5 +1,7 @@
 export type Key = string | number
 
+export type CheckStrategy = 'all' | 'child' | 'parent'
+
 export interface RawNode {
   key?: Key
   children?: RawNode[]
@@ -83,7 +85,7 @@ export interface InputMergedKeys {
 export interface CheckOptions {
   cascade?: boolean
   leafOnly?: boolean
-  checkStrategy?: string
+  checkStrategy?: CheckStrategy
 }
 
 type KeyToNode<R, G> = <T extends Key | null | undefined>(

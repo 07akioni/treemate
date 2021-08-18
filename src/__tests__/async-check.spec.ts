@@ -1,7 +1,11 @@
 import { createTreeMate } from '@/index'
 import { SubtreeNotLoadedError } from '@/check'
 import { expectCheckedStatusSame } from './test-utils'
-import { disabledNodeTestTree, asyncBasicTree } from './async-check-data/index'
+import {
+  disabledNodeTestTree,
+  asyncBasicTree,
+  asyncCascadeTree
+} from './async-check-data/index'
 
 describe('async-check', () => {
   describe('#check (async)', () => {
@@ -100,5 +104,15 @@ describe('async-check', () => {
       }
       expect(error instanceof SubtreeNotLoadedError).toBeTruthy()
     })
+  })
+  describe('#getCheckedKeys (async cascade)', () => {
+    const treeMate = createTreeMate(asyncCascadeTree)
+    expectCheckedStatusSame(
+      treeMate.getCheckedKeys(['4'], { cascade: true, checkStrategy: 'child' }),
+      {
+        checkedKeys: ['4'],
+        indeterminateKeys: ['0', '2']
+      }
+    )
   })
 })
