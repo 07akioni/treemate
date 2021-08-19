@@ -59,7 +59,8 @@ function getExtendedCheckedKeySetAfterUncheck<R, G, I> (
   )
   const extendedKeySetToUncheck = getExtendedCheckedKeySet(
     uncheckedKeys,
-    treeMate
+    treeMate,
+    true
   )
   const ascendantKeySet: Set<Key> = getAvailableAscendantNodeSet(
     uncheckedKeys,
@@ -156,7 +157,12 @@ export function getCheckedKeys<R, G, I> (
       if (checkStrategyIsChild && levelTreeNode.shallowLoaded) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         levelTreeNode.children!.forEach((v) => {
-          if (!v.disabled && !v.isLeaf && v.shallowLoaded && syntheticCheckedKeySet.has(v.key)) {
+          if (
+            !v.disabled &&
+            !v.isLeaf &&
+            v.shallowLoaded &&
+            syntheticCheckedKeySet.has(v.key)
+          ) {
             syntheticCheckedKeySet.delete(v.key)
           }
         })
@@ -216,11 +222,13 @@ export function getCheckedKeys<R, G, I> (
   }
 }
 
+// unchecking is safe when doing cascade uncheck in async mode
 export function getExtendedCheckedKeySet<R, G, I> (
   checkedKeys: Key[],
-  treeMate: TreeMate<R, G, I>
+  treeMate: TreeMate<R, G, I>,
+  isUnchecking: boolean = false
 ): Set<Key> {
-  const { treeNodeMap } = treeMate
+  const { treeNodeMap, getChildren } = treeMate
   const visitedKeySet: Set<Key> = new Set()
   const extendedKeySet: Set<Key> = new Set(checkedKeys)
   checkedKeys.forEach((checkedKey) => {
@@ -233,10 +241,16 @@ export function getExtendedCheckedKeySet<R, G, I> (
         const { key } = treeNode
         if (visitedKeySet.has(key)) return
         visitedKeySet.add(key)
-        if (isExpilicitlyNotLoaded(treeNode.rawNode, treeMate.getChildren)) {
-          throw new SubtreeNotLoadedError()
-        }
+        // Adding keys before loaded check is okay, since if not valid error
+        // would be thrown
         extendedKeySet.add(key)
+        if (isExpilicitlyNotLoaded(treeNode.rawNode, getChildren)) {
+          if (isUnchecking) {
+            return TRAVERSE_COMMAND.STOP
+          } else {
+            throw new SubtreeNotLoadedError()
+          }
+        }
       })
     }
   })

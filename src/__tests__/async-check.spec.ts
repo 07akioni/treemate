@@ -61,15 +61,12 @@ describe('async-check', () => {
       }
       expect(error).toBeFalsy()
     })
-    it('throws error when subtree is not loaded', () => {
-      const treeMate = createTreeMate(disabledNodeTestTree)
-      let error = null
-      try {
-        treeMate.uncheck('0', [])
-      } catch (err) {
-        error = err
-      }
-      expect(error instanceof SubtreeNotLoadedError).toBeTruthy()
+    it('works when essential node is loaded', () => {
+      const treeMate = createTreeMate(asyncCascadeTree)
+      expectCheckedStatusSame(treeMate.uncheck('0', ['4']), {
+        checkedKeys: [],
+        indeterminateKeys: []
+      })
     })
   })
   describe('#getCheckedKeys (async)', () => {
