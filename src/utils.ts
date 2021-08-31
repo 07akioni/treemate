@@ -52,10 +52,10 @@ export function getNonLeafKeys<R, G, I> (
   return keys
 }
 
-export function isLeaf (rawNode: RawNode): boolean {
+export function isLeaf (rawNode: RawNode, getChildren: any): boolean {
   const { isLeaf } = rawNode
   if (isLeaf !== undefined) return isLeaf
-  else if (rawNode.children === undefined) return true
+  else if (getChildren(rawNode) === undefined) return true
   return false
 }
 
@@ -85,12 +85,12 @@ export function isDisabled (rawNode: RawNode): boolean {
   return rawNode.disabled === true
 }
 
-export function isExpilicitlyNotLoaded (rawNode: RawNode): boolean {
-  return rawNode.isLeaf === false && rawNode.children === undefined
+export function isExpilicitlyNotLoaded (rawNode: RawNode, getChildren: any): boolean {
+  return rawNode.isLeaf === false && getChildren(rawNode) === undefined
 }
 
-export function isNodeInvalid (rawNode: RawNode): boolean {
-  return rawNode.isLeaf === true && rawNode.children !== undefined
+export function isNodeInvalid (rawNode: RawNode, getChildren: any): boolean {
+  return rawNode.isLeaf === true && getChildren(rawNode) !== undefined
 }
 
 export function unwrapCheckedKeys (

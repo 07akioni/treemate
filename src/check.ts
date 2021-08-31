@@ -1,4 +1,4 @@
-import { Key, TreeMate, MergedKeys, TreeNode } from './interface'
+import { Key, TreeMate, MergedKeys, TreeNode, GetChildren } from './interface'
 import {
   isExpilicitlyNotLoaded,
   merge,
@@ -18,11 +18,13 @@ export class SubtreeNotLoadedError extends Error {
 function getExtendedCheckedKeySetAfterCheck<R, G, I> (
   checkKeys: Key[],
   currentCheckedKeys: Key[],
-  treeMate: TreeMate<R, G, I>
+  treeMate: TreeMate<R, G, I>,
+  getChildren: GetChildren<R, G, I>
 ): Set<Key> {
   return getExtendedCheckedKeySet(
     currentCheckedKeys.concat(checkKeys),
-    treeMate
+    treeMate,
+    getChildren
   )
 }
 
@@ -51,15 +53,18 @@ function getAvailableAscendantNodeSet<R, G, I> (
 function getExtendedCheckedKeySetAfterUncheck<R, G, I> (
   uncheckedKeys: Key[],
   currentCheckedKeys: Key[],
-  treeMate: TreeMate<R, G, I>
+  treeMate: TreeMate<R, G, I>,
+  getChildren: GetChildren<R, G, I>
 ): Set<Key> {
   const extendedCheckedKeySet = getExtendedCheckedKeySet(
     currentCheckedKeys,
-    treeMate
+    treeMate,
+    getChildren
   )
   const extendedKeySetToUncheck = getExtendedCheckedKeySet(
     uncheckedKeys,
-    treeMate
+    treeMate,
+    getChildren
   )
   const ascendantKeySet: Set<Key> = getAvailableAscendantNodeSet(
     uncheckedKeys,
@@ -85,6 +90,7 @@ export function getCheckedKeys<R, G, I> (
     leafOnly: boolean
     checkStrategy: string
   },
+  getChildren: GetChildren<R, G, I>,
   treeMate: TreeMate<R, G, I>
 ): MergedKeys {
   const {
@@ -120,16 +126,18 @@ export function getCheckedKeys<R, G, I> (
     extendedCheckedKeySet = getExtendedCheckedKeySetAfterUncheck(
       keysToUncheck,
       checkedKeys,
-      treeMate
+      treeMate,
+      getChildren
     )
   } else if (keysToCheck !== undefined) {
     extendedCheckedKeySet = getExtendedCheckedKeySetAfterCheck(
       keysToCheck,
       checkedKeys,
-      treeMate
+      treeMate,
+      getChildren
     )
   } else {
-    extendedCheckedKeySet = getExtendedCheckedKeySet(checkedKeys, treeMate)
+    extendedCheckedKeySet = getExtendedCheckedKeySet(checkedKeys, treeMate, getChildren)
   }
 
   const checkStrategyIsParent = checkStrategy === 'parent'
@@ -218,7 +226,8 @@ export function getCheckedKeys<R, G, I> (
 
 export function getExtendedCheckedKeySet<R, G, I> (
   checkedKeys: Key[],
-  treeMate: TreeMate<R, G, I>
+  treeMate: TreeMate<R, G, I>,
+  getChildren: GetChildren<R, G, I>
 ): Set<Key> {
   const { treeNodeMap } = treeMate
   const visitedKeySet: Set<Key> = new Set()
@@ -233,7 +242,7 @@ export function getExtendedCheckedKeySet<R, G, I> (
         const { key } = treeNode
         if (visitedKeySet.has(key)) return
         visitedKeySet.add(key)
-        if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
+        if (isExpilicitlyNotLoaded(treeNode.rawNode, getChildren)) {
           throw new SubtreeNotLoadedError()
         }
         extendedKeySet.add(key)

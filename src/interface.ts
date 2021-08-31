@@ -114,6 +114,7 @@ export interface TreeMate<R = RawNode, G = R, I = R> {
   // check related methods
   getCheckedKeys: (
     checkedKeys: Key[] | InputMergedKeys | null | undefined,
+    getChildren: GetChildren<R, G, I>,
     options?: CheckOptions
   ) => MergedKeys
   check: (

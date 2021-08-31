@@ -45,7 +45,7 @@ function createTreeNodes<R, G, I> (
 ): Array<TreeNode<R, G, I>> {
   const treeNodes: Array<TreeNode<R, G, I>> = []
   rawNodes.forEach((rawNode, index) => {
-    if (process.env.NODE_ENV !== 'production' && isNodeInvalid(rawNode)) {
+    if (process.env.NODE_ENV !== 'production' && isNodeInvalid(rawNode, getChildren)) {
       console.error('[treemate]: node', rawNode, 'is invalid')
     }
     const treeNode: TreeNode<R, G, I> = Object.create(nodeProto)
@@ -105,7 +105,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
         return getIsGroup((this as any).rawNode)
       },
       get isLeaf (): boolean {
-        return isLeaf((this as any).rawNode)
+        return isLeaf((this as any).rawNode, getChildren)
       },
       get shallowLoaded (): boolean {
         return isShallowLoaded((this as any).rawNode)
@@ -216,6 +216,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     },
     getCheckedKeys (
       checkedKeys: Key[] | InputMergedKeys | null | undefined,
+      getChildren: GetChildren<R, G, I>,
       options: CheckOptions = {}
     ) {
       const { cascade = true, leafOnly = false, checkStrategy = 'all' } = options
@@ -227,6 +228,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
           leafOnly,
           checkStrategy
         },
+        getChildren,
         treemate
       )
     },
@@ -248,6 +250,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
           leafOnly,
           checkStrategy
         },
+        getChildren,
         treemate
       )
     },
@@ -269,6 +272,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
           leafOnly,
           checkStrategy
         },
+        getChildren,
         treemate
       )
     },
