@@ -233,7 +233,7 @@ export function getExtendedCheckedKeySet<R, G, I> (
         const { key } = treeNode
         if (visitedKeySet.has(key)) return
         visitedKeySet.add(key)
-        if (isExpilicitlyNotLoaded(treeNode.rawNode)) {
+        if (isExpilicitlyNotLoaded(treeNode.rawNode, treeMate.getChildren)) {
           throw new SubtreeNotLoadedError()
         }
         extendedKeySet.add(key)

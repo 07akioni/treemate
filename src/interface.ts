@@ -111,6 +111,7 @@ export interface TreeMate<R = RawNode, G = R, I = R> {
   getFlattenedNodes: (expandedKeys?: Key[]) => Array<TreeNode<R, G, I>>
   // I don't want Ignored & GroupNode to be accessed by getNode
   getNode: KeyToNode<R, R>
+  getChildren: GetChildren<R, G, I>
   // check related methods
   getCheckedKeys: (
     checkedKeys: Key[] | InputMergedKeys | null | undefined,
