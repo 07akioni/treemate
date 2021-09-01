@@ -7,7 +7,7 @@ export interface RawNode {
   children?: RawNode[]
   isLeaf?: boolean
   disabled?: boolean
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface KeyedRawNode {
@@ -15,7 +15,7 @@ export interface KeyedRawNode {
   children?: KeyedRawNode[]
   isLeaf?: boolean
   disabled?: boolean
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface GetPrevNextOptions {
@@ -55,7 +55,7 @@ export interface MergedKeys {
   indeterminateKeys: Key[]
 }
 
-export type GetChildren<R, G, I> = (node: R | G) => Array<R | G | I> | undefined
+export type GetChildren<R, G, I> = (node: R | G | I) => Array<R | G | I> | undefined
 
 export interface TreeMateOptions<R, G, I> {
   getChildren?: GetChildren<R, G, I>

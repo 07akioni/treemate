@@ -1,6 +1,6 @@
 import { TreeNode, RawNode } from '../../interface'
 
-type CreateData = () => { input: RawNode[], output: TreeNode[] }
+type CreateData = (key?: string) => { input: RawNode[], output: TreeNode[] }
 
 const data: Array<{ createData: CreateData, description: string }> = [
   {
@@ -47,10 +47,10 @@ const data: Array<{ createData: CreateData, description: string }> = [
   },
   {
     description: '3 nodes',
-    createData () {
+    createData (key = 'children') {
       const raw0 = {
         key: 0,
-        children: [
+        [key]: [
           {
             key: 1
           },
@@ -59,8 +59,8 @@ const data: Array<{ createData: CreateData, description: string }> = [
           }
         ]
       }
-      const raw1 = raw0.children[0]
-      const raw2 = raw0.children[1]
+      const raw1 = (raw0[key] as any)[0]
+      const raw2 = (raw0[key] as any)[1]
       const input = [raw0]
       const node1 = {
         key: 1,
@@ -79,6 +79,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         getChild: () => null,
         getPrev: () => null,
         getNext: () => null,
+        contains: () => true,
         siblings: []
       }
       const node2 = {
@@ -98,6 +99,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         getChild: () => null,
         getPrev: () => null,
         getNext: () => null,
+        contains: () => true,
         siblings: []
       }
       const node0 = {
@@ -117,6 +119,7 @@ const data: Array<{ createData: CreateData, description: string }> = [
         getChild: () => null,
         getPrev: () => null,
         getNext: () => null,
+        contains: () => true,
         siblings: [],
         children: [node1, node2]
       }

@@ -1,43 +1,55 @@
-import { isLeaf } from '@/utils'
-import { createTreeMate, RawNode } from '@/index'
+import { defaultGetChildren, isLeaf } from '@/utils'
+import { createTreeMate } from '@/index'
 
 describe('utils', () => {
   describe('#isLeaf', () => {
-    function getChildren<T = RawNode> (rawNode: T): T[] | undefined {
-      return (rawNode as any).children
-    }
     it('works', () => {
       expect(
-        isLeaf({
-          key: 0
-        }, getChildren)
+        isLeaf(
+          {
+            key: 0
+          },
+          defaultGetChildren
+        )
       ).toEqual(true)
       expect(
-        isLeaf({
-          key: 0,
-          children: []
-        }, getChildren)
+        isLeaf(
+          {
+            key: 0,
+            children: []
+          },
+          defaultGetChildren
+        )
       ).toEqual(false)
       expect(
-        isLeaf({
-          key: 0,
-          isLeaf: true
-        }, getChildren)
+        isLeaf(
+          {
+            key: 0,
+            isLeaf: true
+          },
+          defaultGetChildren
+        )
       ).toEqual(true)
       expect(
-        isLeaf({
-          key: 0,
-          isLeaf: false
-        }, getChildren)
+        isLeaf(
+          {
+            key: 0,
+            isLeaf: false
+          },
+          defaultGetChildren
+        )
       ).toEqual(false)
     })
     it('invalid edge case', () => {
       expect(
-        isLeaf({
-          key: 0,
-          children: [],
-          isLeaf: true
-        }, getChildren)
+        isLeaf(
+          {
+            key: 0,
+            children: [],
+            isLeaf: true
+          },
+          defaultGetChildren
+        )
       ).toEqual(true)
     })
   })

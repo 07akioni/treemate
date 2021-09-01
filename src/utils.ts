@@ -23,7 +23,9 @@ export function traverseWithCb<R, G, I> (
 ): void {
   const command = callback(treeNode)
   if (treeNode.children !== undefined && command !== TRAVERSE_COMMAND.STOP) {
-    treeNode.children.forEach((childNode) => traverseWithCb(childNode, callback))
+    treeNode.children.forEach((childNode) =>
+      traverseWithCb(childNode, callback)
+    )
   }
 }
 
@@ -53,22 +55,23 @@ export function getNonLeafKeys<R, G, I> (
   return keys
 }
 
-export function isLeaf <R = RawNode, G = R, I = R> (rawNode: RawNode, getChildren: GetChildren<R, G, I>): boolean {
-  const { isLeaf } = rawNode
+export function isLeaf<R = RawNode, G = R, I = R> (
+  rawNode: R | G | I,
+  getChildren: GetChildren<R, G, I>
+): boolean {
+  const { isLeaf } = rawNode as any
   if (isLeaf !== undefined) return isLeaf
-  else if (getChildren(rawNode as R | G) === undefined) return true
+  else if (getChildren(rawNode) === undefined) return true
   return false
 }
 
-export function defaultGetChildren<T> (
-  node: unknown
-): T[] | undefined {
+export function defaultGetChildren<R, G, I> (
+  node: R | G | I
+): Array<R | G | I> | undefined {
   return (node as any).children
 }
 
-export function defaultGetKey (
-  node: unknown
-): Key {
+export function defaultGetKey (node: unknown): Key {
   return (node as any).key
 }
 
@@ -86,12 +89,18 @@ export function isDisabled (rawNode: RawNode): boolean {
   return rawNode.disabled === true
 }
 
-export function isExpilicitlyNotLoaded<R = RawNode, G = R, I = R> (rawNode: RawNode, getChildren: GetChildren<R, G, I>): boolean {
-  return rawNode.isLeaf === false && getChildren(rawNode as R | G) === undefined
+export function isExpilicitlyNotLoaded<R = RawNode, G = R, I = R> (
+  rawNode: R | G | I,
+  getChildren: GetChildren<R, G, I>
+): boolean {
+  return (rawNode as any).isLeaf === false && getChildren(rawNode) === undefined
 }
 
-export function isNodeInvalid<R = RawNode, G = R, I = R> (rawNode: RawNode, getChildren: GetChildren<R, G, I>): boolean {
-  return rawNode.isLeaf === true && getChildren(rawNode as R | G) !== undefined
+export function isNodeInvalid<R = RawNode, G = R, I = R> (
+  rawNode: R | G | I,
+  getChildren: GetChildren<R, G, I>
+): boolean {
+  return (rawNode as any).isLeaf === true && getChildren(rawNode) !== undefined
 }
 
 export function unwrapCheckedKeys (
