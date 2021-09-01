@@ -197,6 +197,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     treeNodeMap,
     levelTreeNodeMap,
     maxLevel: Math.max(...levelTreeNodeMap.keys()),
+    getChildren,
     getFlattenedNodes (expandedKeys?: Key[]) {
       return flatten(treeNodes, expandedKeys)
     },
@@ -216,7 +217,6 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     },
     getCheckedKeys (
       checkedKeys: Key[] | InputMergedKeys | null | undefined,
-      getChildren: GetChildren<R, G, I>,
       options: CheckOptions = {}
     ) {
       const { cascade = true, leafOnly = false, checkStrategy = 'all' } = options
@@ -228,7 +228,6 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
           leafOnly,
           checkStrategy
         },
-        getChildren,
         treemate
       )
     },
@@ -250,7 +249,6 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
           leafOnly,
           checkStrategy
         },
-        getChildren,
         treemate
       )
     },
@@ -272,7 +270,6 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
           leafOnly,
           checkStrategy
         },
-        getChildren,
         treemate
       )
     },

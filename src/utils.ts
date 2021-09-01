@@ -3,7 +3,8 @@ import {
   RawNode,
   InputMergedKeys,
   Key,
-  GetNonLeafKeysOptions
+  GetNonLeafKeysOptions,
+  GetChildren
 } from './interface'
 
 export function toArray<T> (arg: T): T extends any[] ? T : T[] {
@@ -52,10 +53,10 @@ export function getNonLeafKeys<R, G, I> (
   return keys
 }
 
-export function isLeaf (rawNode: RawNode, getChildren: any): boolean {
+export function isLeaf <R = RawNode, G = R, I = R> (rawNode: RawNode, getChildren: GetChildren<R, G, I>): boolean {
   const { isLeaf } = rawNode
   if (isLeaf !== undefined) return isLeaf
-  else if (getChildren(rawNode) === undefined) return true
+  else if (getChildren(rawNode as R | G) === undefined) return true
   return false
 }
 
@@ -85,12 +86,12 @@ export function isDisabled (rawNode: RawNode): boolean {
   return rawNode.disabled === true
 }
 
-export function isExpilicitlyNotLoaded (rawNode: RawNode, getChildren: any): boolean {
-  return rawNode.isLeaf === false && getChildren(rawNode) === undefined
+export function isExpilicitlyNotLoaded<R = RawNode, G = R, I = R> (rawNode: RawNode, getChildren: GetChildren<R, G, I>): boolean {
+  return rawNode.isLeaf === false && getChildren(rawNode as R | G) === undefined
 }
 
-export function isNodeInvalid (rawNode: RawNode, getChildren: any): boolean {
-  return rawNode.isLeaf === true && getChildren(rawNode) !== undefined
+export function isNodeInvalid<R = RawNode, G = R, I = R> (rawNode: RawNode, getChildren: GetChildren<R, G, I>): boolean {
+  return rawNode.isLeaf === true && getChildren(rawNode as R | G) !== undefined
 }
 
 export function unwrapCheckedKeys (

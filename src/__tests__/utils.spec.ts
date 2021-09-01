@@ -1,31 +1,34 @@
 import { isLeaf } from '@/utils'
-import { createTreeMate } from '@/index'
+import { createTreeMate, RawNode } from '@/index'
 
 describe('utils', () => {
   describe('#isLeaf', () => {
+    function getChildren<T = RawNode> (rawNode: T): T[] | undefined {
+      return (rawNode as any).children
+    }
     it('works', () => {
       expect(
         isLeaf({
           key: 0
-        })
+        }, getChildren)
       ).toEqual(true)
       expect(
         isLeaf({
           key: 0,
           children: []
-        })
+        }, getChildren)
       ).toEqual(false)
       expect(
         isLeaf({
           key: 0,
           isLeaf: true
-        })
+        }, getChildren)
       ).toEqual(true)
       expect(
         isLeaf({
           key: 0,
           isLeaf: false
-        })
+        }, getChildren)
       ).toEqual(false)
     })
     it('invalid edge case', () => {
@@ -34,7 +37,7 @@ describe('utils', () => {
           key: 0,
           children: [],
           isLeaf: true
-        })
+        }, getChildren)
       ).toEqual(true)
     })
   })
