@@ -9,5 +9,6 @@ export type {
   KeyedRawNode,
   TreeMate,
   TreeNodeMap,
-  TreeMateOptions
+  TreeMateOptions,
+  CheckStrategy
 } from './interface'
