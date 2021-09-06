@@ -149,12 +149,13 @@ export function getCheckedKeys<R, G, I> (
   //    in the case, `e` is assumed not to be checked, nor we can't calc `d`'s
   //    and `a`'s status
   for (let level = maxLevel; level >= 0; level -= 1) {
+    const levelIsZero = level === 0
     // it should exists, nor it is a bug
     const levelTreeNodes = levelTreeNodeMap.get(level)
     for (const levelTreeNode of levelTreeNodes as Array<TreeNode<R, G, I>>) {
       if (levelTreeNode.isLeaf) continue
-      const levelTreeNodeKey = levelTreeNode.key
-      if (checkStrategyIsChild && levelTreeNode.shallowLoaded) {
+      const { key: levelTreeNodeKey, shallowLoaded } = levelTreeNode
+      if (checkStrategyIsChild && shallowLoaded) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         levelTreeNode.children!.forEach((v) => {
           if (
@@ -166,16 +167,8 @@ export function getCheckedKeys<R, G, I> (
             syntheticCheckedKeySet.delete(v.key)
           }
         })
-        if (level === 0) {
-          if (
-            !levelTreeNode.disabled &&
-            syntheticCheckedKeySet.has(levelTreeNodeKey)
-          ) {
-            syntheticCheckedKeySet.delete(levelTreeNodeKey)
-          }
-        }
       }
-      if (levelTreeNode.disabled || !levelTreeNode.shallowLoaded) {
+      if (levelTreeNode.disabled || !shallowLoaded) {
         continue
       }
       let fullyChecked = true
@@ -213,6 +206,13 @@ export function getCheckedKeys<R, G, I> (
         syntheticCheckedKeySet.add(levelTreeNodeKey)
       } else if (partialChecked) {
         syntheticIndeterminateKeySet.add(levelTreeNodeKey)
+      }
+      if (
+        levelIsZero &&
+        checkStrategyIsChild &&
+        syntheticCheckedKeySet.has(levelTreeNodeKey)
+      ) {
+        syntheticCheckedKeySet.delete(levelTreeNodeKey)
       }
     }
   }

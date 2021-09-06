@@ -241,7 +241,7 @@ describe('check', () => {
           checkedKeys: ['1'],
           indeterminateKeys: []
         },
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         tree: oneLevelTree
       },
       {
@@ -252,7 +252,29 @@ describe('check', () => {
           checkedKeys: ['1-0'],
           indeterminateKeys: ['1']
         },
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
+        tree: childStrategyTestTree
+      },
+      {
+        explain: 'child strategy case 1',
+        cascade: true,
+        input: ['0-0', '0-1'],
+        output: {
+          checkedKeys: ['0-0', '0-1'],
+          indeterminateKeys: []
+        },
+        checkStrategy: 'child' as const,
+        tree: childStrategyTestTree
+      },
+      {
+        explain: 'child strategy case 1',
+        cascade: true,
+        input: ['0'],
+        output: {
+          checkedKeys: ['0-0', '0-1'],
+          indeterminateKeys: []
+        },
+        checkStrategy: 'child' as const,
         tree: childStrategyTestTree
       }
     ].forEach((testCase) => {
@@ -319,7 +341,7 @@ describe('check', () => {
       },
       {
         explain: 'case1 (checkStrategy is parent)',
-        checkStrategy: 'parent',
+        checkStrategy: 'parent' as const,
         checkedKeys: [],
         checkedKey: '0-0-0',
         output: {
@@ -329,7 +351,7 @@ describe('check', () => {
       },
       {
         explain: 'case1 (checkStrategy is child)',
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: [],
         checkedKey: '0-0-0',
         output: {
@@ -378,7 +400,7 @@ describe('check', () => {
       },
       {
         explain: 'case2 (checkStrategy is parent)',
-        checkStrategy: 'parent',
+        checkStrategy: 'parent' as const,
         checkedKeys: [],
         checkedKey: '0-1',
         output: {
@@ -388,7 +410,7 @@ describe('check', () => {
       },
       {
         explain: 'case2 (checkStrategy is child)',
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: [],
         checkedKey: '0-1',
         output: {
@@ -427,7 +449,7 @@ describe('check', () => {
       },
       {
         explain: 'case3 (checkStrategy is parent)',
-        checkStrategy: 'parent',
+        checkStrategy: 'parent' as const,
         checkedKeys: [],
         checkedKey: '0-1-0',
         output: {
@@ -437,7 +459,7 @@ describe('check', () => {
       },
       {
         explain: 'case3 (checkStrategy is child)',
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: [],
         checkedKey: '0-1-0',
         output: {
@@ -476,7 +498,7 @@ describe('check', () => {
       },
       {
         explain: 'case4 (checkStrategy is parent)',
-        checkStrategy: 'parent',
+        checkStrategy: 'parent' as const,
         checkedKeys: ['0-0-0-0'],
         checkedKey: '0-0-0-1',
         output: {
@@ -486,7 +508,7 @@ describe('check', () => {
       },
       {
         explain: 'case4 (checkStrategy is child)',
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: ['0-0-0-0'],
         checkedKey: '0-0-0-1',
         output: {
@@ -525,7 +547,7 @@ describe('check', () => {
       },
       {
         explain: 'case5 (checkStrategy is parent)',
-        checkStrategy: 'parent',
+        checkStrategy: 'parent' as const,
         checkedKeys: ['0-0', '0-0-0-0'],
         checkedKey: '0-0-0-1',
         output: {
@@ -535,7 +557,7 @@ describe('check', () => {
       },
       {
         explain: 'case5 (checkStrategy is child)',
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: ['0-0', '0-0-0-0'],
         checkedKey: '0-0-0-1',
         output: {
@@ -604,7 +626,7 @@ describe('check', () => {
       {
         explain: 'child check strategy 1',
         cascade: true,
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: ['0-1-0', '0-1-1'],
         checkedKey: undefined,
         output: {
@@ -615,7 +637,7 @@ describe('check', () => {
       {
         explain: 'child check strategy 2',
         cascade: true,
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: ['0', '0-1'],
         checkedKey: undefined,
         output: {
@@ -626,7 +648,7 @@ describe('check', () => {
       {
         explain: 'parent check strategy 1',
         cascade: true,
-        checkStrategy: 'parent',
+        checkStrategy: 'parent' as const,
         checkedKeys: ['0-0', '0-1'], // 0-0 is disabled
         checkedKey: undefined,
         output: {
@@ -698,7 +720,7 @@ describe('check', () => {
       },
       {
         explain: 'case1 (checkStrategy is parent)',
-        checkStrategy: 'parent',
+        checkStrategy: 'parent' as const,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
         uncheckedKey: '0-0-0',
         output: {
@@ -708,7 +730,7 @@ describe('check', () => {
       },
       {
         explain: 'case1 (checkStrategy is child)',
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
         uncheckedKey: '0-0-0',
         output: {
@@ -757,7 +779,7 @@ describe('check', () => {
       },
       {
         explain: 'case2 (checkStrategy is parent)',
-        checkStrategy: 'parent',
+        checkStrategy: 'parent' as const,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
         uncheckedKey: '0-0-0-0',
         output: {
@@ -767,7 +789,7 @@ describe('check', () => {
       },
       {
         explain: 'case2 (checkStrategy is child)',
-        checkStrategy: 'child',
+        checkStrategy: 'child' as const,
         checkedKeys: ['0-0-0', '0-0-0-0', '0-0-0-1'],
         uncheckedKey: '0-0-0-0',
         output: {
