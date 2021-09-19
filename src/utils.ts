@@ -61,7 +61,7 @@ export function isLeaf<R = RawNode, G = R, I = R> (
 ): boolean {
   const { isLeaf } = rawNode as any
   if (isLeaf !== undefined) return isLeaf
-  else if (getChildren(rawNode) === undefined) return true
+  else if (!getChildren(rawNode)) return true
   return false
 }
 
