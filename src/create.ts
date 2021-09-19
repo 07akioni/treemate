@@ -58,7 +58,7 @@ function createTreeNodes<R, G, I> (
     treeNode.parent = parent
     if (!treeNode.ignored) {
       const rawChildren = getChildren(rawNode as R | G)
-      if (rawChildren !== undefined) {
+      if (rawChildren) {
         treeNode.children = createTreeNodes<R, G, I>(
           rawChildren,
           treeNodeMap,
