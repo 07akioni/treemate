@@ -67,7 +67,7 @@ export function isLeaf<R = RawNode, G = R, I = R> (
 
 export function defaultGetChildren<R, G, I> (
   node: R | G | I
-): Array<R | G | I> | undefined {
+): Array<R | G | I> | unknown {
   return (node as any).children
 }
 
@@ -79,9 +79,12 @@ export function isIgnored (): boolean {
   return false
 }
 
-export function isShallowLoaded (rawNode: RawNode): boolean {
-  const { isLeaf, children } = rawNode
-  if (isLeaf === false && children === undefined) return false
+export function isShallowLoaded<R = RawNode, G = R, I = R> (
+  rawNode: R,
+  getChildren: GetChildren<R, G, I>
+): boolean {
+  const { isLeaf } = rawNode as any
+  if (isLeaf === false && !Array.isArray(getChildren(rawNode))) return false
   return true
 }
 
@@ -93,14 +96,16 @@ export function isExpilicitlyNotLoaded<R = RawNode, G = R, I = R> (
   rawNode: R | G | I,
   getChildren: GetChildren<R, G, I>
 ): boolean {
-  return (rawNode as any).isLeaf === false && getChildren(rawNode) === undefined
+  return (
+    (rawNode as any).isLeaf === false && !Array.isArray(getChildren(rawNode))
+  )
 }
 
 export function isNodeInvalid<R = RawNode, G = R, I = R> (
   rawNode: R | G | I,
   getChildren: GetChildren<R, G, I>
 ): boolean {
-  return (rawNode as any).isLeaf === true && getChildren(rawNode) !== undefined
+  return (rawNode as any).isLeaf === true && Array.isArray(getChildren(rawNode))
 }
 
 export function unwrapCheckedKeys (

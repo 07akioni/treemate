@@ -45,7 +45,10 @@ function createTreeNodes<R, G, I> (
 ): Array<TreeNode<R, G, I>> {
   const treeNodes: Array<TreeNode<R, G, I>> = []
   rawNodes.forEach((rawNode, index) => {
-    if (process.env.NODE_ENV !== 'production' && isNodeInvalid(rawNode, getChildren)) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      isNodeInvalid(rawNode, getChildren)
+    ) {
       console.error('[treemate]: node', rawNode, 'is invalid')
     }
     const treeNode: TreeNode<R, G, I> = Object.create(nodeProto)
@@ -58,7 +61,7 @@ function createTreeNodes<R, G, I> (
     treeNode.parent = parent
     if (!treeNode.ignored) {
       const rawChildren = getChildren(rawNode as R | G)
-      if (rawChildren) {
+      if (Array.isArray(rawChildren)) {
         treeNode.children = createTreeNodes<R, G, I>(
           rawChildren,
           treeNodeMap,
@@ -108,7 +111,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
         return isLeaf((this as any).rawNode, getChildren)
       },
       get shallowLoaded (): boolean {
-        return isShallowLoaded((this as any).rawNode)
+        return isShallowLoaded((this as any).rawNode, getChildren)
       },
       get ignored (): boolean {
         return getIgnored((this as any).rawNode)
@@ -219,7 +222,11 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
       checkedKeys: Key[] | InputMergedKeys | null | undefined,
       options: CheckOptions = {}
     ) {
-      const { cascade = true, leafOnly = false, checkStrategy = 'all' } = options
+      const {
+        cascade = true,
+        leafOnly = false,
+        checkStrategy = 'all'
+      } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
@@ -236,7 +243,11 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
       checkedKeys: Key[] | InputMergedKeys,
       options: CheckOptions = {}
     ) {
-      const { cascade = true, leafOnly = false, checkStrategy = 'all' } = options
+      const {
+        cascade = true,
+        leafOnly = false,
+        checkStrategy = 'all'
+      } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),
@@ -257,7 +268,11 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
       checkedKeys: Key[] | InputMergedKeys,
       options: CheckOptions = {}
     ) {
-      const { cascade = true, leafOnly = false, checkStrategy = 'all' } = options
+      const {
+        cascade = true,
+        leafOnly = false,
+        checkStrategy = 'all'
+      } = options
       return getCheckedKeys(
         {
           checkedKeys: unwrapCheckedKeys(checkedKeys),

@@ -55,7 +55,7 @@ export interface MergedKeys {
   indeterminateKeys: Key[]
 }
 
-export type GetChildren<R, G, I> = (node: R | G | I) => Array<R | G | I> | undefined
+export type GetChildren<R, G, I> = (node: R | G | I) => Array<R | G | I> | unknown
 
 export interface TreeMateOptions<R, G, I> {
   getChildren?: GetChildren<R, G, I>
