@@ -61,7 +61,7 @@ GroupNode {
 
 The group node itself will be ignored when moving along the nodes, and the children of the group node is view as the same level of the group node.
 
-For eaxample, in the following tree, the group child 2 will be viewed as node 1's next node. node 2 will be viewed as group child 2's next node.
+For eaxample, in the following tree, the group child 1 will be viewed as node 1's next node. node 2 will be viewed as group child 2's next node.
 
 ```
 - node 1

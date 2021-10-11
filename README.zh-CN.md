@@ -61,7 +61,7 @@ GroupNode {
 
 在不同节点的移动过程中，Group 节点自身会被忽略，Group 节点的子节点会被看作为和 Group 在同一层的节点。
 
-例如在下面的树中，group node 2 是 node 1 的下一个节点，group child 2 的下一个节点是 node 2.
+例如在下面的树中，group node 1 是 node 1 的下一个节点，group child 2 的下一个节点是 node 2.
 
 ```
 - node 1
