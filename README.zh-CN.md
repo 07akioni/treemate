@@ -32,7 +32,7 @@ npm i -D treemate
 
 ### 普通节点，Group 节点和 Ignored 节点
 
-在 treemate 中，一个树由节点（可选的 group 节点和可选的 ingored 节点）组成。
+在 treemate 中，一个树由节点（可选的 group 节点和可选的 ignored 节点）组成。
 
 一个普通节点包括一个 key，可能还包含一个 children 属性，里面是它的子节点。
 
@@ -181,7 +181,7 @@ const treeMate = createTreeMate(data)
 
 ### 自定义 `createTreeMate` 的选项
 
-如果希望通过其他方式来判定一个节点的 key 和 diabled、group、ignored 的状态，你可以给 create treemate 传递一个选项。
+如果希望通过其他方式来判定一个节点的 key 和 disabled、group、ignored 的状态，你可以给 create treemate 传递一个选项。
 
 ```ts
 const treeMate = createTreeMate(data, {

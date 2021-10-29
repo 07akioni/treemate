@@ -4,7 +4,7 @@
 
 https://treemate.vercel.app
 
-All in one solution for tree structure in component developling.
+All in one solution for tree structure in component developing.
 
 It helps you manipulate tree data structure for user interface. (Can be used in Tree, Select, Dropdown, Table, Menu components and ...)
 
@@ -61,7 +61,7 @@ GroupNode {
 
 The group node itself will be ignored when moving along the nodes, and the children of the group node is view as the same level of the group node.
 
-For eaxample, in the following tree, the group child 1 will be viewed as node 1's next node. node 2 will be viewed as group child 2's next node.
+For example, in the following tree, the group child 1 will be viewed as node 1's next node. node 2 will be viewed as group child 2's next node.
 
 ```
 - node 1
@@ -137,7 +137,7 @@ const data = [
 const treeMate = createTreeMate(data)
 ```
 
-In typescript, the data looks amost same. However `createTreeMate` accepts 3 optional generic parameter to specify the types of node, group node and ignored node.
+In typescript, the data looks almost same. However `createTreeMate` accepts 3 optional generic parameter to specify the types of node, group node and ignored node.
 
 ```ts
 interface BaseNode {
@@ -322,7 +322,7 @@ Get the parent node of the `key`'s corresponding node. In the traverse process, 
 
 #### `TreeMate.getChild(key)`
 
-Get the first not `diabled` child node of the `key`'s corresponding node. In the traverse process, the `group | ignored` node itself will be dismissed. If node doesn't exist, return `null`.
+Get the first not `disabled` child node of the `key`'s corresponding node. In the traverse process, the `group | ignored` node itself will be dismissed. If node doesn't exist, return `null`.
 
 #### `TreeNode.getPrev(options?)`
 
