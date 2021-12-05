@@ -37,17 +37,17 @@ export function getNonLeafKeys<R, G, I> (
   const keys: Key[] = []
   const cb = preserveGroup
     ? (node: TreeNode<R, G, I>) => {
-      if (!node.isLeaf) {
-        keys.push(node.key)
-        traverse(node.children as Array<TreeNode<R, G, I>>)
+        if (!node.isLeaf) {
+          keys.push(node.key)
+          traverse(node.children as Array<TreeNode<R, G, I>>)
+        }
       }
-    }
     : (node: TreeNode<R, G, I>) => {
-      if (!node.isLeaf) {
-        if (!node.isGroup) keys.push(node.key)
-        traverse(node.children as Array<TreeNode<R, G, I>>)
+        if (!node.isLeaf) {
+          if (!node.isGroup) keys.push(node.key)
+          traverse(node.children as Array<TreeNode<R, G, I>>)
+        }
       }
-    }
   function traverse (nodes: Array<TreeNode<R, G, I>>): void {
     nodes.forEach(cb)
   }

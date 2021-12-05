@@ -58,6 +58,7 @@ export interface MergedKeys {
 export type GetChildren<R, G, I> = (node: R | G | I) => Array<R | G | I> | unknown
 
 export interface TreeMateOptions<R, G, I> {
+  ignoreEmptyChildren?: boolean
   getChildren?: GetChildren<R, G, I>
   getKey?: (node: R | G | I) => Key
   getDisabled?: (node: R | G | I) => boolean

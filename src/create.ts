@@ -68,7 +68,7 @@ function createTreeNodes<R, G, I> (
           levelTreeNodeMap,
           nodeProto,
           getChildren,
-          (treeNode as unknown) as TreeNode<R, G>,
+          treeNode as unknown as TreeNode<R, G>,
           level + 1
         )
       }
@@ -90,10 +90,20 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
   const {
     getDisabled = isDisabled,
     getIgnored = isIgnored,
-    getChildren = defaultGetChildren,
     getIsGroup = isGroup,
     getKey = defaultGetKey
   } = options
+  const _getChildren = options.getChildren ?? defaultGetChildren
+  const getChildren = options.ignoreEmptyChildren
+    ? (node: R | I | G) => {
+        const children = _getChildren(node)
+        if (Array.isArray(children)) {
+          if (!children.length) return null
+          return children
+        }
+        return children
+      }
+    : _getChildren
   const nodeProto = Object.assign(
     {
       get key (): Key {
@@ -141,7 +151,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     if (key === null || key === undefined) return null
     const tmNode = treeNodeMap.get(key)
     if (tmNode && !tmNode.isGroup && !tmNode.ignored) {
-      return (tmNode as unknown) as TreeNode<R>
+      return tmNode as unknown as TreeNode<R>
     }
     return null
   }
@@ -153,7 +163,7 @@ export function createTreeMate<R = RawNode, G = R, I = R> (
     if (key === null || key === undefined) return null
     const tmNode = treeNodeMap.get(key)
     if (tmNode && !tmNode.ignored) {
-      return (tmNode as unknown) as TreeNode<R, G>
+      return tmNode as unknown as TreeNode<R, G>
     }
     return null
   }
