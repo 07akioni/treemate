@@ -28,7 +28,7 @@
     "jest": "^27.0.4",
     "prettier": "2.4.1",
     "typescript": "^4.0.3",
-    "vitepress": "^0.18.0"
+    "vitepress": "^0.20.9"
   },
   "scripts": {
     "build": "tsc --project tsconfig.build.esm.json && tsc --project tsconfig.build.cjs.json ",
