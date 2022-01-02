@@ -105,7 +105,11 @@ export function isNodeInvalid<R = RawNode, G = R, I = R> (
   rawNode: R | G | I,
   getChildren: GetChildren<R, G, I>
 ): boolean {
-  return (rawNode as any).isLeaf === true && Array.isArray(getChildren(rawNode))
+  if ((rawNode as any).isLeaf === true) {
+    const children = getChildren(rawNode)
+    if (Array.isArray(children) && children.length > 0) return true
+  }
+  return false
 }
 
 export function unwrapCheckedKeys (

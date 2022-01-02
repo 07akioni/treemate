@@ -29,8 +29,21 @@ describe('index', () => {
       const spy = jest.spyOn(console, 'error').mockImplementation()
       createTreeMate([
         {
+          key: 'a',
           isLeaf: true,
           children: []
+        }
+      ])
+      expect(spy).not.toHaveBeenCalled()
+      createTreeMate([
+        {
+          key: 'a',
+          isLeaf: true,
+          children: [
+            {
+              key: 'b'
+            }
+          ]
         }
       ])
       expect(spy).toHaveBeenCalled()
