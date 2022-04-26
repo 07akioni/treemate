@@ -16,7 +16,7 @@
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.3.0",
-    "babel-jest": "^27.0.2",
+    "babel-jest": "^28.0.0",
     "eslint": "^7.10.0",
     "eslint-config-standard": "^16.0.1",
     "eslint-config-standard-with-typescript": "21.0.1",
