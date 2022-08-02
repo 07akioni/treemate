@@ -28,7 +28,7 @@
     "jest": "^27.0.4",
     "prettier": "2.5.1",
     "typescript": "^4.0.3",
-    "vitepress": "^0.22.0"
+    "vitepress": "1.0.0-alpha.4"
   },
   "scripts": {
     "build": "tsc --project tsconfig.build.esm.json && tsc --project tsconfig.build.cjs.json ",
@@ -47,5 +47,15 @@
   "bugs": {
     "url": "https://github.com/07akioni/treemate/issues"
   },
-  "homepage": "https://github.com/07akioni/treemate#readme"
+  "homepage": "https://github.com/07akioni/treemate#readme",
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search",
+        "react",
+        "react-dom",
+        "@types/react"
+      ]
+    }
+  }
 }
