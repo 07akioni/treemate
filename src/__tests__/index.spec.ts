@@ -26,7 +26,7 @@ describe('index', () => {
       expectTreeNodesEqual(treeNodes as any, output)
     })
     it('warns when node is invalid', () => {
-      const spy = jest.spyOn(console, 'error').mockImplementation()
+      const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
       createTreeMate([
         {
           key: 'a',
