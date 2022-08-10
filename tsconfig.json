@@ -3,6 +3,7 @@
     "moduleResolution": "node",
     "module": "ES2020",
     "target": "ES6",
+    "types": ["vitest/globals"],
     "strict": true,
     "strictNullChecks": true,
     "declaration": true,
@@ -16,6 +17,7 @@
   },
   "include": [
     "src/**/*",
-    "test-dts/**/*"
+    "test-dts/**/*",
+    "vitest.config.ts"
   ]
 }

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { MergedPath } from '@/interface'
 import { createTreeMate, TreeNode } from '../src/index'
 import { expectType } from './utils'

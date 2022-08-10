@@ -103,13 +103,15 @@ describe('async-check', () => {
     })
   })
   describe('#getCheckedKeys (async cascade)', () => {
-    const treeMate = createTreeMate(asyncCascadeTree)
-    expectCheckedStatusSame(
-      treeMate.getCheckedKeys(['4'], { cascade: true, checkStrategy: 'child' }),
-      {
-        checkedKeys: ['4'],
-        indeterminateKeys: ['0', '2']
-      }
-    )
+    it('it should get the same state', () => {
+      const treeMate = createTreeMate(asyncCascadeTree)
+      expectCheckedStatusSame(
+        treeMate.getCheckedKeys(['4'], { cascade: true, checkStrategy: 'child' }),
+        {
+          checkedKeys: ['4'],
+          indeterminateKeys: ['0', '2']
+        }
+      )
+    })
   })
 })
