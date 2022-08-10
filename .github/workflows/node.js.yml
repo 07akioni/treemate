@@ -28,7 +28,7 @@ jobs:
     - run: npm run lint
     - run: npm test -- --coverage
 
-    - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v1.1.1
+    - name: Code coverage
+      uses: codecov/codecov-action@v2.1.0
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.CODECOV_TOKEN }}
