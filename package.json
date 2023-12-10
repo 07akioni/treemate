@@ -23,7 +23,7 @@
     "husky": "^5.1.1",
     "prettier": "2.5.1",
     "typescript": "^4.0.3",
-    "vitepress": "1.0.0-beta.6",
+    "vitepress": "1.0.0-rc.31",
     "vitest": "^0.20.3"
   },
   "scripts": {
