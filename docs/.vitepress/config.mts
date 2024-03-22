@@ -4,18 +4,19 @@ export default defineConfig({
   lang: 'en-US',
   title: 'treemate',
   locales: {
-    '/': {
+    root: {
+      label: 'English',
       lang: 'en-US',
-      title: 'treemate',
-      description: 'Manipulating tree data structure for user interface'
     },
-    '/zh/': {
+    zh: {
+      label: '简体中文',
       lang: 'zh-CN',
-      title: 'treemate',
-      description: 'Manipulating tree data structure for user interface'
     },
   },
   themeConfig: {
+    search:{
+      provider:'local',
+    },
     sidebar:{
       'zh':[
         {
@@ -33,13 +34,6 @@ export default defineConfig({
           ]
         }
       ]
-    },
-    localeLinks: {
-      text: '',
-      items: [
-        { text: 'English', link: '/guide' },
-        { text: '简体中文', link: '/zh/guide' },
-      ],
     },
     socialLinks: [
       { icon: 'github', link: 'https://github.com/07akioni/treemate' },

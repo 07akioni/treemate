@@ -7,3 +7,5 @@ es
 lib
 ~
 pnpm-lock.yaml
+
+docs/.vitepress/cache
